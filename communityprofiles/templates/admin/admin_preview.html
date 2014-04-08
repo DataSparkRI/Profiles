@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--> 
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--> 
+<!--[if IE 8 ]>    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml" lang="en" class="no-js ie8"> <![endif]--> 
+<!--[if IE 9 ]>    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml" lang="en" class="no-js ie9" xmlns:fb="http://ogp.me/ns/fb#"> <![endif]--> 
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]--> 
+<head> 
+	<meta charset="utf-8"> 
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+ 
+	<title>{% block title %}Rhode Island Community Profiles{% endblock %}</title> 
+	<meta name="description" content=""> 
+	<meta name="author" content=""> 
+ 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<link rel="shortcut icon" href="/favicon.ico"> 
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png"> 
+ 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/style.css?v=2"> 
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/pe-default.css"> 
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/wireframe.css"> 
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/skin-ri.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/admin_style.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}js/libs/fancybox/jquery.fancybox-1.3.4.css">
+	<script src="{{ STATIC_URL }}js/libs/modernizr-1.6.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<style type="text/css" media="screen">
+		.denom_row{background:whiteSmoke;}
+		.mappings_wrap{display:none;}
+		small{font-size:70%;}
+		p,h3{left:0;}
+	</style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+<div id="container">
+<header class="site-header"> 
+			<div class="dre clearfix"> 
+				<div class="col w40">
+					<div id="logo">
+					<a href="http://www.provplan.org"><img src="{{STATIC_URL}}css/img/ProvPlan_logo_white_small.png"></a>
+					</div>
+					<nav class="actions">
+						&nbsp;
+						
+					</nav> 
+				</div> 
+			
+				<div class="col w60 txtr"> 
+					
+				</div> 
+			</div> 
+		</header>
+	<div class="page-area admin-preview">
+		<div class="dre boo">
+		<section class="map-area mbx">
+		<header class="map-area-header clearfix"> 
+			<div class="col fl"> 
+				<a href="/" id="banner-link">
+				<span class="banner">
+					<span id="beta-icon">Beta</span>
+					<h1>Rhode Island Community Profiles</h1>
+				</span>
+				<span class="banner-point no-pr"></span>
+				</a>
+			</div> 
+			<div class="fr text-right"> </div> 
+			<div class="banner-3d no-pr"></div> 
+
+		</header>
+		</section>
+			<div class="admin-area-wrap">
+				<h2> Admin Preview Area</h2>
+				<p> Here you can preview the data that Profiles will produce before you publish it. This data comes straight from the Census files that are imported into the application or any csv files you many have uploaded. </p>
+				<h4> Notes:</h4>
+				<p> Looking up values like this requires ALOT of server resources. In real life, we do all this processing in the background. It may take a moment for everything to load up so be patient. Try and use GeoName Search as much as possible!</p>
+
+				<p> <b>GeoName Search:</b> For various reason, Geography name search is VERY case/spelling sensitive. Cross your I's and dot your T's.</p>
+				<p> <b>Test All Tracts:</b> For performance reasons, "Test all Tracts" does not display mappings. This is because some Tracts are mapped to blocks and it is quite expensive to process those relationships. If you would like to explore how Census Tract is mapped in Profiles, Use the GeoName Search.</p> 
+				<h3> Your indicator: {{indicator.display_name}}</h3>
+				<div id="admin-area-controls">
+					<button onclick="get_all()" type="button">
+						Test All Geographies
+					</button>
+					<button onclick="get_munis()" type="button">
+						Test All Munis
+					</button>
+					<button onclick="get_tracts()" type="button">
+						Test All Tracts
+					</button>
+
+					<input type="text" id="geo_name_input" placeholder="Enter the name of a Geography..."><button onclick="get_geo_by_name()">Test Geography</button>
+
+				</div>
+
+				<table class="table" id="main-tbl">
+					<thead>
+						<tr><th>Geography</th>
+						{% for t in indicator.get_times %}
+							<th>{{t.name}}</th>	
+						{%endfor%}
+						<tr>
+					</thead>
+					<tbody></tbody>
+				  </table>
+			</div><!-- end admin area wrap -->
+		</div>
+ 	</div>
+</div>
+	<script type="text/javascript" charset="utf-8">
+		var times = [];
+		{%for t in indicator.get_times%}
+			times.push('{{t.name}}');
+		{%endfor%}
+		var geo_data;
+		var ind_id = {{indicator.id}};
+
+		function get_ind_data(ind_id, geo_id){
+
+			var jqxhr = $.getJSON('/profiles/api/raw/?i='+ind_id+"&r="+geo_id, function(d){
+				// update table
+				update_row("main-tbl", d);
+				
+			});
+
+		}
+
+		function get_geos(level){
+			if(level!='census-tract'){
+				$.getJSON('/profiles/api/geo/?l='+level+"&show_mappings=true",function(d){
+					populate_table("main-tbl", d);	
+				});
+			}else{
+				
+				$.getJSON('/profiles/api/geo/?l='+level,function(d){
+					populate_table("main-tbl", d);	
+				});
+			}
+
+		}
+
+		function get_state(){
+			get_geos('state');
+		}
+		
+		function get_munis(){
+			get_geos('municipality');
+		}
+
+		function get_tracts(){
+			get_geos('census-tract');
+		}
+	
+		function get_all(){
+			get_state();
+			get_munis();
+			get_tracts();
+		}
+
+		function get_geo_by_name(){
+
+			var geo_name = $("#geo_name_input").val();
+			geo_name=geo_name.trim();
+			$.getJSON('/profiles/api/geo/?name='+geo_name+"&show_mappings=true",function(d){
+				populate_table("main-tbl", d); 
+					
+			});
+
+		}
+
+		function populate_table(table_id, geo_data){
+			$('table tbody tr').remove();
+			for(var i in geo_data){
+				add_row(table_id, geo_data[i]);
+				get_ind_data(ind_id, geo_data[i].id);
+			}
+		}	
+
+		function add_row(table_id, geo){
+	
+			var targ_tbl = $("#"+table_id + " tbody");
+			var table_row = document.createElement('tr');
+			table_row.id = geo.slug;
+			var geo_td = document.createElement('td');
+			geo_td.className='ind_label';
+			if(geo.parent_geos.hasOwnProperty('Municipality')) geo_td.innerText+= geo.parent_geos.Municipality + ", ";
+			
+			geo_td.innerHTML += geo.name;
+			if(geo.hasOwnProperty('mappings')){
+				geo_td.innerHTML += " <a href='#"+ geo.slug +"' class='mappings_btn' ><small>Show/Hide Mappings</small></a>";
+				// build mappings div
+				var mappings_div = document.createElement('div');
+				mappings_div.className="mappings_wrap";
+				geo_td.appendChild(mappings_div);
+				var mappings_list = document.createElement('ul');
+				mappings_div.appendChild(mappings_list);
+				for(var m in geo.mappings){
+
+					var mli = document.createElement('li');
+					mli.innerHTML= "<b>Level: </b> " + geo.mappings[m].level + " <b>Geo Id: </b> " + geo.mappings[m].geo_id;
+					mappings_list.appendChild(mli);
+				}
+
+			}
+			table_row.appendChild(geo_td);
+			// times tds
+			for(var t in times){
+				var time_td = document.createElement('td');
+				time_td.className = times[t].replace(/ /g,"");
+				time_td.innerText="Fetching Data...";
+				table_row.appendChild(time_td);
+				
+			}
+
+			targ_tbl.append(table_row);
+
+		}
+
+		function update_row(table_id, data){
+			
+			if(!data.hasOwnProperty('error')){
+				for(var d in data){
+					
+					var selector = "#"+table_id+ " tbody tr#"+data[d].geo_rec.slug+" ."+data[d].time.replace(/ /g, "");
+					var value_cell = $(selector);
+					value_cell.text(data[d].value);
+					// iterate denoms
+					for(var dm in data[d].denoms){
+						// add a new tr for this denom
+						var denom_select = data[d].denoms[dm].name.replace(/ /g,"_").replace(/\%/,"perc").replace(/\+/,"plus")+data[d].denoms[dm].geo_rec.slug;	
+						
+						// check to see if we havent already created the row
+						if($('#'+denom_select).length==0){
+							var denom_tr = document.createElement('tr');
+							denom_tr.id= denom_select;
+							denom_tr.className='denom_row';
+							value_cell.parent().children('td').each(function(){
+								var denom_td = document.createElement('td');
+								denom_td.innerHTML = '';
+								denom_td.className=$(this).attr('class');
+								denom_tr.appendChild(denom_td);
+							});
+							value_cell.parent().after(denom_tr);
+							//console.log($("#"+table_id+ " tbody tr#"+data[d].denoms[dm].geo_rec.slug));
+						}
+						//$("#"+table_id+ " tbody tr#"+data[d].denoms[dm].geo_rec.slug).after(denom_tr);
+						//insert the label
+						$('#'+denom_select +" .ind_label").text(data[d].denoms[dm].name); 
+
+						// insert the value
+						$('#'+denom_select +" ." + data[d].denoms[dm].time.replace(/ /g, "")).text(data[d].denoms[dm].value);
+
+					}
+							
+				}
+			}
+		}
+
+		$(function(){
+			$('.mappings_btn').live("click", function(e){
+				e.preventDefault();
+				var selector = $(this).attr("href") + " td.ind_label .mappings_wrap";
+				$(selector).toggle();
+		
+			})
+		});
+
+	</script>
+	
+</body>
+</html>

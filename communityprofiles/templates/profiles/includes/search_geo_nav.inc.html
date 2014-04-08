@@ -1,0 +1,15 @@
+{% load profiles_tags %}
+							{% for level, display_records, selected_record in levels %}
+							{% if selected_record.name != "Rhode Island" %}
+							<div class="mbm">
+								<span class="buttons w100">
+									<a id="DD-Munic" class="dd"><span>{% if selected_record %}{{ selected_record.name}}{% else %}Choose {{ level.name }}{% endif %}</span><span class="icon icon-arrow-down fr"></span><!--
+										--><ul class="dd-content">
+											{% if level.name == "Municipality" %}<li><a href="#" id="record_1">Rhode Island</a></li>{% endif %}
+											{% for record in display_records %}<li><a href="#" id="record_{{ record.pk }}">{{ record.name }}</a></li>{% endfor %}
+										</ul><!--
+									--></a><!--
+								--></span>
+							</div>
+							{% endif %}
+							{% endfor %}

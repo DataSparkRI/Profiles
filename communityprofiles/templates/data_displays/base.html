@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<script src="{{ STATIC_URL }}js/libs/modernizr.min.js"></script>
+	<script src="{{ STATIC_URL }}js/jquery.min.js"></script>
+	<script src="{{ STATIC_URL }}js/pp.js"></script>
+	<script type="text/javascript" charset="utf-8">
+		PP.Settings.baseURL = "http://{{request.META.HTTP_HOST}}";
+	</script>
+	
+
+	{%for item in css%}
+		<link rel="stylesheet" type="text/css" href="{{item}}">
+	{%endfor%}
+	
+	
+	<style type="text/css" media="screen">
+		
+		body{
+			margin:0;
+			padding:0;
+			font-family:'Helvetica', Arial, sans;
+		}
+
+		#header{
+			background:#e3e3e3;
+		}
+
+		#header-content{
+			padding:10px;
+			color:#444;
+			float:left;
+		}
+
+		#header-meta{
+			padding:10px;
+			float:right;
+		}
+
+		#header h1{
+			display:inline;
+			font-size:20px;
+			margin-right:10px;
+		}
+
+		
+		#header h2{
+			font-size:15px;
+			margin: 5px 0 0 0;
+			padding:0 ;
+		}	
+
+
+		#wrapper{
+			margin:0px auto 0 auto;
+		}
+		
+		#viz-wrapper{
+			position:relative;
+			overflow:hidden;
+			margin: 0 auto;
+		}
+
+		#footer{
+			background:transparent;
+			padding: 0 0 2px 40px;
+			color:#444;
+			font-size:12px;
+			position:relative;
+		}
+
+		
+
+		#viz-meta{
+			position:absolute;
+			right:10px;
+			bottom:10px;
+			max-width:200px;
+			font-size:10px;
+		}
+		
+		.clear{
+			clear:both;
+		}
+
+		#nosvg-wrapper{
+			display:none;
+			width:1216px;
+			height:800px;
+			margin:0 auto;
+
+		}
+
+	</style>
+	
+
+
+</head>
+<body>
+	<div id="nosvg-wrapper">
+		<img src="{{MEDIA_URL}}{{display.image}}"/>
+	</div>
+	
+	<div id="wrapper">
+			<div id="header">
+				<div id="header-content">
+					<h1>{{display.title}} in {{display.record.name}}</h1>
+					<h2>Time Period: {{display.time.name}}</h2> 
+				</div>
+				<div id="header-meta">
+				
+				</div>
+
+				<div class="clear"></div>
+			</div><!-- end header-->
+			
+			<div id = "viz-wrapper">
+			
+			</div> <!-- end viz-wrapper-->
+			
+			<div class="clear"></div>
+			<div id ="footer">
+				<div id="viz-description">
+					{{display.template.description}}
+				</div>
+				<div id ="viz-meta">
+					<div id="viz-source">
+						<b>Source:</b><br/> {{display.template.get_sources}}
+					</div>
+					<div id="viz-attribution">
+						Provplan
+					</div>
+				</div>
+			</div><!-- end footer -->
+	
+	</div> <!-- end wrapper -->
+	
+	<!--[if gt IE 8]><!-->
+	<script type="text/javascript" charset="utf-8">
+		var level = {};
+		level.name = "{{display.record.level.name}}";
+		level.id = "{{display.record.level.id}}";
+		var time_period = "{{display.time.name}}";
+		var wrapper = document.getElementById("wrapper");
+		var header_div = document.getElementById("header");
+		var footer_div = document.getElementById("footer");
+		var descr_div = document.getElementById("viz-description");
+		var meta_div = document.getElementById("viz-meta");
+		var viz_wrap = document.getElementById("viz-wrapper");
+		var viz_height;
+		var viz_width;
+
+		function resize_viz_wrap(){
+			//resize the wrapper
+			wrapper.style.width = window.innerWidth;
+			descr_div.style.width = ((window.innerWidth/2)-10)+"px"; 
+			// #viz-wrapper should resize to an appropriate size based on our current viewport
+			var offset = header_div.scrollHeight + footer_div.scrollHeight;
+			// set viz-wrapper height
+			viz_height = window.innerHeight-offset;
+			viz_wrap.style.height = viz_height;
+			// set viz-wrapper width so we can add some padding and center it.
+			viz_wrap.style.width = window.innerWidth - (window.innerWidth * .05) + "px";
+			viz_width = viz_wrap.scrollWidth;
+			
+		}
+
+		// some resizing based on our viewport;
+		resize_viz_wrap();
+
+		// geo and indicator values -->
+		var geo_records='{%for record in records%}&record={{record.id}}{%endfor%}'; // legacy
+		var map_geos_ids=[]
+		var map_geos = [];
+		{%for record in records%}
+		map_geos.push("{{record.slug}}");
+		map_geos_ids.push({{record.id}});
+		{%endfor%};
+		var indicator_ids = [{{indicator_ids|safe}}];
+		var indicator_meta = {};
+		{%for key, value in indicators.items%}
+		indicator_meta['{{value.slug}}'] = {
+			'display_change':{{value.display_change|lower}},
+			'display_distribution':{{value.display_change|lower}}
+		};
+		indicator_meta['{{value.slug}}']['denominators'] = [];
+		{%for d in value.denominators%}
+		indicator_meta['{{value.slug}}']['denominators'].push({'id':{{d.id}}, 'label':'{{d.label}}'});
+		{%endfor%}
+		{%endfor%}
+		var dataQ="{%for key, value in indicators.items%}&name=" +encodeURIComponent("{{value.display_name}}"){%endfor%};
+		dataQ+="&time={{display.time.name}}";
+		var geo_json_src = "/profiles/geojson/?"+geo_records;
+		var data_json_src = "/profiles/indicator_data/multi/?";
+		var record = {{geo_record}};
+		
+		// Some helper methods, to use in viz
+		function addCommas(nStr)
+		{
+		  nStr += '';
+		  x = nStr.split('.');
+		  x1 = x[0];
+		  x2 = x.length > 1 ? '.' + x[1] : '';
+		  var rgx = /(\d+)(\d{3})/;
+		  while (rgx.test(x1)) {
+			x1 = x1.replace(rgx, '$1' + ',' + '$2');
+		  }
+		  return x1 + x2;
+		}
+
+	</script>
+	
+	{%for item in js%}
+	<script type="text/javascript" src ="{{item}}"></script>
+	{%endfor%}
+	<!--<![endif]-->
+	<script type="text/javascript" charset="utf-8">
+		// check to see if svg is supported;
+                if(Modernizr.svg == false){
+                        // hide svg wrapper
+                        wrapper.style.display="none";
+                        // show img
+                        document.getElementById("nosvg-wrapper").style.display="block"
+                }
+		
+	</script>
+	
+</body>
+</html>

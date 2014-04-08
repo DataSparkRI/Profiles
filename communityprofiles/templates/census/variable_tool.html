@@ -1,0 +1,156 @@
+<html>
+<head>
+<script>
+// global flag
+var isIE = false;
+
+// global request and XML document objects
+var req;
+
+// retrieve XML document (reusable generic function);
+// parameter is URL string (relative or complete) to
+// an .xml file whose Content-Type is a valid XML
+// type, such as text/xml; XML source must be from
+// same domain as HTML file
+function loadXMLDoc(url) {
+    // branch for native XMLHttpRequest object
+    if (window.XMLHttpRequest) {
+        req = new XMLHttpRequest();
+        req.open("GET", '/census/api_tables/'+url, true);
+        req.send(null);
+        return req;
+    // branch for IE/Windows ActiveX version
+    } else if (window.ActiveXObject) {
+        isIE = true;
+        req = new ActiveXObject("Microsoft.XMLHTTP");
+        if (req) {
+            req.open("GET", '/census/api_tables/'+url, true);
+            req.send();
+            return req;
+        }
+    }
+}
+function textToXML ( text ) {
+      try {
+        var xml = null;
+
+        if ( window.DOMParser ) {
+
+          var parser = new DOMParser();
+          xml = parser.parseFromString( text, "text/xml" );
+
+          var found = xml.getElementsByTagName( "parsererror" );
+
+          if ( !found || !found.length || !found[ 0 ].childNodes.length ) {
+            return xml;
+          }
+
+          return null;
+        } else {
+
+          xml = new ActiveXObject( "Microsoft.XMLDOM" );
+          xml.async = false;
+          xml.loadXML( text );
+
+          return xml;
+        }
+      } catch ( e ) {
+        // suppress
+      }
+    }
+function searchNodeValue(name){
+	xmlDoc = textToXML(req.responseText);
+	variables = xmlDoc.getElementsByTagName('variable');
+	for(var i =0; i<variables.length; i++){
+		if(variables[i].getAttribute('name')==name){
+			return variables[i].firstChild.nodeValue;
+		}
+	}
+	return null;
+}
+function searchName(nodeValue){
+	xmlDoc = textToXML(req.responseText);
+	variables = xmlDoc.getElementsByTagName('variable');
+	
+	for(var i =0; i<variables.length; i++){
+		if(variables[i].firstChild.nodeValue.replace(/\s/g, "")==nodeValue.replace(/\s/g, "")){
+			return variables[i].getAttribute('name');
+		}
+	}
+
+	return null;
+}
+function search(input){
+	result = searchName(input);
+	if (result == null){
+		result = searchNodeValue(input);
+	}
+	alert(result);
+}
+function matchNodeValue(NodeValue){
+	xmlDoc = textToXML(req.responseText);
+	variables = xmlDoc.getElementsByTagName('variable');
+	var result = [];
+	for(var i =0; i<variables.length; i++){
+		if(fuzzy_match(variables[i].firstChild.nodeValue.replace(/\s/g, ""),NodeValue.replace(/\s/g, ""))){
+			result.push(variables[i].getAttribute('name')+", "+variables[i].firstChild.nodeValue);
+		}
+	}
+	console.log(result);
+
+	document.getElementById('text').innerHTML = toString(result);
+
+	return result;
+}
+function matchName(name){
+	xmlDoc = textToXML(req.responseText);
+	variables = xmlDoc.getElementsByTagName('variable');
+	var result = [];
+	for(var i =0; i<variables.length; i++){
+		if(fuzzy_match(variables[i].getAttribute('name'),name)){
+			result.push(variables[i].getAttribute('name')+", "+variables[i].firstChild.nodeValue);
+		}
+	}
+	document.getElementById('text').innerHTML = toString(result);
+	return result;
+}
+
+function fuzzy_match(str,pattern){
+    pattern = pattern.split("").reduce(function(a,b){ return a+".*"+b; });
+    return (new RegExp(pattern)).test(str);
+};
+function toString(arr) {
+	result = ""
+	for(var i = 0; i < arr.length; i++){
+		result = result + arr[i]+"<br>";
+	}
+  return result;
+}
+
+</script>
+</head>
+<body onLoad="loadXMLDoc('2010sf1')">
+<select onchange="loadXMLDoc(value)">
+  <option value="2010sf1">2010 SF1 API Variables [XML]</option>
+  <option value="2000sf1">2000 SF1 API Variables [XML]</option>
+  <option value="2000sf3">2000 SF3 API Variables [XML]</option>
+  <option value="acs5yr2011">2007-2011 ACS API Variables [XML]</option>
+  <option value="acs5yr2010">2006-2010 ACS API Variables [XML]</option>
+</select>
+
+<br><br><br>
+Search: <input type="text" name="search" id = "search">
+<input type="button" value="Get" onClick="search(document.getElementById('search').value)">
+
+<br><br><br>
+Match for Name: <input type="text" name="search" id = "searchName">
+<input type="button" value="Get" onClick="matchName(document.getElementById('searchName').value)">
+
+<br><br><br>
+Match for NodeValue: <input type="text" name="search" id = "searchNodeValue">
+<input type="button" value="Get" onClick="matchNodeValue(document.getElementById('searchNodeValue').value)">
+<br><br><br>
+<div id="text"></div>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+{% load profiles_tags %}<div class="col fl tour_2 no-pr">
+                        {% if geo_record.level.summary_level != default_georecord.level.summary_level %}   
+							<span class="buttons">
+								<a class="" href="{% record_href default_georecord %}">
+									<span>
+										Back to {{default_georecord.name}}
+									</span>
+								</a>
+							</span>
+                            {%endif%}
+							{% for k, level in levels.items %}
+							<span class="buttons geo-nav"> 
+								<a id="dd-{{ level.slug }}" class="dd">{% if selected_record %}<span>{{ selected_record.name}}</span>{% else %}<span>Choose {{ level.name }}</span>{% endif %}<span class="icon icon-arrow-down"></span></a> 
+								
+								<ul class="dd-content">
+                                    {% for record in level.geos %}<li><a href="{% record_href record %}" data-sn="{{record.sortable_name}}">{{ record.name }}</a></li>{% endfor %}
+								</ul> 
+							</span> 
+							{% endfor %}
+						</div> 
+						<div class="fr text-right"> 
+						</div> 

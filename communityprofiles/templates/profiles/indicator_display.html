@@ -1,0 +1,88 @@
+<html>
+<head>
+	<meta http-equiv="content-type" 
+		content="text/html;charset=utf-8" />
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/protovis_vml-d3.2.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/visualization.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.2.min.js"></script>
+<style type="text/css">
+#container {
+    background-color: #fff;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+}
+#fig {
+    width: 500px;
+}
+
+</style>
+</head>
+<body>
+<div id="container">
+<div id="fig">
+<script type="text/javascript+protovis">
+
+$.getJSON('/profiles/indicator_data/{{ indicator_data.indicator.id }}?time={{ indicator_data.time.name }}{% for record in records %}&record={{ record.id}}{% endfor %}&callback=test', function(table) {
+var rank = table.data;
+rank.sort(function(a,b) a.value-b.value);
+var data = {classes:table.classes,data:rank};
+
+$.getJSON('/profiles/geojson/?{% for record in records %}record={{ record.id}}&{% endfor %}callback=test', function(geo_records) {
+
+v = new vis.Visualization();
+
+v.load(
+    new vis.Data(data), 
+    new vis.Geo(geo_records, 'TRACT')
+);
+
+    /* Layout */
+    var map_w = 500,
+        map_h = 500;
+
+    /* Main Panel */
+    var map = new pv.Panel()
+        .canvas('fig')
+        .width(map_w)
+        .height(map_h)
+        .bottom(0)
+        .left(0)
+        .right(0)
+        .top(0);
+       
+    /* Map */
+    var geo_scale = v.geo.scale(500, 500);
+    var map_offset = 0;
+
+    map = map.add(pv.Panel) // map panel
+        .data(v.geo.features())
+        .left(map_offset)
+        .top(10)
+    .add(pv.Panel) // municipality panel
+        .data(function(c) { return c['geometry']['coordinates']} )
+    .add(pv.Line) // municipality landmass/polygons
+        .data(function(l) { if(l.length == 1) { return l[0] } else { return l }})
+        .left(geo_scale.x)
+        .top(geo_scale.y)
+        .fillStyle(function(d, l, c) {
+          return v.color(v.data_obj.forKey(c.properties.key,function(item){return item.value}))
+         })
+        .lineWidth(function(d,l,c) v.probed == c.properties.key ? 3 : 1)
+        .lineJoin(null)
+        .strokeStyle(function(d,l,c) v.probed == c.properties.key ? "#666" : "#ddd")
+        .antialias(true)
+    
+    map.render();
+
+
+});
+});
+
+</script>
+</div>
+</div>
+</body>
+
+</html>

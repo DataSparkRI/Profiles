@@ -1,0 +1,5 @@
+                                <ul>
+                                    {% for indicator, href in indicators %}
+                                    <li><a href="{{ href }}">{{ indicator.display_name|default:indicator.name }}</a></li>
+                                    {% endfor %}
+                                </ul>

@@ -1,0 +1,75 @@
+{% load profiles_tags %}                                <table class="data-table"> 
+									<thead> 
+										<tr> 
+											<th>{{ title }}</th>
+                                            {% for time in times %}
+                                            <th colspan="3">{{ time.name }}</th>
+                                            {% endfor %}
+                                            <th colspan="2">Change</th>
+										</tr> 
+									</thead> 
+									<tbody>
+                                        {% for info in indicator_info %}
+                                        <tr>
+                                            <th>{{ info.indicator.display_name }}</th>
+                                            {% for value in info.values %}
+                                            {% if forloop.last and display_change %}
+                                                {% if value and value.number %}
+                                                    <td class="value">{% format_number value.number %}</td>
+                                                {% else %}
+                                                    <td class="value empty">&nbsp;</td>
+                                                {% endif %}
+                                                {% if value and value.percent %}
+                                                    <td>{% format_number value.percent "PERCENT" %}%</td>
+                                                {% else %}
+                                                    <td class="empty">&nbsp;</td>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if value and value.number %}
+                                                    <td class="value">{% format_number value.number %}</td>
+                                                {% else %}
+                                                    <td class="value empty">&nbsp;</td>
+                                                {% endif %}
+                                                {% if value and value.moe %}
+                                                    <td class="moe">&plusmn; {% format_number value.moe %}</td>
+                                                {% else %}
+                                                    <td class="empty">&nbsp;</td>
+                                                {% endif %}
+                                            {% if info.denominators|length %}<td>Divisor</td>{% else %}<td class="empty">&nbsp;</td>{% endif %}
+                                            {% endif %}
+                                            {% endfor %}
+                                        </tr>
+                                        {% for denominator, values in info.denominators %}
+                                        <tr class="denominator"{% if not forloop.first %} style="display:none;"{% endif %}>
+                                            <th>... as {{ denominator.label }}</th>
+                                            {% for value in values %}
+                                            {% if forloop.last and display_change %}
+                                                <td class="empty">&nbsp;</td>
+                                                {% if value and value.percent %}
+                                                    <td>{% format_number value.percent %}
+                                                {% else %}
+                                                    <td class="empty">&nbsp;</td>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if value and value.percent %}
+                                                    <td class="value">{% format_number value.percent "PERCENT" %}%</td>
+                                                {% else %}
+                                                    <td class="value empty">&nbsp;</td>
+                                                {% endif %}
+                                                {% if value and value.moe %}
+                                                    <td class="moe">{% format_number value.moe %}</td>
+                                                {% else %}
+                                                    <td class="moe empty">&nbsp;</td>
+                                                {% endif %}
+                                                {% if value and value.number %}
+                                                    <td>{% format_number value.number %}</td>
+                                                {% else %}
+                                                    <td class="empty">&nbsp;</td>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% endfor %}
+                                        </tr>
+                                        {% endfor %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>

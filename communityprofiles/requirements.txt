@@ -1,0 +1,47 @@
+BeautifulSoup==3.2.1
+Django==1.5.1
+Markdown==2.2.0
+#PIL>=1.1.7
+South==0.7.3
+Whoosh==2.5.3
+amqplib==1.0.2
+beautifulsoup4==4.1.3
+distribute==0.6.34
+django-admin-jqueryui==1.8.22
+django-admin-sortable==1.6.3
+django-appconf==0.6
+django-compressor==1.2
+django-floppyforms==0.4.6
+django-haystack==2.1.0
+django-indexer==0.3.0
+django-kombu==0.9.4
+-e git://github.com/asmedrano/django-lilbox.git#egg=django_lilbox
+django-paging==0.2.4
+django-picklefield==0.1.9
+-e git://github.com/asmedrano/django-radmin-console.git#egg=django_radmin_console
+django-registration==0.8
+#-e git://github.com/ProvidencePlan/DjangoSays.git@5ab1c173faf9c7f232604470966dec41b613796a#egg=django_says-master
+django-storages==1.1.5
+django-tastypie==0.9.14
+django-templatetag-sugar==0.1
+geopy==0.95.1
+-e git+git@github.com:coleifer/huey.git#egg=huey
+kombu==2.1.8
+mimeparse==0.1.3
+mock==1.0b1
+ordereddict==1.1
+psycopg2==2.4.1
+pycrypto==2.6
+-e git://github.com/asmedrano/pylmth.git#egg=pylmth
+pyparsing==1.5.5
+pysqlite==2.6.3
+python-dateutil==2.1
+python-ptrace==0.6.5
+redis==2.8.0
+requests==2.0.1
+-e git+git@github.com:ProvidencePlan/rigeocoder.git#egg=rigeocoder
+six==1.3.0
+sorl-thumbnail==11.05.2
+ssh==1.7.14
+uuid==1.30
+wsgiref==0.1.2

@@ -1,0 +1,83 @@
+<div id="exporter" style="display:none">
+  <div id="export-wrapper">
+
+    <form id="export-form" method="get" action="/profiles/export">
+      <h2>Export Page</h2>
+
+      <div id="indicator-export-choice-wrap">
+        <h4>Choose Indicators</h4>
+
+		<div class="export-select-tbl-wrap">
+			<table id="indicator-tbl">
+				<tbody>
+					{%if indicators%}
+					{%for ind in indicators %}
+					<tr>
+						<td><input type="checkbox" checked="checked" name="i" value="{{ind.id}}" /></td>
+
+						<td>{{ind.display_name}}</td>
+					</tr>
+					{%endfor%}
+					{%endif%}
+					{%if indicator%}
+					<tr>
+						<td><input type="checkbox" checked="checked" name="i" value="{{indicator.id}}" /></td>
+
+						<td>{{indicator.display_name}}</td>
+					</tr>
+
+					{%endif%}
+
+				</tbody>
+			</table>
+		</div>
+      </div>
+
+      <div id="geography-export-choice-wrap">
+        	<h4>Choose Geographies</h4>
+
+        	<div class="export-select-tbl-wrap">
+			<table id="geography-tbl">
+				<tbody>
+					{%if context == "indicator" %}
+
+					{%if geo_record.level.slug == 'state' %}
+						<tr>
+							<td><input type="checkbox" name="r" value="smt" /></td>
+							<td> Export All State, Munis and Tracts </td>
+						</tr>	
+					{%endif%}
+
+					{% for geo in geo_record.child_records %}
+					<tr>
+						{%if geo_record.level.slug != 'state' %}
+						<td><input type="checkbox" checked="checked" name="r" value="{{geo.id}}" /></td>
+						{%else%}
+						<td><input type="checkbox" name="r" value="{{geo.id}}" /></td>
+						{%endif%}
+
+						<td>{{geo.name}}</td>
+					</tr>
+					{%endfor%}
+					{%else%}
+					<tr>
+						<td><input type="checkbox" checked="checked" name="r" value="{{geo_record.id}}" /></td>
+
+						<td>{{geo_record.name}}</td>
+					</tr>
+					
+					{%endif%}
+				</tbody>
+			</table>
+        	</div>
+      </div>
+
+      <div style="clear: both;"></div>
+
+      <div id="export-btn-wrap">
+	      <input class="buttons" type="submit" value="Export as CSV"/>
+      </div>
+    </form>
+  </div>
+  </div>
+

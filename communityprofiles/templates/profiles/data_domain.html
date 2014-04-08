@@ -1,0 +1,205 @@
+{% extends "profiles/base_profiles.html" %}{% load profiles_tags %}
+{%block head%}
+	<link rel="stylesheet" href="{{ STATIC_URL }}js/maps/leaflet.css">
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:400italic' rel='stylesheet' type='text/css'>
+
+	<!--[if lte IE 8]>
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.ie.css" />
+	<![endif]-->
+	<script src="{{ STATIC_URL }}js/maps/leaflet.js"></script>
+	<script src="{{ STATIC_URL }}js/maps/leaflet_maps.js"></script>
+    <script type="text/javascript">
+        var LEVEL = JSON.parse('{{level_json|safe}}');
+        var LEVELS = JSON.parse('{{levels|safe}}');
+        var RECORD = JSON.parse('{{rec_json|safe}}');
+        var CENSUS_ID = '{{geo_record.census_id}}';
+        var FILTER_KEY = RECORD.geo_id.replace(CENSUS_ID, "");
+        var API_URL = '{{API_URL}}';
+        var DOMAIN = {'name':'{{data_domain.name}}', 'slug':'{{data_domain.slug}}'};
+        var APP_URL = "{{APP_HOST}}";
+        var CENTER_MAP = {{CENTER_MAP}};
+        var INIT = function(){
+            initScrollSpy();
+        }
+        {% if user.is_authenticated %}var AUTHN=true;{%endif%}
+
+    </script>
+
+{%endblock%}
+{% block content %}
+    <div ng-controller="MapCntrl">
+       
+            {%comment%}
+            <div id="data-domains">
+                {% data_domains geo_level geo_record data_domain %}
+            </div>
+            {%endcomment%}
+
+
+    <div class="row hidden-print">
+        {% data_domains geo_record data_domain %}
+    </div>
+
+    <div class="row" id="wrap">
+     
+        <div class="col-md-3" id="sb">
+            <div class= "sb-fix" data-spy="affix" data-offset-top="140" data-offset-bottom="0">
+                
+            <h4 id="geo-rec-title"  ng-class="{'hidden-print': dataViewActive}">{{geo_record.name}}</h4>
+            <h3 id="domain-title"  ng-class="{'hidden-print': dataViewActive}">{{data_domain}}</h3>
+            <div id="map" class="hidden-print">
+               
+            </div>{#end map#}
+            <div id="map-tools" class="well hidden-print">
+                <h3> Explore </h3>
+                <div id="similar-nav" class="limited-dd">
+                    <h5>More places like {{geo_record.name}}</h5>
+                    <select class="form-control input-sm" ng-model="selected_record" ng-options="rec.name for rec in lev_records | orderBy:geoLabelSort" ng-change='updateRecordFromSimilar()'>
+                        <option value="">{{geo_record.name}}</option>
+                    </select>
+                    
+                </div>
+
+                <h5>Change Geography Level </h5>
+                <select class="form-control input-sm" ng-model="level" ng-options="level.name for level in levels" ng-change="updateLev(level, true)">
+                                        
+                    <option value="">{[{level.name}]}</option>
+                </select>
+
+                <div id="geo-level-recs-wrap" class="hidden">
+                    <select class="form-control input-sm" ng-model="selected_record" ng-options="rec.label for rec in options_records | orderBy:geoLabelSort" ng-change="updateRecord()">
+                       <option value="">{[{level.name}]}s in {{geo_record.name}}</option>
+                    </select>
+                </div>
+                
+                <h5>Find an Address</h5> 
+                  <form ng-submit="geocodeAddress($event)">
+                        <div class="input-group" id="find-address-form">
+                      
+                          <input type="text" class="form-control input-sm" id="address-input" ng-model="address" placeholder="Street, City, Zip" />
+                          <span class="input-group-btn">
+                            <button class="btn btn-default btn-sm" type="button">Go!</button>
+                          </span>
+                        </div>{# find-address-form#}
+                  </form>
+                {# geocode messages#}
+                <span class="label label-{[{geocode_mssg_type}]}">{[{geocode_mssg}]}</span>
+                <div class="list-group" id="address-results">
+                    <a href="#" class="list-group-item preventable" ng-click="chooseAddress(addr, $event)" ng-repeat="addr in addr_results">{[{addr.location.address}]}</a>
+                </div>
+                
+                <div ng-bind-html="selected_address.message"></div>
+
+                <div class="list-group" id="address-breakdown">
+                    <a href="#" ng-click="updateRecord(geo.slug, geo.level.slug)" class="list-group-item" ng-repeat="geo in selected_address.geography">
+                        {[{geo.name}]} - {[{geo.level.name}]}</td>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+        </div> {# end sb#}
+
+        <div class="col-md-9"  ng-class="{'hidden-print': dataViewActive}"> 
+            <div class="row" id ="main-tables">
+               
+                {%for domain in data_domain.subdomains.all%}
+                <div class="panel panel-default" id="{{domain.slug}}">
+                    <div class="panel-heading sub-domain">
+                        <h5>{{domain.name}}</h5>
+                        <form class="dl-form hidden-print" name="download" action="{{API_URL}}/csv/" method="get">
+                            <input type="hidden" name="i" value="{%for g in domain.sorted_groups%}{%for indicator in g|group_filter:geo_level %}{{indicator.id}},{% endfor %}{% endfor %}">
+                            <input type="hidden" name="g" value="{{geo_record.id}}">
+                            <input type="hidden" name="dom" value="{{domain.name}}">
+
+                            <button type="submit" class="btn btn-default btn-sm">Download <span class="glyphicon glyphicon-file"></span></button>
+                        </form>
+                    </div>
+
+                    <div class="panel-body">
+                    <ul class="domain-groups">
+                    {%for g in domain.sorted_groups%}
+                    <li>
+{% if g|group_filter:geo_level %}
+                    <a href="#" class="domain-title">
+                        <span id="{{g.name}}" class="title {%if forloop.first%} first-group{%endif%}" ng-click='groupSelect([{%for indicator in g|group_filter:geo_level %}
+                            {{indicator.get_slug_time_props|order_key:forloop.counter|safe}}{%if forloop.last%}{%else%},{%endif%}{%endfor%}],"{{g.name}}", $event)'>{{g.name}} <span class="glyphicon glyphicon-chevron-right"></span></span></a>
+{% else %}
+                    <a href="#" class="domain-title" rel="popover" data-trigger="hover" style="color:gray" data-title="No Data" data-content="Data not available at all geography levels">
+                        <span id="{{g.name}}" class="title">{{g.name}}</span></a>
+
+{% endif %}
+
+                        <table class="table table-condensed ng-cloak hidden" ng-cloak> 
+                            <tbody>
+                            {#<!--- header -->#}
+                            <tr class="table-header" ng-repeat-start="s in data_cache['{{g.name}}'].sortedGroupedTimes" ng-init="time=data_cache['{{g.name}}'].groupedTimes[s]">
+                                <td class="indicator-name"></td>
+                                
+                                <td class="indicator-time" colspan="{[{time.times.length|col}]}" ng-repeat='t in time.times'>
+                                    <div>{[{t}]}</div>
+                                </td>
+                                
+                                <td class="indicator-info hidden-print"></td>
+                                <td class="indicator-options hidden-print"><div class="wrap"></div></td>
+                            </tr>
+
+                            {#<!--- inddata -->#}
+                            <tr id="{[{indicator.slug}]}" class="indicator-data-row" data-indicator="{[{indicator.id}]}" ng-repeat-start="indicator in time.indicators | orderBy:'order_key'">
+                                <td class="indicator-name" ng-bind-html="indicator.name | safehtml"></td>
+
+                                <td class="indicator-time" colspan="{[{indicator.times.length | col}]}" ng-repeat='t in indicator.times'>
+                                    <div ng-if = "indicator.vals[t].value==''" class="val-wrap">N/A</div>
+                                    <div ng-if = "indicator.vals[t].value !=''" class="val-wrap">{[{indicator.vals[t].value}]}</div>
+
+                                    <div class="moe-wrap" ng-bind-html=indicator.vals[t].moe|safehtml></div>
+                                </td>
+                                <td class="indicator-info hidden-print">
+                                    <div> <a href="#" ng-click="indicatorInfo($event, indicator)"><span class="glyphicon glyphicon-info-sign"</span></a></div>
+                                </td>                                    
+                                <td class="indicator-options hidden-print">
+                                    <div class="wrap">
+                                    <a href="{[{indicator.targ_url}]}" data-indicator="{[{indicator.name}]}" class="map-link" ng-click="mapIt($event)">MAP{#<span class="glyphicon glyphicon-globe"></span>#}</a>
+                                    </div>
+                                    <div ng-bind-html=indicator.alink|safehtml></div>
+
+                                </td>
+                            </tr>
+                            {#<!--- denoms -->#}
+                            <tr id="{[{denom.slug}]}" ng-repeat="denom in indicator.denominators" ng-repeat-end class="denominator-row">
+                        
+                                <td class="indicator-name" ng-bind-html="denom.name | safehtml"></td>
+
+                                <td class="indicator-time" colspan="{[{indicator.times.length|col}]}" ng-repeat='t in indicator.times'>
+                                    <div class="val-wrap denominator" {#data-toggle="tooltip" title="{[{denom.vals[t].number | prefix:'of'}]}"#}>{[{denom.vals[t].value}]} <div class="moe-wrap" ng-bind-html=denom.vals[t].moe|safehtml></div> <small>of</small> {[{ denom.vals[t].number }]}</div>
+                                    
+                                </td>
+
+                                <td colspan="2">
+                                </td>
+                            </tr>
+
+                            <tr ng-repeat-end class="sep shim {[{$last | ifBool:'last'}]}"><td></td></tr>
+                            {#<!---end ind data -->#}
+                            
+                            </tbody>
+                        </table>
+                    </li>
+                    {%endfor%}
+                    </ul>
+                </div>
+
+                </div>
+                {%endfor%}
+                <small id="moe-print-notice" class="visible-print"><b>Note:</b> MOEs are not included on the print tables, but are available through the data download option.</small>
+
+            </div>
+        </div>
+    </div> {# end mapcontroller#}
+{% endblock content %}
+{%block extrafoot%}
+
+<div id ="f-foot" ><a href="#" class="hidden-print"><span class="glyphicon glyphicon-chevron-up"></span></a></div>
+{% endblock extrafoot%}
+

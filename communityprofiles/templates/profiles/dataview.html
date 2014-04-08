@@ -1,0 +1,211 @@
+<!DOCTYPE html>{% load profiles_tags %}
+<!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8" ng-app="profiles"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9" ng-app="profiles"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="" ng-app="profiles"> <!--<![endif]-->
+	<head > 
+		<meta charset="utf-8"> 
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+        <title></title>
+		<meta name="description" content=""> 
+		<meta name="author" content=""> 
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<link rel="shortcut icon" href="/favicon.ico"> 
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png"> 
+        
+ 		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css">
+ 		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profiles.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}js/maps/leaflet.css">
+        
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.ie.css" />
+        <![endif]-->
+        <script src="{{ STATIC_URL }}js/maps/leaflet.js"></script>
+        <script src="{{ STATIC_URL }}js/maps/leaflet_maps.js"></script>
+        <script type="text/javascript">
+            var LEVEL = JSON.parse('{{level_json|safe}}');
+            var LEVELS = JSON.parse('{{levels|safe}}');
+            var RECORD = JSON.parse('{{rec_json|safe}}');
+            var CENSUS_ID = '{{geo_record.census_id}}';
+            var FILTER_KEY = RECORD.geo_id.replace(CENSUS_ID, "");
+            var CENTER_MAP = {{CENTER_MAP}};
+
+            var INDICATOR = {slug:"{{indicator.slug}}", name:"{{indicator.display_name}}", tbl_name:null, times:JSON.parse('{{times|safe}}'), key:"number"};
+            {%if indicator.denominator_set.count != 0%}
+            var INDICATOR_OPTIONS = [{slug:"{{indicator.slug}}",name:"{{indicator.display_name}}",tbl_name:null,times:JSON.parse('{{times|safe}}'), key:"number"}];
+            {%for d in indicator.denominator_set.all %}
+            INDICATOR_OPTIONS.push({slug:"{{d.slug}}", name:"{{d.display_name}}", tbl_name:"{{d.table_label}}", times:JSON.parse('{{times|safe}}'), key:"percent"});
+            {%endfor%}
+            {%endif%}
+            var API_URL = '{{API_URL}}';
+            var APP_URL = "{{APP_HOST}}";
+            var DISP_OPTS = JSON.parse('{{display_options|safe}}');
+            var KEY = '{{value_key}}';
+            var INIT = function(){
+                var tHeight= window.innerHeight-90; {# 70 is the height of the offset from the top#}
+                if (tHeight < 10){
+                tHeight = window.parent.innerHeight-245;}
+                $(".dataview.container .data-table").css({height:tHeight});
+                $(".dataview.container #map").css({height:tHeight});
+
+            };
+        </script>
+	</head> 
+    <body>
+
+        <div class="dataview container ng-cloak" ng-controller="MapCntrl" ng-cloak>
+            <div class="row" ng-show="wTop">
+                <div class="col-12-md">
+                    <h4>{{indicator.display_name}}</h4>
+                </div>
+            </div>
+
+            <span id="activity" class="label label-default" ng-show="activity">Loading Data...</span>
+          
+            <div class="row hidden-print">
+              
+                {# times toggle #}
+                <div class="col-md-8" id="map-controls" ng-show="enable_tools">
+                    {#<!--<h3>{{indicator.display_name}} - {{geo_record.name}}</h3>-->#}
+                    <div class="btn-group btn-group-sm" data-toggle="buttons" >
+                        <label class="btn btn-primary" ng-repeat="t in times" id="t{[{t}]}" ng-click="switchTime(t)" ng-class="{active: t==time}">
+                            <input type="radio"> {[{t}]}
+                        </label>
+                    </div>
+                    {# level toggle #}
+                    <div class="btn-group btn-group-sm" data-toggle="buttons">
+                        <label class="btn btn-info" ng-repeat="l in levels" id="lev_{[{l.name}]}" ng-click="switchDataLevel(l)" ng-class="{active: l==level}">
+                            <input type="radio"> {[{l.name}]}
+                        </label>
+                    </div>
+                </div>{# end map controls#}
+                <div class="col-md-4" ng-show="enable_tools && indicatorOptions != false" id="indicator-options">
+                    <label> Options </label>
+                    <select class="form-control input-sm" ng-options="i.name for i in indicatorOptions"  ng-model="indicator" ng-change="changeIndicator(i)">
+                    </select>
+                 </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="map">
+                    </div>{#end map#}  
+                </div> 
+            
+                <div class="col-md-6 data-table">
+                    <form class="dl-form" name="download" action="{{API_URL}}/csv/" method="get">
+                        <input type="hidden" name="i" value="{{indicator.id}}">
+                        <input type="hidden" name="g" value="{[{recordIdstr}]}">
+                        <input type="hidden" name="dom" value="{{indicator.display_name}}">
+
+                        <button type="submit" class="btn btn-default btn-sm hidden-print">Download All <span class="glyphicon glyphicon-file"></span></button>
+                    </form>
+                    <button ng-show="!wTop" id="print-btn" class="btn btn-default btn-sm hidden-print" title="Open a Print Friendly Version" ng-click="launchPrintFriendly()">Print Friendly <span class="glyphicon glyphicon-print"></span></button>
+
+
+                {#table#}
+             
+                <table class="table table-striped table-bordered" id="table-data-{[{key}]}"  ng-repeat='(key, tval) in table_data' ng-show="key==level.name">
+                    <thead>
+                        <tr id="{[{val.label}]}">
+                            <th class="geo-label" ng-show="indicator.key !='percent'"><div ng-click="sortTable('label')">Geography</div></th>
+                            <th class="geo-label" ng-show="indicator.key =='percent'" rowspan="2"><div ng-click="sortTable('label')">Geography</div></th>
+                            
+                            <th ng-repeat="t in indicator.times" id="{[{t}]}" ng-show="indicator.key !='percent'">
+                                <div>{[{t}]}</div>
+                            </th>
+                            <th ng-repeat="t in indicator.times" id="{[{t}]}" ng-show="indicator.key =='percent'" colspan="3" class="time-heading">
+                                <div>{[{t}]}</div>
+                            </th>
+
+                        </tr>
+                        <tr ng-repeat-end ng-show="indicator.key =='percent'">
+                            <th ng-repeat-start="t in indicator.times">
+                             %
+                            </th>
+                            <th>
+                             #
+                            </th>
+                            <th ng-repeat-end>
+                                {[{indicator.tbl_name}]}
+                            </th>
+
+                        </tr>
+                    </thead>
+                    {#<tbody style="display:block;" class="shim"></tbody>#}
+                    <tbody>
+                        <tr ng-repeat="val in tval" id="{[{val.label}]}">
+                            <td class="geo-label"><div>{[{val.label}]}</div></td>{# geo label #}                            
+                            <td ng-repeat-start="t in indicator.times" id="{[{t}]}">{# main value #}
+                                <div class="val-wrap" ng-show="indicator.key =='percent'">
+                                    {[{value_formatter(val[t].value, true)}]}<span ng-show="val[t].value">%</span>
+                                    <div class="moe-wrap" ng-bind-html="val[t].moe|safehtml" ng-show="val[t].moe"></div>
+                                </div>
+
+                                <div class="val-wrap" ng-show="indicator.key =='number'">
+                                    {[{value_formatter(val[t].value)}]}
+                                    <div class="moe-wrap" ng-bind-html="val[t].moe|safehtml" ng-show="val[t].moe"></div>
+                                </div>
+                                
+                            </td>
+                            <td ng-show="indicator.key =='percent'">{#numerator#}
+                                <div class="val-wrap">
+                                    {[{value_formatter(val[t].numerator)}]}
+                                <div class="moe-wrap" ng-bind-html="val[t].numerator_moe|safehtml" ng-show="val[t].numerator_moe">
+                                  
+                                </div>
+
+                                </div>
+                            </td>
+                            <td ng-repeat-end ng-show="indicator.key =='percent'">  
+                                <div class="val-wrap">
+                                    {[{value_formatter(val[t].number)}]}
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                    </table>
+                       <small id="moe-print-notice" class="visible-print"><b>Note:</b> MOEs are not included on the print tables, but are available through the data download option.</small>
+
+            </div>
+
+            <div class="row" ng-show="wTop">
+                <div class="col-12-md">
+                   {%load markup%}<div class="notes-wrap">
+                    {%for note in indicator.get_notes%}
+                    <div class="note">
+                        <h3 class="n-label">{{note.label}}</h3>
+                        <p>{{note.text|markdown}}</p>
+                    </div>
+
+                    {%endfor%}
+                    </div>
+                </div>
+            </div>
+
+          </div>
+
+    	<script> 
+            var _gaq = [['_setAccount', '{% google_analytics %}'], ['_trackPageview']];
+            (function(d, t) {
+                var g = d.createElement(t),
+                s = d.getElementsByTagName(t)[0];
+                g.async = true;
+                g.src = ('https:' == location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                s.parentNode.insertBefore(g, s);
+            })(document, 'script');
+	    </script>
+
+   <script src="{{STATIC_URL}}js/jquery.min.js"></script>   
+   <script src="{{ STATIC_URL }}js/libs/angular.min.js"></script>
+   <script src="{{ STATIC_URL }}js/libs/angular-sanitize.min.js"></script>
+   <script src="{{ STATIC_URL }}js/libs/ngStorage.min.js"></script>
+   <script src="{{ STATIC_URL }}js/libs/bootstrap.min.js"></script>
+   <script src="{{ STATIC_URL }}js/pp.js"></script>   
+   <script src = "{{STATIC_URL}}js/app.js"></script>
+   <script src = "{{STATIC_URL}}js/ui.js"></script>
+   {{SENTRY_JS|safe}}
+   </body> 
+</html>

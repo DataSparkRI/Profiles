@@ -1,0 +1,46 @@
+{% extends "account/base.html" %}
+
+{% block title %}Login | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<section id="login">
+  <h2>Login</h2>
+  <form method="POST" class="fancy">
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+
+    <ul>
+      <li>
+        {{ form.username.errors }}
+        {{ form.username.label_tag }}
+        {{ form.username }}
+      </li>
+      <li>
+        {{ form.password.errors }}
+        {{ form.password.label_tag }}
+        {{ form.password }}
+      </li>
+    </ul>
+
+
+    <div class="form-actions">
+      <p>
+        Forgot your password?
+        <a href="{% url auth_password_reset %}">Reset it</a>.
+      </p>
+      <span class="buttons"> 
+        <input type="submit" value="Login" />
+	    </span>
+    </div>
+
+    <script type="text/javascript">
+        document.getElementById("id_username").focus();
+    </script>
+
+  </form>
+</section>
+
+{% endblock content %}
+

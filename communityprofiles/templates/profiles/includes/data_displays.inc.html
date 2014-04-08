@@ -1,0 +1,54 @@
+{% load thumbnail %}
+				{% if data_displays %}			
+				<section class="related-displays mtx ptx phl clearfix"> 
+
+					<header class="displays-header clearfix tour_7"> 
+						<div class="col w50"> 
+							<h2>Related Data Displays:</h2> 
+						</div> 
+						
+						<div class="col w50 text-right"> 
+							<span class="buttons" id ="datadisplay_filter"> 
+								<a class="dd" i><span>Filter By Times:</span><span class="icon icon-arrow-down"></span></a>
+								<ul class="dd-content">
+									{%for time in times %}
+									<li>
+										<a href="time_{{time.id}}">{{time.name}}</a>
+									</li>
+									{%endfor%}
+								</ul>							
+							</span> 
+							
+							{%comment%}
+							<span class="buttons"> 
+								<a href="#"><span>View More &raquo;</span></a> 
+							</span> 
+							{%endcomment%}
+						</div> 
+					</header> 
+
+					<div class="displays-elements"> 
+                        {% for display in data_displays %}
+						<article class="time_{{display.time.id}}{%if display.time.id != default_time%} dd_hidden{%else%} dd_active{%endif%}">   
+							<div class="box" > 
+								<a class="display-thumb" href="{{ display.get_absolute_url }}" target="_blank">
+                                {% thumbnail display.image "211x155" crop="center" format="PNG" as thumb %}
+                                <img src="{{ thumb.url }}" alt="Thumbnail of {{ display.title }}"/>
+                                {% endthumbnail %}
+                                </a> 
+								
+								<div class="display-info"> 
+									<h3>{{ display.title }}</h3>
+									<span> {{display.time}}</span>
+									<span>{{ display.subtitle }}<br> 
+									    {{ display.subsubtitle }}</span> 
+								</div> 
+							</div> 
+						</article> 
+
+                        {% endfor %}
+					</div> 
+				</section> 
+				<!-- END .related-displays --> 
+				
+        	{% endif %}

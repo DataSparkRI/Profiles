@@ -1,0 +1,75 @@
+<!DOCTYPE html>{% load profiles_tags %}{%load markup%}
+	<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--> 
+	<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--> 
+	<!--[if IE 8 ]>    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml" lang="en" class="no-js ie8"> <![endif]--> 
+	<!--[if IE 9 ]>    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml" lang="en" class="no-js ie9" xmlns:fb="http://ogp.me/ns/fb#"> <![endif]--> 
+	<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js" xmlns:fb="http://ogp.me/ns/fb#"> <!--<![endif]--> 
+	<head> 
+		<meta charset="utf-8"> 
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+
+		<title>{% block title %}Rhode Island Community Profiles{% endblock %}</title> 
+		<meta name="description" content=""> 
+		<meta name="author" content=""> 
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<link rel="shortcut icon" href="/favicon.ico"> 
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png"> 
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.css">
+		<link rel="stylesheet" href="{{ STATIC_URL }}css/style.css?v=2"> 
+		<link rel="stylesheet" href="{{ STATIC_URL }}css/pe-default.css"> 
+		<link rel="stylesheet" href="{{ STATIC_URL }}css/wireframe.css"> 
+		<link rel="stylesheet" href="{{ STATIC_URL }}css/skin-ri.css">
+		<script src="{{ STATIC_URL }}js/libs/modernizr.min.js"></script>
+		<script src="{{STATIC_URL}}js/jquery.min.js"></script>
+		<script src="{{ STATIC_URL }}js/pp.js"></script>
+
+
+	<link rel="stylesheet" href="{{ STATIC_URL }}js/maps/leaflet.css">
+	<!--[if lte IE 8]>
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.ie.css" />
+	<![endif]-->
+	<script src="{{ STATIC_URL }}js/maps/leaflet.js"></script>
+	<script src="{{ STATIC_URL }}js/maps/leaflet_maps.js"></script>
+</head> 
+	 
+<body onload="" class="print-view"> 
+	<div id="container" class="print">
+	<div id="header">
+		<a id="logo" href="http://www.provplan.org"><img src = "{{ STATIC_URL }}css/img/ProvPlan_logo_black_small.png" /></a>
+		<h1>Rhode Island Community Profiles</h1>
+	</div>
+<div id="Map-Tabs" class="tabs"> 					
+	<div class="indicator clearfix indicator-ttl">
+	{# THE INDICATOR NAME #}
+	<h3>{%if geo_record.level.name == "Census Tract"%}{{geo_record.parent.name}}, {%endif%}{{geo_record.name}}</h3>
+	<h2>{{indicator.display_name}}{%if denom%} <small>as {{denom.label}}</small>{%endif%}</h2>
+	{#{% include 'profiles/includes/search_by_address.html' with context="indicator" %} #}
+	</div> 
+	
+<div id="Tab-Content-Area" class="indicator_view"> 
+	<div id="data_view">
+		<div id="map" class="map"></div>
+		<div class="page-break"></div>
+		<div id="table_container" class="">
+		{% indicator_table indicator geo_record%}
+		</div> <!--end table_container-->
+	</div><!--end data_view -->
+	{%comment%}
+	{% include 'profiles/includes/share_popup.html' %}						
+	{%endcomment%}
+	</div> <!-- end #Tab-Content-Area -->
+	</div> 
+
+	{% include 'profiles/includes/maps/indicator_maps.html' %}
+	
+	<div class = "indicator-info">
+		<h2>{{indicator.display_name}}</h2>
+		{% for n in indicator.get_notes %}
+			<h3>{{n.label}}</h3>
+			{{n.text|markdown}}
+		{%endfor%}
+	</div>
+</div>
+</body>
+</html>

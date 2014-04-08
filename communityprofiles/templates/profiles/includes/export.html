@@ -1,0 +1,22 @@
+<script type="text/javascript">
+	{%if context == "data_domain"%}
+	var exp_ctx = "data_domain";
+	var ind_ids = [];
+	{% for ind in indicators %}
+	ind_ids.push({'id':{{ind.id}},'name':'{{ind.display_name}}'});
+	{% endfor %}
+	var geo_records= [];
+	geo_records.push({'id':{{geo_record.id}},'name':'{{geo_record.name}}'});
+	{%endif%}
+	{%if context == "indicator"%}
+	var exp_ctx = "indicator";
+	var ind_ids =[];
+	ind_ids.push({'id':{{indicator.id}},'name':'{{indicator.display_name}}'});
+	var geo_records = [];
+	geo_records.push({'id':{{geo_record.id}},'name':'{{geo_record.name}}'});
+	{% for geo in geo_record.child_records %}
+	geo_records.push({'id':{{geo.id}},'name':'{{geo.name}}'});
+	{%endfor%}
+	{% endif %}
+</script>
+

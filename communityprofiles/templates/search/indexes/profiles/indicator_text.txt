@@ -1,0 +1,9 @@
+{{ object.display_name }}
+{{ object.name }}
+{{ object.short_definition }}
+{{ object.long_definition }}
+{{ object.purpose }}
+{{ object.universe }}
+{{ object.limitation }}
+{{ object.levels.all|join:' '}}
+{{ object.data_domains.all|join:' ' }}

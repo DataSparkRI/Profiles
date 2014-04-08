@@ -1,0 +1,6 @@
+File Name	Matrix Number	Cell Count	Name	Universe
+01	P1	71	RACE		Total population
+01	P2	73	HISPANIC OR LATINO, AND NOT HISPANIC OR LATINO BY RACE		Total population
+02	P3	71	RACE FOR THE POPULATION 18 YEARS AND OLDER		Total population 18 years and over
+02	P4	73	HISPANIC OR LATINO, AND NOT HISPANIC OR LATINO BY RACE FOR THE POPULATION 18 YEARS AND OVER		Total population 18 years and over
+02	H1	3	OCCUPANCY STATUS		Housing units

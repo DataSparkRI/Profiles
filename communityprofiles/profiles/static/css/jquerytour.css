@@ -1,0 +1,231 @@
+.tooltip_tour{
+	position:absolute;
+	width:300px;
+/*	left:0;
+	top:0;
+	background-color:#000;
+	background: rgba(25, 25, 25, .95);
+	color:#fff;*/
+	background-color:#fff;
+	background: rgba(255, 255, 255, 1.0);
+	color:#000;
+	box-shadow: 0 0 20px #000;
+	z-index:999;
+	/*border:2px solid #fff;
+	border:2px solid rgba(0,0,0,.95);*/
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+}
+.tooltip_tour p{
+	padding:21px 10px 0px 10px;
+	font-size:14px;
+	left:0px;
+	/*text-align:center*/
+}
+.tooltip_arrow{
+	position:absolute;
+	background-color:transparent;
+	background-repeat:no-repeat;
+}
+.tooltip_arrow_T,
+.tooltip_arrow_B,
+.tooltip_arrow_TL,
+.tooltip_arrow_TR,
+.tooltip_arrow_BL,
+.tooltip_arrow_BR{
+	background-image:url("img/topbottom_big_white_v3.png");
+	width:50px;
+	height:70px;
+}
+.tooltip_arrow_L,
+.tooltip_arrow_R,
+.tooltip_arrow_LT,
+.tooltip_arrow_LB,
+.tooltip_arrow_RT,
+.tooltip_arrow_RB{
+	background-image:url("img/leftright_big_white_v3.png");
+	width:70px;
+	height:50px;
+}
+
+.tooltip_arrow_T{
+	background-position:0px -70px;
+	top:-70px;
+	left:50%;
+	margin-left:0px;
+}
+.tooltip_arrow_TL{
+	background-position:0px -7px;
+	top:-7px;
+	left:5px;
+}
+.tooltip_arrow_TR{
+	background-position:0px -7px;
+	top:-7px;
+	right:5px;
+}
+.tooltip_arrow_B{
+	background-position:0px 0px;
+	bottom:-7px;
+	left:50%;
+	margin-left:-3.5px;
+}
+.tooltip_arrow_BL{
+	background-position:0px 0px;
+	bottom:-69px;
+	left:15px;
+}
+.tooltip_arrow_BR{
+	background-position:0px 0px;
+	bottom:-7px;
+	right:5px;
+}
+.tooltip_arrow_L{
+	background-position:-70px 0px;
+	top:50%;
+	margin-top:0px;
+	left:-70px;
+	z-index: -1;
+}
+.tooltip_arrow_LT{
+	background-position:-7px 0px;
+	top:5px;
+	left:-7px;
+}
+.tooltip_arrow_LB{
+	background-position:-7px 0px;
+	bottom:5px;
+	left:-7px;
+}
+.tooltip_arrow_R{
+	background-position:0px 0px;
+	top:50%;
+	margin-top:0px;
+	right:-70px;
+	z-index: -1;
+}
+.tooltip_arrow_RT{
+	background-position:0px 0px;
+	top:50px;
+	right:-70px;
+}
+.tooltip_arrow_RB{
+	background-position:0px 0px;
+	bottom:5px;
+	right:-7px;
+}
+.overlay_tour{
+	position:fixed;
+	width:100%;
+	height:100%;
+	top:0px;
+	left:0px;
+	background:#000;
+	opacity:0.5;
+	z-index:100;
+	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50);
+}
+/*.tourcontrols{
+	position:fixed;
+	top:20px;
+	right:-300px;
+	width:270px;
+	background:;
+	color:#fff;
+	text-shadow:0px 0px 1px #fff;
+	font-size:16px;
+	padding:10px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	font-weight:bold;
+	z-index:9999;
+}
+.tourcontrols a{
+	font-size:11px;
+	color:#f0f0f0;
+	cursor:pointer;
+	font-weight:normal;
+	text-decoration:underline;
+	margin:10px;
+}
+.tourcontrols a:hover{
+	
+}*/
+.close_tour{
+	display: block;
+	position:absolute;
+	top:6px;
+	right:7px;
+	width:10px;
+	height:10px;
+	/*background:transparent url("img/close.gif") no-repeat center center;*/
+	background:transparent url("img/sm-icon-x.png") no-repeat center center;
+	cursor:pointer;
+}
+.tourcontrols p{
+	padding:10px;
+}
+
+#tour_btn_wrap{
+	position:relative;
+	height:30px;
+}
+
+.button_tour{
+	font-weight:bold;
+	position:absolute;
+	white-space: nowrap;
+	display:inline-block;
+	margin:0 5px 5px 5px;
+	cursor:pointer;
+	background: rgb(255,222,91);
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	color: rgb(68,68,68);
+	padding:3px 10px;
+	text-align: center;
+}
+.button_tour:hover {
+	background: #FFDEA7;
+}
+.button_tour:active{
+	background: #FFDEA7;
+	color:#000;
+}
+
+#nextstep{
+	left:5px;
+}
+#prevstep{
+	right:5px;
+}
+
+.nav_tour{
+	clear:both;
+	width:100%;
+	float:left;
+}
+
+.ie8 .tooltip_tour {
+	border: 1px solid #999;
+}
+
+.ie8 .tooltip_arrow_T,
+.ie8 .tooltip_arrow_B,
+.ie8 .tooltip_arrow_TL,
+.ie8 .tooltip_arrow_TR,
+.ie8 .tooltip_arrow_BL,
+.ie8 .tooltip_arrow_BR{
+	background-image:url("img/topbottom_big_white_v3_gray_border.png");
+}
+.ie8 .tooltip_arrow_L,
+.ie8 .tooltip_arrow_R,
+.ie8 .tooltip_arrow_LT,
+.ie8 .tooltip_arrow_LB,
+.ie8 .tooltip_arrow_RT,
+.ie8 .tooltip_arrow_RB{
+	background-image:url("img/leftright_big_white_v3_gray_border.png");
+}

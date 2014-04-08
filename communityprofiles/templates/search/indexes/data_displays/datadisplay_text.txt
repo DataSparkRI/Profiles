@@ -1,0 +1,7 @@
+{{ object.title }}
+{{ object.template.title }}
+{{ object.template.subtitle }}
+{{ object.description }}
+
+
+

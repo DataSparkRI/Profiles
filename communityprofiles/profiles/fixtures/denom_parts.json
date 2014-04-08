@@ -1,0 +1,79 @@
+[
+    {
+        "pk": 137,
+        "model": "profiles.denominatorpart",
+        "fields": {
+            "indicator": 98,
+            "data_source": 3,
+            "denominator": 108,
+            "part": 446,
+            "formula": "B17010024+B17010031+B17010037+B17010004 + B17010011 + B17010017\r\n",
+            "data": ""
+        }
+    },
+    {
+        "pk": 138,
+        "model": "profiles.denominatorpart",
+        "fields": {
+            "indicator": 98,
+            "data_source": 3,
+            "denominator": 109,
+            "part": 446,
+            "formula": "B17010002",
+            "data": "",
+            "levels":[1,6,11]             
+        }
+    },
+    {
+        "pk": 357,
+        "model": "profiles.denominatorpart",
+        "fields": {
+            "indicator": 98,
+            "data_source": 2,
+            "denominator": 108,
+            "part": 98,
+            "formula": "P090024+P090031+P090037+P090004 + P090011 + P090017",
+            "data": "",
+            "levels":[1,6,11]
+             
+        }
+    },
+    {
+        "pk": 358,
+        "model": "profiles.denominatorpart",
+        "fields": {
+            "indicator": 98,
+            "data_source": 2,
+            "denominator": 109,
+            "part": 98,
+            "formula": "P090002",
+            "data": "",
+            "levels":[1,6,11]
+
+        }
+    },
+    {
+        "pk": 544,
+        "model": "profiles.denominatorpart",
+        "fields": {
+            "indicator": 97,
+            "data_source": 2,
+            "denominator": 283,
+            "part": 97,
+            "formula": "P087001",
+            "data": ""
+        }
+    },
+    {
+        "pk": 545,
+        "model": "profiles.denominatorpart",
+        "fields": {
+            "indicator": 97,
+            "data_source": 3,
+            "denominator": 283,
+            "part": 379,
+            "formula": "B17001001",
+            "data": ""
+        }
+    }
+]

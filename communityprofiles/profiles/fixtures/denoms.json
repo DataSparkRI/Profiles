@@ -1,0 +1,32 @@
+[
+    {
+        "pk": 108,
+        "model": "profiles.denominator",
+        "fields": {
+            "sort": 1,
+            "indicator": 98,
+            "multiplier": 100,
+            "label": "% of Families with Children"
+        }
+    },
+    {
+        "pk": 109,
+        "model": "profiles.denominator",
+        "fields": {
+            "sort": 1,
+            "indicator": 98,
+            "multiplier": 100,
+            "label": "% Families Below Poverty"
+        }
+    },
+    {
+        "pk": 283,
+        "model": "profiles.denominator",
+        "fields": {
+            "sort": 1,
+            "indicator": 97,
+            "multiplier": 100,
+            "label": "% of Population"
+        }
+    }
+]

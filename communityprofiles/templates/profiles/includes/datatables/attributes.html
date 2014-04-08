@@ -1,0 +1,57 @@
+{% load profiles_tags %}
+<table class="data-table"> 
+	<thead> 
+	<tr class="tour_4"> 
+		<th>{{ indicator.display_name|default:indicator.name }}</th> 
+		<th>&nbsp;</th>
+        {% for time in times %}
+        <th>{{ time }}</th>
+        {% endfor %}
+        {% if indicator.display_change %}
+        <th>Change</th>
+		{% endif %}
+		<th>&nbsp;</th>
+		</tr> 
+	</thead> 
+	<tbody>
+		{% for geo_record, href in attributes %}
+		<tr class = "attribute-entry">
+			
+				<td{% if indicator.display_percent %} rowspan="2"{% endif %}><a href="{{ href }}">{{ geo_record.name }}</a></td>
+				<td>#</td>
+				{% for time in times %}
+				 <td>{% indicator_number indicator geo_record time %}</td>
+				{% endfor %}
+
+				{% if indicator.display_change %}
+				<td>{% indicator_number indicator geo_record %}</td>
+				{% endif %}
+				<td {% if indicator.display_percent %} rowspan="2"{% endif %}><a class="preview">&nbsp;</a></td>
+        </tr>
+        {% if indicator.display_percent %}
+		<tr class="altrow"> 
+				<td>%</td>
+				{% for time in times %}
+				<td>{% indicator_percent indicator geo_record time %}</td> 
+			   {% endfor %}
+			   {% if indicator.display_change %}
+			   <td>{% indicator_percent indicator geo_record %}</td>
+			   {% endif %}
+        </tr> 
+       {% endif %}
+       {% endfor %}
+    </tbody>
+</table>
+
+<!--function to highlight in the table the census tract of the current page (simply adds 'selected_geo' class to the link)-->
+<script type="text/javascript">
+$(function(){
+	$(".attribute-entry a").each(function(){
+
+		var item_href = $(this).attr('href');
+		if(item_href === window.location.pathname){
+			$(this).addClass('selected_geo');
+		}
+	});	
+});
+</script>

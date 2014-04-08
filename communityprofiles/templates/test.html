@@ -1,0 +1,105 @@
+{% load profiles_tags %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="http://960ls.atomidata.com/static/cssserve/1/9/2/0/9/1/192091.css">
+<title>Indicator debug</title>
+<script type="text/javascript"
+ src="//ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<style>
+body {
+    font:85%/1.35em "helvetica neue", helvetica, arial, sans-serif;
+}
+
+tr.odd {
+    background-color: #eee;
+}
+
+#results table {
+    
+}
+
+#results table tr {
+    text-align: right;
+}
+
+#results table tr td, #results table tr th {
+    padding: 10px;
+}
+
+tr.subheader {
+    color: #666;
+}
+
+.number {
+    background-color: #f99;
+}
+.moe {
+    background-color: #99f;
+}
+.percent {
+    background-color: #9f9;
+}
+</style>
+</head>
+<body>
+                
+
+<div id="content" class="container_12">
+<h2>Results</h2>
+<div id="results">
+{% load humanize %}
+
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            {% for part in indicator_parts %}
+            <th colspan="3">{{ part.indicator.name }} ({{ part.time.name }})</th>
+            {% endfor %}
+        </tr>
+        <tr class="subheader">
+            <th></th>
+            {% for part in indicator_parts %}
+            <th class="number">#</th>
+            <th class="moe">MOE</th>
+            <th class="percent">%</th>
+            {% endfor %}
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for geo in geo_records %}
+        <tr class ="{% cycle 'odd' 'even' %}">
+            <th>{{ geo.name }}</th>
+            {% for part in indicator_parts %}
+            <td class="number">{% indicator_number part.indicator geo part.time %}</th>
+            <td class="moe">&plusmn; {% indicator_moe part.indicator geo part.time %}</th>
+            <td class="percent">{% indicator_percent part.indicator geo part.time %}</th>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    
+    {% comment %}
+        {% for indicator_part, ri_result, pvd_result in results %}
+        <tr class="{% cycle 'odd' 'even' %}">
+            <th>{{ indicator_part.indicator.name }} ({{ indicator_part.time.name }})</th>
+            <th>{{ indicator_part.formula }}</th>
+            <td>{{ ri_result.number|intcomma }}</td>
+            <td>&plusmn; {{ ri_result.moe|default:'N/A' }}</td>
+            <td>{{ pvd_result.number|intcomma }}</td>
+            <td>&plusmn; {{ pvd_result.moe|default:'N/A' }}</td>
+
+        </tr>
+        {% endfor %}{% endcomment %}
+    </tbody>
+</table>
+
+</div>
+</div>
+                
+
+<div id="footer" class="container_12"></div>
+            
+</body>
+</html>
+

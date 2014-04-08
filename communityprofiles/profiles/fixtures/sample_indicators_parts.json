@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "profiles.indicatorpart", "fields": {"formula": "P001001", "indicator": 1, "data_source": 7, "data": "", "time": 1}}, {"pk": 2, "model": "profiles.indicatorpart", "fields": {"formula": "P0010001", "indicator": 1, "data_source": 9, "data": "", "time": 2}}]

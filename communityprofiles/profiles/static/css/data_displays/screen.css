@@ -1,0 +1,75 @@
+body {
+  background: rgb(255, 255, 255);
+  font: 12px Helvetica Neue, sans-serif;
+}
+
+#fig {
+width: 900px;
+}
+#content {
+    margin-left: auto;
+    margin-right: auto;
+    width: 900px;
+}
+h1 {
+    margin-bottom: 0px;
+    text-align: center;
+}
+h2 {
+    margin-top: 0px;
+    font-size: 10px;
+    font-style: normal;
+    text-align: center;
+}
+h3 {
+    font-style: italic;
+    margin-bottom: 0px;
+    text-align: center;
+}
+
+div#hover {
+    font-size: 10px;
+    width: 120px;
+    padding: 2px;
+    border: 1px solid #ddd;
+    position: absolute; 
+    background-color: #fff;
+    z-index: 3; /* on IE, probed poly has 1 and labels have 2 */
+}
+
+div#hover span#geo_label {
+    font-weight: bold;
+}
+
+div#hover dl {
+margin: 0;
+padding: 0;
+
+}
+
+div#hover dl dt {
+    float:left;
+margin: 0;
+padding: 0;
+display:inline;
+}
+
+div#hover dl dd {
+    margin-left: 100px;
+    text-align: right;
+    float: left;
+margin: 0;
+padding: 0;
+display:inline;
+float: none;    
+}
+
+div#hover dt+dd{
+display:block;
+}
+
+#post_vis_content {
+    margin-top: 15px;
+    width: 100%;
+    text-align: center;
+}

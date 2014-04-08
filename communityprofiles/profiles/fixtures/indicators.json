@@ -1,0 +1,71 @@
+[
+    {
+        "pk": 141,
+        "model": "profiles.indicator",
+        "fields": {
+            "limitations": "The most general limitation for many decades has been the tendency of people to overreport ages or years of birth that end in zero or five. This phenomenon is called \"age heaping.\"   \r\n\r\nThere is some tendency for respondents to provide their age as of the date they completed the census questionnaire or interview, not their age as of the census reference date (April 1). In Census 2010, the question was expanded to two parts (i.e., age and date of birth). Both age and date of birth responses are used in combination to determine the most accurate age for the person as of the census reference date. The modified question along with editing procedures have attempted to minimize the effect of this reporting problem on tabulations. Additionally, the 2010 age question displays the census reference date prominently, and interviewer training emphasizes the importance of collecting age as of the reference date.\r\n\r\nRespondents sometimes round a persons age up if they were close to having a birthday. For most single years of age, the misstatements are largely offsetting. The problem is most pronounced at age 0. There is some respondent resistance to reporting age as 0 years. (Age in completed months was not collected for infants under age 1.) Editing procedures correct this problem.\r\n\r\nFor more details see the [Technical Documentation](http://www.census.gov/prod/www/abs/decennial/index.html) on Summary File 1 for Census 2000 and Census 2010. ",
+            "last_generated_at": "2012-12-13 10:39:45",
+            "display_change": true,
+            "display_name": "Total Population",
+            "long_definition": "Count of the total population.\r\n\r\n\r\n_The age classification for a person in census tabulations is the age of the person in completed years as of the census reference date. For Census 2000 the reference date is April 1, 2000; for Census 2010 the date is April 1, 2010._",
+            "data_type": "COUNT",
+            "universe": "Total population",
+            "notes": "",
+            "short_definition": "Total Population",
+            "display_percent": true,
+            "source": "U.S. Census Bureau",
+            "purpose": "",
+            "published": true,
+            "display_distribution": true,
+            "routine_use": "",
+            "slug": "poptot",
+            "name": "POPTOT"
+        }
+    },
+    {
+        "pk": 97,
+        "model": "profiles.indicator",
+        "fields": {
+            "limitations": "This data has very wide Margins of Error (MoE) at the tract level. Be sure to check MoE and USE CAUTION IF MAKING ANY COMPARISONS, EITHER OVER TIME OR AMONG TRACTS WITHIN ACS PERIOD (2006-20010).\r\n\r\nSince answers to income questions are frequently based on memory and not on records, many people tended to forget minor or sporadic sources of income and, therefore, underreport their income. Underreporting tends to be more pronounced for income sources that are not derived from earnings, such as public assistance, interest, dividends, and net rental income.  ",
+            "last_generated_at": "2012-12-13 13:49:02",
+            "display_change": true,
+            "display_name": "Below Poverty Level ",
+            "long_definition": "Count of population for whom poverty status is determined with income below the federal poverty level.\r\n\r\n_2000 Census determines poverty based on income reported for the calendar year 1999. The 2006-2010 American Community Survey (ACS) 5-year data reflect incomes over 2005-2010 (in 2010 inflation-adjusted dollars). Data for the 2006-2010 (ACS) 5-year estimates are collected on an on-going basis from January 1, 2006-December 31, 2010. ACS income values are reported based on the amount of income received during the 12 months preceding the interview month._\r\n\r\n_To determine a person's poverty status, one compares the person's total family income in the previous calendar year (2000 Census) or the last 12 months (ACS 2006-2010) with the poverty threshold appropriate for that person's family size and composition. If the total income of that person's family is less than the threshold appropriate for that family, then the person is considered \"below the poverty level,\" together with every member of his or her family. The total number of people \"below the poverty level\" is the sum of people in families and the number of unrelated individuals with incomes in the previous calendar year (2000 Census) or the last 12 months (ACS 2006-2010) below the poverty threshold._\r\n\r\nFor more details see _How Poverty Status is Determined_ in the [2000](http://www.census.gov/prod/cen2000/doc/sf3.pdf) technical documentation or _How the Census Bureau Determines Poverty Status_ in the [2006-2010](http://www.census.gov/acs/www/Downloads/data_documentation/SubjectDefinitions/2010_ACSSubjectDefinitions.pdf) technical documentation.",
+            "data_type": "COUNT",
+            "universe": "Population for whom poverty status is determined",
+            "notes": "",
+            "short_definition": "Population With Income Below Poverty Level \r\n\r\n",
+            "display_percent": true,
+            "source": "U.S. Census Bureau",
+            "purpose": "",
+            "published": true,
+            "display_distribution": true,
+            "routine_use": "",
+            "slug": "income6",
+            "name": "INCOME6 "
+        }
+    },
+    {
+        "pk": 98,
+        "model": "profiles.indicator",
+        "fields": {
+            "limitations": "This data has very wide Margins of Error (MoE) at the tract level. Be sure to check MoE and USE CAUTION IF MAKING ANY COMPARISONS, EITHER OVER TIME OR AMONG TRACTS WITHIN ACS PERIOD (2006-20010).",
+            "last_generated_at": "2012-12-13 13:59:34",
+            "display_change": true,
+            "display_name": "Below Poverty, Families W/ Children",
+            "long_definition": "Count of families with incomes  below the federal poverty level with related children under age 18.\r\n\r\n_2000 Census determines poverty based on income reported for the calendar year 1999. The 2006-2010 American Community Survey (ACS) 5-year data reflect incomes over 2005-2010 (in 2010 inflation-adjusted dollars). Data for the 2006-2010 (ACS) 5-year estimates are collected on an on-going basis from January 1, 2006-December 31, 2010. ACS income values are reported based on the amount of income received during the 12 months preceding the interview month._ _To determine a person's poverty status, one compares the person's total family income in the previous calendar year (2000 Census) or the last 12 months (ACS 2006-2010) with the poverty threshold appropriate for that person's family size and composition. If the total income of that person's family is less than the threshold appropriate for that family, then the person is considered \"below the poverty level,\" together with every member of his or her family. The total number of people \"below the poverty level\" is the sum of people in families and the number of unrelated individuals with incomes in the previous calendar year (2000 Census) or the last 12 months (ACS 2006-2010) below the poverty threshold._ For more details see _How Poverty Status is Determined_ in the [2000](http://www.census.gov/prod/cen2000/doc/sf3.pdf) technical documentation or _How the Census Bureau Determines Poverty Status_ in the [2006-2010](http://www.census.gov/acs/www/Downloads/data_documentation/SubjectDefinitions/2010_ACSSubjectDefinitions.pdf) technical documentation.",
+            "data_type": "COUNT",
+            "universe": "Families",
+            "notes": "",
+            "short_definition": "Families Below Poverty W/ Own Children Under Age 18 \r\n\r\n",
+            "display_percent": true,
+            "source": "U.S. Census Bureau",
+            "purpose": "",
+            "published": true,
+            "display_distribution": true,
+            "routine_use": "",
+            "slug": "income7",
+            "name": "INCOME7 "
+        }
+    }
+]

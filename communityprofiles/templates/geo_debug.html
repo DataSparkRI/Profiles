@@ -1,0 +1,71 @@
+{% load profiles_tags %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="http://960ls.atomidata.com/static/cssserve/1/9/2/0/9/1/192091.css">
+<title>Geo debug</title>
+<script type="text/javascript"
+ src="//ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<style>
+body {
+    font:85%/1.35em "helvetica neue", helvetica, arial, sans-serif;
+}
+
+tr.odd {
+    background-color: #eee;
+}
+
+#results table {
+    
+}
+
+#results table tr {
+    text-align: right;
+}
+
+#results table tr td, #results table tr th {
+    padding: 10px;
+}
+</style>
+</head>
+<body>
+                
+
+<div id="content" class="container_12">
+<h2>Geo Mapping</h2>
+<div id="results">
+{% load humanize %}
+
+<table>
+    <thead>
+        <tr>
+            <th>Level</th>
+            <th>Record</th>
+            {% for level in levels %}
+            <th>{{ level.name }}</th>
+            {% endfor %}
+        </tr>
+
+    </thead>
+    <tbody>
+        {% for record in records %}
+        <tr class="{% cycle 'odd' 'even' %}">
+            <th>{% ifchanged %}{{ record.level.name }}{% endifchanged %}</th>
+            <th>{{ record.geo_id }}</th>
+            {% for level in levels %}
+            <td>{% geo_mapping record level %}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</div>
+</div>
+                
+
+<div id="footer" class="container_12"></div>
+            
+</body>
+</html>
+
+

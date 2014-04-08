@@ -1,0 +1,1 @@
+{% indicators_table data_domain.name indicators geo_record data_domain %}

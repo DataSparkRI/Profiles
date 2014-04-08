@@ -1,0 +1,35 @@
+{% extends "base.html" %}{% load markup %}
+{% block geo_nav %}{% endblock %}
+{% block title %}{{ flatpage.title }}{% endblock %}
+{% block content %}
+<nav class = "tab-links clearfix flat-page-divider"></nav>
+<div class="indicator flat-page-header">
+<h2>{{ flatpage.title }}</h2>
+</div>
+<div class="flat-page-two-col">
+<div class="flat-page-left">
+	<div id="about-box">
+		<a href="/about/">About the Site</a>
+		<a href="/about/data/">About the Data</a>
+		<a href="/about/provplan/">About ProvPlan</a>
+		<a href="/about/faq/">FAQ</a>
+		<a href="/about/contact/">Contact Us</a>
+
+	</div>
+	<div class="flat-page-wrapped-content">
+	{{flatpage.content|markdown}}
+	</div><!-- end wrapped-content-->
+</div>
+
+<div class="flat-page-right">
+	<!--<a href="#">-->
+		<img src="{{STATIC_URL}}images/about_pg_ddd.jpg">
+	<!--</a>-->
+	
+	
+</div>
+<div class ="clearfix"></div>
+
+</div>
+{% endblock %}
+

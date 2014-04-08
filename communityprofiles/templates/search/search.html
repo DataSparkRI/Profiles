@@ -1,0 +1,36 @@
+{% extends 'base.html' %}{% load profiles_tags %}{% load thumbnail %}{% load markup %}
+{% block head %}
+<script type="text/javascript" charset="utf-8">
+var INIT_RECORD = {name:'{{geo_record.name}}', slug:'{{geo_record.slug}}'};
+var INIT_LEVEL = {name:'{{geo_record.level.name}}', slug:'{{geo_record.level.slug}}'};
+</script>
+{% endblock %}
+{% block search %}{% endblock %}
+
+{% block geo_nav %}{% endblock geo_nav %}
+
+{% block content %}
+
+
+{% if query %}
+<div class="row" ng-controller="SearchCtrl">
+    <div class = "col-md-12">
+        <h2>Your search for &ldquo;<strong>{{ query }}</strong>&rdquo; returned {{ total_results }} result{{ total_results|pluralize }}...</h2>
+    </div>
+    <div class="col-md-12">
+    {% for result, indicator_data in indicator_results %}
+        <hr>
+        <div>
+            <h3><a href="/profiles/dataview/{{geo_record.level.slug}}/{{geo_record.slug}}/{{result.object.slug}}" ng-click="mapIt($event, '{{result.object.get_slug_time_props}}')">{{ result.object.display_name }}</a></h3>
+            <p><small>{{self.source}}</small></p>
+            <p> {{result.object.long_definition|markdown:"safe"}} </p>
+            <p class="result-loc">Appears in:
+            {%for p in result.object.domain_group_path%}<a target="blank" href="/profiles/{{geo_record.level.slug}}/{{geo_record.slug}}/{{p.domain.slug}}/#/{{p.subdomain}}/{{p.group}}">{{p.domain.name}} - {{p.group}}</a>{%if forloop.last%}{%else%}, {%endif%}
+            {%endfor%}</p>
+        </div>
+    {% empty %}
+    <p>No Indicators were found matching your search criteria</p>
+    {% endfor %}
+ </div>
+{%endif%}                           
+{% endblock %}

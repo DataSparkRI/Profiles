@@ -1,0 +1,222 @@
+[
+    {
+        "pk": 1,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [],
+            "name": "State",
+            "parent": null,
+            "slug": "state"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [],
+            "name": "Census 2000 SF1 State",
+            "parent": null,
+            "slug": "census-2000-SF1-state"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [
+                2
+            ],
+            "name": "Census 2000 SF3 State",
+            "parent": null,
+            "slug": "census-2000-sf3-state"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [
+                3
+            ],
+            "name": "ACS 2010e5 State",
+            "parent": null,
+            "slug": "acs-2010e5-state"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [
+                5
+            ],
+            "name": "Census 2010 State",
+            "parent": null,
+            "slug": "census-2010-state"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [],
+            "name": "Municipality",
+            "parent": 1,
+            "slug": "municipality"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [
+                1
+            ],
+            "name": "Census 2000 SF1 Municipality",
+            "parent": 2,
+            "slug": "census-2000-sf1-municipality"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [
+                2
+            ],
+            "name": "Census 2000 SF3 Municipality",
+            "parent": 3,
+            "slug": "census-2000-sf3-municipality"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [
+                3
+            ],
+            "name": "ACS 2010e5 Municipality",
+            "parent": 4,
+            "slug": "acs-2010e5-municipality"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [
+                5
+            ],
+            "name": "Census 2010 Municipality",
+            "parent": 5,
+            "slug": "census-2010-municipality"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [],
+            "name": "Census Tract",
+            "parent": 6,
+            "slug": "census-tract"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [
+                1
+            ],
+            "name": "Census 2000 SF1 Tract",
+            "parent": 7,
+            "slug": "census-2000-sf1-tract"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [
+                2
+            ],
+            "name": "Census 2000 SF3 Tract",
+            "parent": 8,
+            "slug": "census-2000-sf3-tract"
+        }
+    },
+    {
+        "pk": 14,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [
+                3
+            ],
+            "name": "ACS 2010e5 Tract",
+            "parent": 9,
+            "slug": "acs-2010e5-tract"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [
+                5
+            ],
+            "name": "Census 2010 Tract",
+            "parent": 10,
+            "slug": "census-2010-tract"
+        }
+    },
+    {
+        "pk": 16,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [
+                1
+            ],
+            "name": "Census 2000 SF1 Block",
+            "parent": 12,
+            "slug": "census-2000-sf1-block"
+        }
+    },
+    {
+        "pk": 17,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [
+                2
+            ],
+            "name": "Census 2000 SF3 Block",
+            "parent": 13,
+            "slug": "census-2000-sf3-block"
+        }
+    },
+    {
+        "pk": 18,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [
+                2
+            ],
+            "name": "Census 2000 SF3 Block Group",
+            "parent": 13,
+            "slug": "census-2000-sf3-block-group"
+        }
+    },
+    {
+        "pk": 19,
+        "model": "profiles.geolevel",
+        "fields": {
+            "data_sources": [
+                3
+            ],
+            "name": "Acs 2010e5 Block Group",
+            "parent": 14,
+            "slug": "acs-2010e5-block-group"
+        }
+    }
+]

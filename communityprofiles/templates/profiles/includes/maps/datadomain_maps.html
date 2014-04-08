@@ -1,0 +1,78 @@
+{%load profiles_tags %}
+	<script type="text/javascript">
+	    var defaultView=[41.83, -71.41];
+	    var defaulZoom=9;
+	    var tiles = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+	    var sorted_data;
+		var map_geos = [];
+        {% for g in geo_record.get_geom_id %}
+	    map_geos.push('{{g.id}}');
+        {%endfor%}   
+        //{{geo_record.get_geom_id}}
+	    var pm;
+	    var overlayMaps = {};
+		var base_map;
+		var info;
+		var layers;
+		var geo_poly_methods = {
+			mouseover: onGeoRollover,
+			mouseout: onGeoRollout,
+			click: onGeoClick
+		
+		};
+		var default_style = {
+			weight:1,
+			fillColor:'#72cbff',
+			color:"#444",
+			dashArray: '',
+			fillOpacity:0.7
+		}
+
+		$(function(){
+			pm = new ProfilesMap();
+			pm.homeLocation = '/profiles/state/{%get_state_for_geo geo_record%}/{{data_domain.slug}}';
+			pm.defaultView=defaultView;
+			pm.defaultStyle = default_style;
+			pm.init();// activate
+			info = pm.makeInfoBox('info');
+			info.addTo(pm.map);
+			info.update("<p><b>Creating Map...</b></p>"); 
+			PP.XHR.getGeoDataByIdV2(map_geos, true, function(data){
+				info.update("<h4>{{geo_record.name}}</h4>");
+				base_map = pm.DataPolyFeatureGroup(data, null, geo_poly_methods);
+				base_map.addTo(pm.map);
+                pm.map.fitBounds(base_map.getBounds());{#always center to base_map#}
+			});
+		
+
+
+		});
+
+	 	function onGeoRollover(e){
+            var layer = e.target;
+            var geoName = layer.feature.geometry.properties.label;
+            // update the info-box
+		    info.update('<h4>'+geoName+'</h4>');
+            // built in highlight function
+			pm.highlightLayer(e);
+        }
+
+		function onGeoRollout(e){
+			var layer = e.target;
+			pm.unhighlightLayer(e);
+			info.update();
+		}
+
+		function onGeoClick(e){
+			var layer = e.target;
+			var geoName = layer.feature.properties.label;
+			var popup = L.popup();
+			var targ_path="/profiles";
+			targ_path+="/"+layer.feature.geometry.properties.level.slug;
+			targ_path+="/"+layer.feature.geometry.properties.slug;
+			targ_path+="/{{data_domain.slug}}";
+			window.location = targ_path;
+		}
+
+
+	</script>

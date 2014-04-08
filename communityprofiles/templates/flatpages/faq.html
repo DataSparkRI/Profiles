@@ -1,0 +1,77 @@
+{% extends "base.html" %}{% load markup %}
+{% block geo_nav %}{% endblock %}
+{% block title %}{{ flatpage.title }}{% endblock %}
+{% block content %}
+<nav class = "tab-links clearfix flat-page-divider"></nav>
+<div class="indicator flat-page-header">
+<h2>{{ flatpage.title }}</h2>
+</div>
+
+<!--<div class = "flat-page-one-col">
+
+	{{flatpage.content|markdown:"safe"}}
+</div>-->
+
+<div class = "flat-page-two-col">
+	<div class = "flat-page-left">
+		<h3>Where does the data come from?</h3>
+		<p style="float:left;width:440px;">Data on this site comes from the US Census Bureau, the RI Department of Health and eventually the RI Department of Education. Maternal and child risk factor data (teen birth, delayed prenatal care, etc.) comes from the RI Department of Health. Detailed public school student counts and related indicators will come from RI Department of Education.
+		</br></br>
+		We are actively pursuing new data partnerships and will add additional datasets as they become available.
+		</p>
+
+		<div id="about-box">
+			<a href="/about/">About the Site</a>
+			<a href="/about/data/">About the Data</a>
+			<a href="/about/provplan/">About ProvPlan</a>
+			<a href="/about/faq/">FAQ</a>
+			<a href="/about/contact/">Contact Us</a>
+		</div>
+
+		<div class="clearfix"></div>
+
+		<h3>How does the census work?</h3>
+		<p>
+			According to law the US Census Bureau is required to collect the short-form census, which is mailed to all households every 10 years and collects basic information such as age, sex, race, and number of households. The bulk of this information is contained in Census Summary File 1 (SF1) or Short Form. Through the 2000 Census the bureau also collected Summary File 3 (SF3) or Long Form data. In addition to collecting basic demographic information, it asked around 50 additional questions about socio-economic and housing characteristics. In 2000 it was sent to about one 1 out of 6 households.
+		</br></br>
+			After the 2000 Census, the US Census Bureau discontinued SF3 and replaced it with the American Community Survey (ACS). The ACS is a random survey of the population conducted continuously throughout the year. A random sample is surveyed each year so multiple years of data are combined to try to account for the true population of all areas. Many of the questions asked by SF3 are now available on the ACS, but not all. Additionally, due to a smaller sample size, some data are unavailable at finer levels of geography.
+		</br></br>
+			The ACS is available for 3 different time categories that represent different levels of geography: 1‐year (areas above 65k population), 3‐year (areas above 20k population), and 5‐year (tract and block group). The 5‐year ACS estimates are the data that replicate SF3; census tract and (some) block group level data are available, but margins of error are wide and we have chosen only to display tract-level data in the Community Profiles.
+		</br></br>
+			The 2006‐2010 5‐year survey data is keyed to the 2010 short-form census results. It is appropriate to compare SF3 and ACS 5‐year data for many but not all variables. See the Margin of Error section below for a description of sampling error for the ACS.
+		</p>
+
+		<h3>How do we deal with changes in political geography?</h3>
+		<p>
+			Census geographies are updated every decade to account for population shifts and growth. State‐wide geography does not change. Municipalities generally should not shift in geography but there are few cases where blocks are attributed to different RI municipalities between 2000 and 2010 (Example: a few Providence blocks were attributed to Johnston).
+		</br></br>
+			Census tracts have the most change. They can be added, removed, split, or consolidated (roughly based on a population target of 4,000). Within tracts, block groups and blocks can also be added, removed, split or consolidated. Documentation of all changes is available on the <a href="http://www.census.gov/geo/www/tiger/">Census TIGER website</a>.
+		</br></br>
+			Changes to geographies make comparisons difficult across datasets and years. For SF1 data, ProvPlan created a statewide 2000 block to 2010 tract crosswalk that works in the background to allow users to see 2000 count data as‘2010’ tracts to be able to compare data over time. SF3/ACS was more challenging, particularly for medians and averages that are tricky to impute or interpolate. We overcame this by using 2000 block groups to constitute 2010 tracts where the tract had changed (only five tracts in the State). In the even rarer case where 2000 block groups did not fit within 2010 tract boundaries, we used underlying block values to split the variable proportionally between the two 2010 tracts.
+		</p>
+
+		<h3>How accurate is the data?</h3>
+		<p>
+			As indicated above, the American Community Survey is a continuous sampling of population and households throughout the year. The data are sample estimates and are subject to sampling error. Margins of Error are provided for each estimate at each geography level and should always be checked before drawing conclusions. Depending on the level of geography the estimates may have a margin of error too wide to show any meaningful change over time.
+		</br></br>
+			To overcome wide margins of error ACS users have a few options. They can sum across table categories to create new groups (ex: age 0‐5 instead of age 0, 1,2,3,4,5 alone), sum up several tracts to create a new geography level (ex: add several tracts together to get a neighborhood), or do a combination of the two. Users have to create new estimates and new margins of error when summing up categories or across geographies. Documentation of necessary formulas is provided by Census in ACS handbooks. [HTML_REMOVED] The Community Profiles deals with MOE in several ways. First we recalculate MOE automatically for any of our indicators that require a combination of multiple fields. This is very convenient for the user because our published indicators are based on popular demand and help overcome the fact that the Census is very fine-grained and users inevitably combine fields to get what they want. Secondly we provide margin of error in all of our ACS tabular output. A user can easily see whether the MOE is larger than a change figure. Lastly we provide error bars on our Map & Ranking graphics. Although we do provide interactive mapping without indication of MOE, our hope is that users will get more mileage out of the Map & Ranking because it is a more powerful data display for analysis.
+		</p>
+
+		<h3>Where can I find more information?</h3>
+		<p>
+			Additional information on Census Data is available <a href="http://provplan.org/assets/uploads/fom/CensusResourceSheets.pdf">here</a>.
+		</br></br>
+			Census 2010 Block-level Data with Common SF1 Variables is available from our partners at the Rhode Island Geographic Information System <a href="http://www.edc.uri.edu/rigis/data/data.aspx?ISO=society">here</a>.
+		</p>
+	</div>
+
+	<div class="flat-page-right">
+	<!--<a href="#">-->
+		<img src="{{STATIC_URL}}images/about_pg_ddd.jpg">
+	<!--</a>-->
+	</div>
+	<div class ="clearfix"></div>
+</div>
+
+{% endblock %}
+

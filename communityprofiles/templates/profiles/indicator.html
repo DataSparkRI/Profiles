@@ -1,0 +1,88 @@
+{% extends "profiles/base_profiles.html" %}{% load profiles_tags %}{% load markup %}
+{% block head %}
+
+	<link rel="stylesheet" href="{{ STATIC_URL }}js/maps/leaflet.css">
+	<!--[if lte IE 8]>
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.ie.css" />
+	<![endif]-->
+	<script src="{{ STATIC_URL }}js/maps/leaflet.js"></script>
+	<script src="{{ STATIC_URL }}js/maps/leaflet_maps.js"></script>
+{% endblock %}
+{% block content %}
+
+<div id="Map-Tabs" class="tabs"> 					
+	<nav class="tab-links clearfix no-pr"> 
+		<div class="col w90">
+			{% data_domains geo_level geo_record data_domain %}
+		</div> 
+		{% comment%}
+		<div class="col w10 text-right"> 
+		<span class="buttons"> 
+		<a class="add"><span class="icon icon-plus"><span></span></span></a> 
+		</span> 
+		</div> 
+		{% endcomment %}
+	</nav> 
+
+	<div class="indicator clearfix indicator-ttl">
+	{# THE INDICATOR NAME #}
+	<h3>{%if geo_record.level.name == "Census Tract"%}{{geo_record.parent.name}}, {%endif%}{{geo_record.name}}</h3>
+	<h2>{{indicator.display_name}}{%if denom%} <small>as {{denom.label}}</small>{%endif%}</h2>
+	{#{% include 'profiles/includes/search_by_address.html' with context="indicator" %} #}
+	</div> 
+		{% include 'profiles/includes/search_by_address.html' %}
+	
+<div id="Tab-Content-Area" class="indicator_view"> 
+	<div id="data_view" class="" style="">
+		<div id="map" class="map tour_1"></div>
+		<div id="table_container" class="tour_4">
+		{% indicator_table indicator geo_record%}
+		</div> <!--end table_container-->
+	</div><!--end data_view -->
+	{%comment%}
+	{% include 'profiles/includes/share_popup.html' %}						
+	{%endcomment%}
+	<div class="tab-content-functions"> 
+		<div class="col w50 tour_6 no-pr" id="Indicator-Control"> 
+			<span class="buttons"> 
+			<a id="Export-Button"><span class="sm-icon sm-icon-export"></span><span>Export</span></a> 
+			</span> 
+	
+	{%comment%}
+			<span class="buttons"> 
+			<a id="Share-Button"><span class="sm-icon sm-icon-share"></span><span>Share</span></a> 
+			</span> 
+	{%endcomment%}
+	
+			<span class="buttons"> 
+				<a id="Print-Button" href="{{request.get_full_path}}"><span class="sm-icon sm-icon-print"></span><span>Print Friendly View</span></a> 
+			</span> 
+		</div> 
+
+		<a href="#" class="about-indicator">
+			<img src="{{STATIC_URL}}css/img/info.png"/>About this Indicator 
+		</a>
+
+	</div> 
+	</div> <!-- end #Tab-Content-Area -->
+	</div> 
+	{#{% data_displays geo_record data_domain indicator %}#}
+	{#{% include 'profiles/includes/export.html' with context="indicator" %}#}
+
+	{% include 'profiles/includes/maps/indicator_maps.html' %}
+	
+    <div class="modal hide">
+
+        <div class="modal-header">
+		<h3>{{indicator.display_name}}</h3>
+        </div>
+        <div class="modal-body">
+		{% for n in indicator.get_notes %}
+			<h3>{{n.label}}</h3>
+			{{n.text|markdown}}
+            {%endfor%}
+        </div>
+	</div>
+	{% include 'profiles/includes/export_form.html' with context="indicator" %}
+
+{% endblock content %}

@@ -1,0 +1,205 @@
+{%load profiles_tags %}
+
+	<script type="text/javascript">
+	    var defaultView=[41.83, -71.41];
+	    var defaulZoom = 9;
+	    var tiles = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+		var map_geos = [];
+		{% if geo_record.child_records%}
+			{% for geo in geo_record.child_records %}
+				map_geos.push('{{geo.id}}');
+			{%endfor%}
+		{%else%}
+			{% for geo in geo_record.parent.child_records %}
+				map_geos.push('{{geo.id}}');
+			{%endfor%}
+		{%endif%}
+
+		var pm;
+		var info;
+        var layers;
+        var layer_control;
+        var dataQ = "name={{indicator.display_name}}"; // defaults to indicator with first time
+        var valueKey ='number';
+        var valueMap={};
+        var legends = {};
+        var currL = null;
+        var times = {{m_times|safe}};
+        var related = {{related|safe}}; {# related is a list of related denoms#}
+        var disp_opts = {{display_options|safe}};
+
+        function onGeoRollover(e){
+			var layer = e.target;
+            var geoName = layer.feature.geometry.properties.label;
+            // update the info-box
+            var dataType ='';
+            if(valueKey != 'number'){
+                dataType = valueMap[valueKey];
+            }
+            var info_text = '<h4>'+geoName+'</h4>';
+			info_text += "<p>";
+            info_text += "<b>"+layer.feature.geometry.properties.value.name +"</b> " + capitalise(layer.feature.geometry.properties.value.time) + "</br>";
+			//info_text += "<span class='value'>" + layer.feature.geometry.properties.value["f_"+valueKey];
+			for(var i =0; i<disp_opts.value_format.rules.length; i++){
+				if(layer.feature.geometry.properties.value["f_"+valueKey]==disp_opts.value_format.rules[i].value_operator){
+					info_text += "<span class='value'>"+ disp_opts.value_format.rules[i].display_value
+				}
+				else{
+					info_text += "<span class='value'>" + layer.feature.geometry.properties.value["f_"+valueKey];
+				}
+			}			
+
+                        if(layer.feature.geometry.properties.value.moe){
+				info_text+= " +/- " + layer.feature.geometry.properties.value["f_moe"];
+			}
+			info_text += "</span></p>";
+			info.update(info_text);
+            // built in highlight function
+			pm.highlightLayer(e);
+        }
+
+		function onGeoRollout(e){
+			var layer = e.target;
+			pm.unhighlightLayer(e);
+			info.update();
+		}
+
+		function onGeoClick(e){
+			var layer = e.target;
+			var geoName = layer.feature.geometry.properties.label;
+			var popup = L.popup();
+			var targ_path="/profiles";
+			targ_path+="/"+layer.feature.geometry.properties.level.slug;
+			targ_path+="/"+layer.feature.geometry.properties.slug;
+			targ_path+="/{{data_domain.slug}}";
+			targ_path+="/{{indicator.slug}}";
+			
+			window.location = targ_path+"/?"+getDataQ();
+		}
+        
+        var geo_poly_methods = {
+		    mouseover:onGeoRollover,
+			mouseout:onGeoRollout,
+			click:onGeoClick
+        };
+
+        function getDataQ(){
+			return dataQ.replace(/name=[a-z0-9-_]+&/g,'');
+        }
+
+        function addBaseLayer(data, createBaseLayer){
+            if(data.hasOwnProperty('meta')){
+                valueMap[data.meta.name] = data.meta.vk;
+
+                var c = 0;
+                {# generate a layer for each data type ex: Value, percent count#}
+                for(var vk in data.meta.vk){
+              
+                    var choro = pm.DataChoroplethFeatureGroup(data, vk, geo_poly_methods, disp_opts['legend'], disp_opts['value_format']); {# this pm method returns an array [0] is the layer, [1] is the lengend#}
+                    
+                    var layer_name = data.meta.name.replace('change', 'Change') + " (" + valueMap[data.meta.name][vk] +")";
+                    var type = layer_name.indexOf("% of") != -1 ? "den": "num";
+                    var layer_style = "<span id='{1}' class='{2}'>{3}</span>".replace('{1}', vk).replace("{2}",type).replace("{3}", layer_name)
+                    layer_control.addBaseLayer(choro[0], layer_style);
+                    legends[layer_style] = choro[1];
+                    
+                    if(c == 0 && currL == null && createBaseLayer== true) {
+                        choro[0].addTo(pm.map);
+                        currL = layer_name;
+                        {% if geo_record.level.name != 'Census Tract' %}
+                        pm.map.fitBounds(choro[0].getBounds());{#always center to base_map#}                          
+                        {%endif%}
+                    }
+                    {% if geo_record.level.name == 'Census Tract' %}
+                    pm.highlightGeoLayer('{{geo_record.name}}', false);
+                    {%endif%}
+
+                    c++;
+
+                    $(".leaflet-control-layers-base label").tsort('span span', {attr:'class', order:'desc'}, 'span span', {attr:'id'});             
+                  
+                }
+            }
+
+        }
+
+        function getDataLayer(dataQ, createBaseLayer, callback, getTimes){
+            createBaseLayer = typeof createBaseLayer !== 'undefined' ? createBaseLayer : false; 
+            getTimes = typeof getTimes !== 'undefined' ? getTimes : true; 
+            
+            PP.XHR.getGeoDataById(map_geos, dataQ, true, function(data){
+
+               addBaseLayer(data, createBaseLayer);
+                
+               {# grab the rest of the years for this datasource#}
+               
+               if(getTimes){
+                   for(var i=1; i < times.length; i++){
+                        dataQ = dataQ.replace(/time=[a-zA-Z0-9\-\s]+/, "time=" + times[i])
+                        PP.XHR.getGeoDataById(map_geos, dataQ, true, function(data){
+                            addBaseLayer(data, false);
+                        });
+                   }
+               }
+               if(typeof callback !=='undefined' && callback != null){
+					callback();
+			   }
+                                  
+            }); // end xhr get geo
+            
+        } // end getDataLayer
+
+        $(function(){
+            pm = new ProfilesMap();
+			pm.homeLocation = '/profiles/state/{%get_state_for_geo geo_record%}/{{data_domain.slug}}/{{indicator.slug}}/';
+			pm.defaultView=defaultView;
+			pm.init();// activate
+            info = pm.makeInfoBox('info', '<h4>{{geo_record.name}}</h4>');
+            info.addTo(pm.map);
+            layer_control = L.control.layers(null, null,  { position : 'bottomright', collapsed:false}).addTo(pm.map);
+            pm.map.on('baselayerchange', function(e){
+                var name = e.name.replace(/<\/?span[(\sa-z=\')?>]+/g, "")
+                var vt = name.slice(-2,-1);
+                if(vt == "%"){
+                    valueKey='percent';
+                }else{
+                    valueKey='number';
+                }
+                // remove all the lengeds
+                for(l in legends){
+                    try{
+                        pm.map.removeControl(legends[l]);
+                    }catch(err){
+                        //...
+                    }
+                }
+                pm.map.addControl(legends[e.name]);
+            });
+            {# fetch the first time for this indicator. Then fetch related denoms #}
+            {#display loader #}
+            var mdom = $("#map");
+            mdom.append("<span id = 'loader'><img src='{{STATIC_URL}}images/loader.gif'/></span>").children('#loader').css({
+                position:'absolute',
+                "z-index": 1000,
+                left: mdom.width()/2 - 50,
+                top: mdom.height()/2
+            });
+            dataQ = 'name=' + encodeURIComponent('{{indicator.display_name}}') + '&time=' + times[0]; {# this is the default dataQ #}
+            getDataLayer(dataQ, true, function(){
+
+                for(var r in related){
+                    dataQ = 'name='+encodeURIComponent(related[r])+"&time=" +  times[0];
+                    getDataLayer(dataQ, false);
+                }
+                {% if indicator.display_change %}
+                var cDataQ = 'name='+ encodeURIComponent('{{indicator.display_name}}') + '&time=change';
+                getDataLayer(cDataQ, false, null, false);
+                {%endif%} 
+                $("#loader").remove();
+            });
+             
+        }); // end docready
+
+
+
+	</script>

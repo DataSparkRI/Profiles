@@ -1,0 +1,47 @@
+{% extends "base.html" %}{% load markup %}
+{% block geo_nav %}{% endblock %}
+{% block title %}{{ flatpage.title }}{% endblock %}
+{% block content %}
+<nav class = "tab-links clearfix flat-page-divider"></nav>
+<div class="indicator flat-page-header">
+<h2>{{ flatpage.title }}</h2>
+</div>
+<div class="flat-page-two-col">
+<div class="flat-page-left">
+	<p style="float:left;width:440px;">The Providence Plan is an independent 501c3 nonprofit that provides Rhode Islanders and public agencies with data and information to support critical decision making. Our innovative programs improve community well-being and transform lives.
+	</br></br>
+	We believe that information – what exists, how it is used, and who uses it – is a fundamental
+	aspect of community revitalization in an age of expanding information technology.
+	</p>
+	<div id="about-box">
+		<a href="/about/">About the Site</a>
+		<a href="/about/data/">About the Data</a>
+		<a href="/about/provplan/">About ProvPlan</a>
+		<a href="/about/faq/">FAQ</a>
+		<a href="/about/contact/">Contact Us</a>
+
+	</div>
+	<div class="clearfix"></div>
+	<p>
+	We work to democratize information by transforming data from spreadsheets and complex databases into maps, charts, and interactive tools that empower policymakers and residents to advocate for community change.
+	</br></br>
+	Our data warehouse, the largest of its kind in Rhode Island, is compiled from federal, state, and local statistics. By bringing together data from multiple sources, our tools provide a comprehensive snapshot of communities that would otherwise be unavailable.
+	</br></br>
+	Over the next several years we look forward to leveraging new technologies that will allow us to present greater amounts of information more quickly - and in increasingly interactive formats. We also remain fundamentally committed to expanding the work of our programs and seeding new initiatives that are consistent with our mission.
+	</p>
+	<p style="font-weight:bold;"></br>Other data tools and details about ProvPlan programs at ProvPlan.org
+	</p>
+</div>
+
+<div class="flat-page-right">
+	<!--<a href="#">-->
+		<img src="{{STATIC_URL}}images/about_pg_ddd.jpg">
+	<!--</a>-->
+	
+	
+</div>
+<div class ="clearfix"></div>
+
+</div>
+{% endblock %}
+

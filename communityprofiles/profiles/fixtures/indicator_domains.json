@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "profiles.indicatordomain", "fields": {"default": true, "indicator": 141, "domain": 1}}, {"pk": 2, "model": "profiles.indicatordomain", "fields": {"default": true, "indicator": 98, "domain": 1}}, {"pk": 3, "model": "profiles.indicatordomain", "fields": {"default": true, "indicator": 97, "domain": 1}}]

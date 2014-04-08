@@ -1,0 +1,23 @@
+.admin-area-wrap{
+	width:900px;
+	margin:0 auto;
+	min-height:500px;
+	padding-bottom:20px;
+}
+
+.admin-area-wrap p {
+	margin:10px 0;
+	padding:0;
+}
+
+#admin-area-controls{
+	margin:10px 0px 20px 0;
+}
+
+#admin-area-controls #geo_name_input{
+	border:thin solid #e3e3e3;
+	display:inline-block;
+	margin:0px 5px 0px 10px;
+	width:195px;
+}
+

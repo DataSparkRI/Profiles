@@ -1,0 +1,9 @@
+{%load markup%}<div class="notes-wrap">
+{%for note in notes%}
+<div class="note">
+    <h3 class="n-label">{{note.label}}</h3>
+    <p>{{note.text|markdown}}</p>
+</div>
+
+{%endfor%}
+</div>

@@ -1,0 +1,95 @@
+[
+    {
+        "pk": 2,
+        "model": "profiles.georecord",
+        "fields": {
+            "name": "RI",
+            "parent": null,
+            "level": 2,
+            "notes": null,
+            "geo_id": "0000001",
+            "components": [],
+            "owner": null,
+            "custom_name": null,
+            "slug": "ri",
+            "mappings": [
+                1
+            ]
+        }
+    },
+    {
+        "pk": 3,
+        "model": "profiles.georecord",
+        "fields": {
+            "name": "RI",
+            "parent": null,
+            "level": 3,
+            "notes": null,
+            "geo_id": "0000001",
+            "components": [],
+            "owner": null,
+            "custom_name": null,
+            "slug": "ri",
+            "mappings": [
+                1
+            ]
+        }
+    },
+    {
+        "pk": 4,
+        "model": "profiles.georecord",
+        "fields": {
+            "name": "RI",
+            "parent": null,
+            "level": 4,
+            "notes": null,
+            "geo_id": "0000001",
+            "components": [],
+            "owner": null,
+            "custom_name": null,
+            "slug": "ri",
+            "mappings": [
+                1
+            ]
+        }
+    },
+    {
+        "pk": 5,
+        "model": "profiles.georecord",
+        "fields": {
+            "name": "RI",
+            "parent": null,
+            "level": 5,
+            "notes": null,
+            "geo_id": "0000001",
+            "components": [],
+            "owner": null,
+            "custom_name": null,
+            "slug": "ri",
+            "mappings": [
+                1
+            ]
+        }
+    },
+    {
+        "pk": 1,
+        "model": "profiles.georecord",
+        "fields": {
+            "name": "Rhode Island",
+            "parent": null,
+            "level": 1,
+            "notes": null,
+            "geo_id": "RI",
+            "components": [],
+            "owner": null,
+            "custom_name": null,
+            "slug": "rhode-island",
+            "mappings": [
+                4,
+                5,
+                2,
+                3
+            ]
+        }
+    }
+]

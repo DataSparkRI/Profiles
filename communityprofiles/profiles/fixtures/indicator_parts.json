@@ -1,0 +1,70 @@
+[
+    {
+        "pk": 97,
+        "model": "profiles.indicatorpart",
+        "fields": {
+            "formula": "P087002\r\n",
+            "indicator": 97,
+            "data_source": 2,
+            "data": "",
+            "time": 1
+        }
+    },
+    {
+        "pk": 98,
+        "model": "profiles.indicatorpart",
+        "fields": {
+            "formula": "P090004 + P090011 + P090017\r\n",
+            "indicator": 98,
+            "data_source": 2,
+            "data": "",
+            "time": 1,
+            "levels":[1,6,11]
+        }
+    },
+    {
+        "pk": 141,
+        "model": "profiles.indicatorpart",
+        "fields": {
+            "formula": "P001001",
+            "indicator": 141,
+            "data_source": 1,
+            "data": "",
+            "time": 1
+        }
+    },
+    {
+        "pk": 323,
+        "model": "profiles.indicatorpart",
+        "fields": {
+            "formula": "P0010001",
+            "indicator": 141,
+            "data_source": 5,
+            "data": "",
+            "time": 2
+        }
+    },
+    {
+        "pk": 379,
+        "model": "profiles.indicatorpart",
+        "fields": {
+            "formula": "B17001002",
+            "indicator": 97,
+            "data_source": 3,
+            "data": "",
+            "time": 6
+        }
+    },
+    {
+        "pk": 446,
+        "model": "profiles.indicatorpart",
+        "fields": {
+            "formula": "B17010004 + B17010011 + B17010017",
+            "indicator": 98,
+            "data_source": 3,
+            "data": "",
+            "time": 6,
+            "levels":[1,6,11]
+        }
+    }
+]

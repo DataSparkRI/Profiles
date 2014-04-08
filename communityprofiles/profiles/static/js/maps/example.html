@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  	<meta charset="utf-8">
+  	<title></title>
+	<link rel="stylesheet" href="leaflet.css" />
+ 	<!--[if lte IE 8]>
+     		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.ie.css" />
+     	<![endif]-->
+	<script src="leaflet.js"></script>
+	<style type="text/css" media="screen">
+		html,body{height:100%;}
+		#map { height: 100%; }
+	.info {
+	    padding: 6px 8px;
+	    font: 14px/16px Arial, Helvetica, sans-serif;
+	    background: white;
+	    background: rgba(255,255,255,0.8);
+	    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	    border-radius: 5px;
+	}
+	.info h4 {
+	    margin: 0 0 5px;
+	    color: #777;
+	}
+	</style>
+	
+</head>
+	<body>
+		<div id="map"></div>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="pp.js" type="text/javascript" charset="utf-8"></script>
+		<script src="leaflet_maps.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+			
+			var defaultView=[41.83, -71.41];
+		        var defaulZoom=9;
+			var tiles = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+			var sorted_data;
+			var pm;
+			var overlayMaps = {};
+			var info;
+			var methods = {
+				mouseover:onGeoRollover,
+				mouseout:onGeoRollout, 
+				click:onGeoClick
+			}
+			var geos = ['rhode-island', 'providence'];
+			var indicators = ['income6'];
+			var q;
+
+			$(function(){
+				PP.Settings.baseURL = "http://127.0.0.1:8555";
+				pm = new ProfilesMap();
+				pm.defaultView=defaultView;
+				pm.init();// activate the mappity map
+				info = pm.makeInfoBox('info', '<h3>Hi angel.</h3>');
+				info.addTo(pm.map);
+				/*==========Basic map=============*/
+				/*
+				//1) Load data
+				PP.XHR.getGeoData(['rhode-island', 'providence'], null, true, function(data){
+					// 2) once data is loaded, create polys
+					pm.DataPolyFeatureGroup(data, null, methods).addTo(pm.map);
+
+				});
+				*/
+			
+				/*=========Choropleth=============*/
+				q = "ind=poptot&time=2010";
+				PP.XHR.getGeoData(geos, q, true, function(data){
+					//console.log(data);
+					pm.DataChoroplethFeatureGroup(data, null, methods).addTo(pm.map);
+
+				});
+
+				
+			});
+			
+
+			function onGeoRollover(e){
+				var layer = e.target;
+				var geoName = layer.feature.properties.label;
+				// update the info-box
+				info.update(geoName)
+				// built in highlight function
+				pm.highlightLayer(e);
+
+			}
+
+			function onGeoRollout(e){
+				var layer = e.target;
+				pm.unhighlightLayer(e);
+				info.update();
+			}
+			function onGeoClick(e){
+				var layer = e.target;
+				var geoName = layer.feature.properties.label;
+				console.log(geoName);
+			}
+
+
+		</script>
+		
+		
+	</body>
+</html>	

@@ -1,0 +1,82 @@
+{% extends "registration/registration_base.html" %}
+{% block title %}Register for an account{% endblock %}
+{% block head %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#id_organization').keyup(function() {
+        if($('#id_organization').val()) {
+            if(!$('#org_type').is(":visible")) {
+                $('#org_type').slideDown();
+            }
+        } else {
+            if($('#org_type').is(':visible')) {
+                $('#org_type').slideUp();
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
+{% block content %}
+<div class="clearfix">
+    <section id="register" class="col w100 phl pvl">
+      <h2 style="margin-bottom: 10px;">Register</h2>
+      <form method="POST" class="fancy">
+        {% csrf_token %}
+
+{% if form.non_field_errors %}
+<h4>Errors</h4>
+{{ form.non_field_errors }}
+{% endif %}
+
+
+        <h3>Required</h3>
+        <ul>
+          <li>{{ form.email.label_tag }} {{ form.email }} {{ form.email.errors }}</li>
+          <li>{{ form.first_name.label_tag }} {{ form.first_name }} {{ form.first_name.errors }}</li>
+          <li>{{ form.last_name.label_tag }} {{ form.last_name }} {{ form.first_name.errors }}</li>
+          <li>{{ form.password1.label_tag }} {{ form.password1 }} {{ form.password1.errors }}</li>
+          <li>{{ form.password2.label_tag }} {{ form.password2 }} {{ form.password2.errors }}</li>
+          <li><label for="id_tos" style="display: inline;">{{ form.tos }} {{ form.tos.label }}</label> {{ form.tos.errors }}</li>
+        </ul>
+
+        <h3>Optional</h3>
+        <ul>
+          <li><label>User Type (please choose all that apply)</label></li>
+          <li><label for="id_is_general_public" style="display: inline;">{{ form.is_general_public }} {{ form.is_general_public.label }}</label> {{ form.is_general_public.errors }}</li>
+          <li><label for="id_is_community_advocate" style="display: inline;">{{ form.is_community_advocate }} {{ form.is_community_advocate.label }}</label> {{ form.is_community_advocate.errors }}</li>
+          <li><label for="id_is_journalist" style="display: inline;">{{ form.is_general_publiis_journalistc }} {{ form.is_general_publiis_journalistc.label }}</label> {{ form.is_general_publiis_journalistc.errors }}</li>
+          <li><label for="id_is_researcher" style="display: inline;">{{ form.is_researcher }} {{ form.is_researcher.label }}</label> {{ form.is_researcher.errors }}</li>
+          <li><label for="id_is_grant_writer" style="display: inline;">{{ form.is_grant_writer }} {{ form.is_grant_writer.label }}</label> {{ form.is_grant_writer.errors }}</li>
+          <li><label for="id_is_city_state_agency_staff" style="display: inline;">{{ form.is_city_state_agency_staff }} {{ form.is_city_state_agency_staff.label }}</label> {{ form.is_city_state_agency_staff.errors }}</li>
+          <li><label for="id_is_consultant" style="display: inline;">{{ form.is_consultant }} {{ form.is_consultant.label }}</label> {{ form.is_consultant.errors }}</li>
+          <li><label for="id_is_legislator" style="display: inline;">{{ form.is_legislator }} {{ form.is_legislator.label }}</label> {{ form.is_legislator.errors }}</li>
+          <li><label for="id_is_policy_analyst" style="display: inline;">{{ form.is_policy_analyst }} {{ form.is_policy_analyst.label }}</label> {{ form.is_policy_analyst.errors }}</li>
+          <li><label for="id_is_other" style="display: inline;">{{ form.is_other }} {{ form.is_other.label }}</label> {{ form.is_other.errors }}</li>
+          <li>{{ form.organization.label_tag }} {{ form.organization }} {{ form.organization.errors }}</li>
+          <li>
+            <ul id="org_type" style="display: none;">
+                <li><label>Organization Type (please choose all that apply)</label></li>
+                <li><label for="id_org_is_non_profit" style="display: inline;">{{ form.org_is_non_profit }} {{ form.org_is_non_profit.label }}</label> {{ form.org_is_non_profit.errors }}</li>
+                <li><label for="id_org_is_state_city_agency" style="display: inline;">{{ form.org_is_state_city_agency }} {{ form.org_is_state_city_agency.label }}</label> {{ form.org_is_state_city_agency.errors }}</li>
+                <li><label for="id_org_is_university" style="display: inline;">{{ form.org_is_university }} {{ form.org_is_university.label }}</label> {{ form.org_is_university.errors }}</li>
+                <li><label for="id_org_is_other" style="display: inline;">{{ form.org_is_other }} {{ form.org_is_other.label }}</label> {{ form.org_is_other.errors }}</li>
+
+            </ul>
+          </li>
+          <li><label for="id_wants_notifications" style="display: inline;">{{ form.wants_notifications }} {{ form.wants_notifications.label }}</label> {{ form.wants_notifications.errors }}</li>
+        </ul>
+
+
+        <div class="form-actions">
+            <span class="buttons"> 
+	            <input type="submit" value="Register" />
+	        </span>
+        </div>
+
+        <script type="text/javascript">document.getElementById("id_email").focus();</script>
+
+      </form>
+    </section>
+</div>
+{% endblock %}

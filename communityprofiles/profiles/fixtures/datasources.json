@@ -1,0 +1,91 @@
+[
+    {
+        "pk": 1,
+        "model": "profiles.datasource",
+        "fields": {
+            "implementation": "data_adapters.Census2000SF1",
+            "name": "Census 2000 SF1"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "profiles.datasource",
+        "fields": {
+            "implementation": "data_adapters.Census2000SF3",
+            "name": "Census 2000 SF3"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "profiles.datasource",
+        "fields": {
+            "implementation": "data_adapters.ACS2010e5",
+            "name": "ACS 2010 Five Year Estimate"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "profiles.datasource",
+        "fields": {
+            "implementation": "data_adapters.Census2010SF1",
+            "name": "Census 2010 SF1"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "profiles.datasource",
+        "fields": {
+            "implementation": "data_adapters.FileAdapter",
+            "name": "File"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "profiles.datasource",
+        "fields": {
+            "implementation": "data_adapters.CensusAPI_SF1_2000",
+            "name": "CensusAPI_SF1_2000"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "profiles.datasource",
+        "fields": {
+            "implementation": "data_adapters.CensusAPI_SF3_2000",
+            "name": "CensusAPI_SF3_2000"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "profiles.datasource",
+        "fields": {
+            "implementation": "data_adapters.CensusAPI_SF1_2010",
+            "name": "CensusAPI_SF1_2010"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "profiles.datasource",
+        "fields": {
+            "implementation": "data_adapters.CensusAPI_ACS5_2010",
+            "name": "CensusAPI_ACS5_2010"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "profiles.datasource",
+        "fields": {
+            "implementation": "data_adapters.CensusAPI_ACS5_2011",
+            "name": "CensusAPI_ACS5_2011"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "profiles.datasource",
+        "fields": {
+            "implementation": "data_adapters.CensusAPI_ACS5_2012",
+            "name": "CensusAPI_ACS5_2012"
+        }
+    }
+
+]
