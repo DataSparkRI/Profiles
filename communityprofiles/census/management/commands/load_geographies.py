@@ -3,7 +3,7 @@ from census.tools.geography import parse_file, get_sum_lev_name, SUPPORTED_DATAS
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from profiles.models import GeoRecord, GeoLevel
-from django.utils.text import slugify
+from django.utils.text import slugify as djslugify
 import json
 
 class Command(BaseCommand):
@@ -15,6 +15,11 @@ class Command(BaseCommand):
     Census geo files can be downloaded from census.gov, check dataset documentation for more info
     Supported dataset_types are %s
     """ % ','.join(SUPPORTED_DATASETS)
+
+    def slugify(self, str):
+        """ Wrapper for slugify that replaces . with - since Django slugify ignores it"""
+        str = str.replace(".", "-")
+        return djslugify(str)
 
     def handle(self, *args, **options):
         if len(args) < 2:
@@ -34,7 +39,7 @@ class Command(BaseCommand):
         self.stdout.write("---- Generating Base GeoLevels ------")
         for sum_lev in sum_levs:
             geo_lev = get_sum_lev_name(sum_lev)
-            obj, created = GeoLevel.objects.get_or_create(name=geo_lev, slug=slugify(u'' + geo_lev.lower()), summary_level=sum_lev) # TODO: What about parenting?
+            obj, created = GeoLevel.objects.get_or_create(name=geo_lev, slug=self.slugify(u'' + geo_lev.lower()), summary_level=sum_lev) # TODO: What about parenting?
             if not created:
                 self.stdout.write("%s exists. Skipping..." % geo_lev)
             elif created:
@@ -44,7 +49,7 @@ class Command(BaseCommand):
         for sum_lev in sum_levs:
             geo_lev = get_sum_lev_name(sum_lev)
             geo_lev_name = geo_lev
-            obj, created = GeoLevel.objects.get_or_create(name=geo_lev_name, year=dataset_type, slug=slugify(dataset_type + u'_'+ geo_lev_name.lower()), summary_level=sum_lev) # TODO: What about parenting?
+            obj, created = GeoLevel.objects.get_or_create(name=geo_lev_name, year=dataset_type, slug=self.slugify(dataset_type + u'_'+ geo_lev_name.lower()), summary_level=sum_lev) # TODO: What about parenting?
             if not created:
                 self.stdout.write("%s exists..." % (geo_lev_name))
             elif created:
@@ -101,7 +106,7 @@ class Command(BaseCommand):
 
                     base_geo_record, created = GeoRecord.objects.get_or_create(level = base_geo_level,
                                                                                name = geo['name'],
-                                                                               slug = slugify(u''+geo['name']),
+                                                                               #slug = self.slugify(u''+geo['name']),
                                                                                geo_id = geo['geoid'],
                                                                                geo_id_segments = json.dumps(geo['geoid_dict']),
                                                                                geo_searchable = True,
@@ -114,7 +119,7 @@ class Command(BaseCommand):
 
                     dataset_geo_record, created = GeoRecord.objects.get_or_create(level = dataset_geo_level,
                                                                                name = geo['name'],
-                                                                               slug = slugify(u''+geo['name']),
+                                                                               #slug = self.slugify(u''+geo['name']+"_"+dataset_type),
                                                                                geo_id = geo['geoid'],
                                                                                geo_id_segments = json.dumps(geo['geoid_dict']),
                                                                                geo_searchable = False,

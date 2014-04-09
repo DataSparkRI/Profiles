@@ -285,8 +285,12 @@ class GeoRecord(models.Model):
             return self.name
 
     def save(self, *args, **kwargs):
+        
+        unique_slugify(self, self.name, queryset=GeoRecord.objects.all())
+        
         super(GeoRecord ,self).save(*args,**kwargs)
         default_levels = get_default_levels()
+
         try:
             if self.level.name in default_levels and self.level.year == None: # When Year is none, This is base geography
                 # Lets "Reparent all the layers related to this main level so the user doesnt have to
@@ -1380,9 +1384,6 @@ def task_cleanup(sender, instance, **kwargs):
     except IndicatorTask.DoesNotExist:
         pass
 
-@receiver(pre_save, sender=GeoRecord)
-def slug_handler(sender, instance, **kwargs):
-    unique_slugify(instance, instance.name, queryset=GeoRecord.objects.filter(level=instance.level))
 
 @receiver(pre_save, sender=Denominator)
 def slug_handler(sender, instance, **kwargs):

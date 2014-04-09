@@ -51,9 +51,9 @@ PHANTOM_JS_RENDER_DIR = "/tmp/phantom/"
 DEFAULT_GEO_RECORD_ID = 1
 
 ADDITIONAL_APPS = (
-    'rhodeisland',
-	#'gunicorn',
-	#raven.contrib.django', # sentry logging
+    #'rhodeisland',
+    #'gunicorn',
+    #raven.contrib.django', # sentry logging
 )
 
 
