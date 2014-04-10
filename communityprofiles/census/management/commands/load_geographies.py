@@ -18,7 +18,9 @@ class Command(BaseCommand):
 
     def slugify(self, str):
         """ Wrapper for slugify that replaces . with - since Django slugify ignores it"""
+        from uuid import uuid4
         str = str.replace(".", "-")
+        str += unicode(uuid4())[:6]
         return djslugify(str)
 
     def handle(self, *args, **options):
@@ -106,7 +108,7 @@ class Command(BaseCommand):
 
                     base_geo_record, created = GeoRecord.objects.get_or_create(level = base_geo_level,
                                                                                name = geo['name'],
-                                                                               #slug = self.slugify(u''+geo['name']),
+                                                                               slug = self.slugify(u''+geo['name']),
                                                                                geo_id = geo['geoid'],
                                                                                geo_id_segments = json.dumps(geo['geoid_dict']),
                                                                                geo_searchable = True,
@@ -119,7 +121,7 @@ class Command(BaseCommand):
 
                     dataset_geo_record, created = GeoRecord.objects.get_or_create(level = dataset_geo_level,
                                                                                name = geo['name'],
-                                                                               #slug = self.slugify(u''+geo['name']+"_"+dataset_type),
+                                                                               slug = self.slugify(u''+geo['name']+"_"+ dataset_geo_level.year),
                                                                                geo_id = geo['geoid'],
                                                                                geo_id_segments = json.dumps(geo['geoid_dict']),
                                                                                geo_searchable = False,

@@ -14,6 +14,7 @@ from django.contrib.gis.db.models import Union
 from django.core.exceptions import ValidationError
 from decimal import Decimal
 from django.core import serializers
+from django.utils.text import slugify
 import json
 from adminsortable.fields import SortableForeignKey
 from adminsortable.models import Sortable
@@ -165,7 +166,7 @@ class GeoRecord(models.Model):
     """
     level = models.ForeignKey(GeoLevel)
     name = models.CharField(max_length=100, db_index=True)
-    slug = models.SlugField(max_length=100, blank=True, db_index=True)
+    slug = models.SlugField(max_length=100, blank=True, db_index=True, unique=True)
 
     # GIS properties
     #shapefile = models.ForeignKey(ShapeFile, blank=True, null=True, on_delete=models.SET_NULL, help_text="The shapefile that contains the geometries for this GeoRecord. Profiles expects this to be a Polygon type shapefile")
@@ -285,9 +286,6 @@ class GeoRecord(models.Model):
             return self.name
 
     def save(self, *args, **kwargs):
-        
-        unique_slugify(self, self.name, queryset=GeoRecord.objects.filter(level=self.level))
-        
         super(GeoRecord ,self).save(*args,**kwargs)
         default_levels = get_default_levels()
 
@@ -1383,7 +1381,6 @@ def task_cleanup(sender, instance, **kwargs):
         IndicatorTask.objects.get(task_id=instance.t_id).delete()
     except IndicatorTask.DoesNotExist:
         pass
-
 
 @receiver(pre_save, sender=Denominator)
 def slug_handler(sender, instance, **kwargs):
