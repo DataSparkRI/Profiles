@@ -286,7 +286,7 @@ class GeoRecord(models.Model):
 
     def save(self, *args, **kwargs):
         
-        unique_slugify(self, self.name, queryset=GeoRecord.objects.all())
+        unique_slugify(self, self.name, queryset=GeoRecord.objects.filter(level=self.level))
         
         super(GeoRecord ,self).save(*args,**kwargs)
         default_levels = get_default_levels()
