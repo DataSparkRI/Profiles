@@ -16,11 +16,12 @@ class Command(BaseCommand):
     Supported dataset_types are %s
     """ % ','.join(SUPPORTED_DATASETS)
 
-    def slugify(self, str):
+    def slugify(self, str, uuid=False):
         """ Wrapper for slugify that replaces . with - since Django slugify ignores it"""
         from uuid import uuid4
         str = str.replace(".", "-")
-        str += unicode(uuid4())[:6]
+        if uuid:
+            str += unicode(uuid4())[:6]
         return djslugify(str)
 
     def handle(self, *args, **options):
@@ -41,10 +42,11 @@ class Command(BaseCommand):
         self.stdout.write("---- Generating Base GeoLevels ------")
         for sum_lev in sum_levs:
             geo_lev = get_sum_lev_name(sum_lev)
-            obj, created = GeoLevel.objects.get_or_create(name=geo_lev, slug=self.slugify(u'' + geo_lev.lower()), summary_level=sum_lev) # TODO: What about parenting?
-            if not created:
+            try:
+                obj = GeoLevel.objects.get(name=geo_lev, slug=self.slugify(u'' + geo_lev.lower()), summary_level=sum_lev, year='')
                 self.stdout.write("%s exists. Skipping..." % geo_lev)
-            elif created:
+            except GeoLevel.DoesNotExist:
+                created = GeoLevel.objects.create(name=geo_lev, slug=self.slugify(u'' + geo_lev.lower()), summary_level=sum_lev, year='')
                 self.stdout.write("Created %s" % geo_lev)
 
         self.stdout.write("---- Generating %s GeoLevels ------" % dataset_type )
@@ -72,7 +74,7 @@ class Command(BaseCommand):
                 self.stdout.write("----Creatings Geos for Sum Lev %s----" % key)
 
                 geo_lev_name = get_sum_lev_name(key)
-                base_geo_level = GeoLevel.objects.get(name=geo_lev_name, year__isnull=True)
+                base_geo_level = GeoLevel.objects.get(name=geo_lev_name, year='')
                 dataset_geo_level = GeoLevel.objects.get(year=dataset_type, name=geo_lev_name)
 
                 # Now create a Geo Record for each Geography we have found in
@@ -83,6 +85,8 @@ class Command(BaseCommand):
                 for geo in geos[key].itervalues():
                     if geo['parent'] != None:
                         try:
+                            pass
+                            """
                             base_parent_level = GeoLevel.objects.get(summary_level = geo['parent']['sumlev'],
                                                                      name=get_sum_lev_name(geo['parent']['sumlev']),
                                                                      year__isnull=True)
@@ -94,12 +98,15 @@ class Command(BaseCommand):
                                                                        year=dataset_type)
 
                             dataset_parent = GeoRecord.objects.get(level=dataset_parent_level, geo_id=geo['parent']['geoid'])
-
+                            """
                         except Exception as e:
+                            """
                             if key != "040":
                                 self.stderr.write("Parent Geo for %s not found - %s" % (geo['name'], e))
                             base_parent = None
                             dataset_parent = None
+                            """
+                            pass
                     else:
                         if key != "040":
                             self.stderr.write("Parent Geo Not found through Geography File for: %s" % geo)
@@ -108,11 +115,11 @@ class Command(BaseCommand):
 
                     base_geo_record, created = GeoRecord.objects.get_or_create(level = base_geo_level,
                                                                                name = geo['name'],
-                                                                               slug = self.slugify(u''+geo['name']),
+                                                                               slug = self.slugify(u''+geo['geoid']),
                                                                                geo_id = geo['geoid'],
                                                                                geo_id_segments = json.dumps(geo['geoid_dict']),
-                                                                               geo_searchable = True,
-                                                                               parent = base_parent)
+                                                                               geo_searchable = True,)
+                                                                               #parent = base_parent)
 
                     if not created:
                         self.stdout.write("%s @ Geo Lev %s exists. GEOID = %s " % (geo['name'], base_geo_level.name, base_geo_record.geo_id) )
@@ -121,12 +128,12 @@ class Command(BaseCommand):
 
                     dataset_geo_record, created = GeoRecord.objects.get_or_create(level = dataset_geo_level,
                                                                                name = geo['name'],
-                                                                               slug = self.slugify(u''+geo['name']+"_"+ dataset_geo_level.year),
+                                                                               slug = self.slugify(u''+geo['name'] + dataset_type),
                                                                                geo_id = geo['geoid'],
                                                                                geo_id_segments = json.dumps(geo['geoid_dict']),
-                                                                               geo_searchable = False,
-                                                                               parent = dataset_parent,
-                                                                            )
+                                                                               geo_searchable = False,)
+                                                                               #parent = dataset_parent,
+                                                                            
 
                     if not created:
                         self.stdout.write("%s @ Geo Lev %s exists. Skipping..." % (geo['name'], dataset_geo_level.name) )
