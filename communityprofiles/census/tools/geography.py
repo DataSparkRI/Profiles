@@ -399,7 +399,6 @@ def test_parse_file():
     file_path = os.path.join(os.path.dirname(__file__), 'sample_data/g20105pa.sample.txt')
     SUMMARY_LEVELS = ('040','050','060','140','150',)
     geos = parse_file(file_path, 'acs2010', SUMMARY_LEVELS)
-    #assert geos['names'] == ['Pennsylvania', 'Pennsylvania -- Urban', 'Pennsylvania -- Rural', 'Pennsylvania -- In metropolitan or micropolitan statistical area', 'Pennsylvania -- In metropolitan statistical area', 'Pennsylvania -- In metropolitan statistical area -- in principal city', 'Pennsylvania -- In metropolitan statistical area -- not in principal city', 'Pennsylvania -- In micropolitan statistical area', 'Pennsylvania -- In micropolitan statistical area -- in principal city', 'Pennsylvania -- In micropolitan statistical area -- not in principal city', 'Pennsylvania -- Not in metropolitan or micropolitan statistical area', 'Pennsylvania -- Not in metropolitan statistical area']
 
     tools.assert_raises(ValueError, parse_file, '/', '8474j')
     assert get_sum_lev_names(SUMMARY_LEVELS) == ('County', 'State', 'Census Tract', 'Block Group', 'County Subdivision')

@@ -128,7 +128,7 @@ class Command(BaseCommand):
 
                     dataset_geo_record, created = GeoRecord.objects.get_or_create(level = dataset_geo_level,
                                                                                name = geo['name'],
-                                                                               slug = self.slugify(u''+geo['name'] + dataset_type),
+                                                                               slug = self.slugify(u''+geo['geoid'] + dataset_type),
                                                                                geo_id = geo['geoid'],
                                                                                geo_id_segments = json.dumps(geo['geoid_dict']),
                                                                                geo_searchable = False,)
