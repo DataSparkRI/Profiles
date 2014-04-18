@@ -32,7 +32,7 @@ admin.site.register(GeoLevel, GeoLevelAdmin)
 
 class GeoRecordAdmin(admin.OSMGeoAdmin):
     prepopulated_fields = {"slug": ("name",)}
-    list_display = ('name', 'level', )
+    list_display = ('name', 'level', 'geo_id' )
     list_filter = ('level', )
     #filter_horizontal = ['mappings', ]
     exclude = ('components','parent','mappings')
