@@ -156,12 +156,10 @@ class Migration(SchemaMigration):
             ('notes', self.gf('django.db.models.fields.TextField')(blank=True)),
             ('source', self.gf('django.db.models.fields.CharField')(default='U.S. Census Bureau', max_length=300, blank=True)),
             ('display_percent', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('display_change', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('display_change', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('display_distribution', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('published', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('data_as_of', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('last_generated_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('next_update_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('last_modified_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
         ))
         db.send_create_signal(u'profiles', ['Indicator'])
@@ -174,22 +172,12 @@ class Migration(SchemaMigration):
         ))
         db.create_unique(u'profiles_indicator_indicator_tasks', ['indicator_id', 'indicatortask_id'])
 
-        # Adding model 'DataFile'
-        db.create_table(u'profiles_datafile', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('file', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
-            ('added', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal(u'profiles', ['DataFile'])
-
         # Adding model 'IndicatorPart'
         db.create_table(u'profiles_indicatorpart', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('data_source', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.DataSource'])),
             ('formula', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('data', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.DataFile'], null=True)),
+            ('data', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
             ('published', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('indicator', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Indicator'])),
             ('time', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Time'])),
@@ -221,7 +209,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('data_source', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.DataSource'])),
             ('formula', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('data', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.DataFile'], null=True)),
+            ('data', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
             ('published', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('indicator', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Indicator'])),
             ('denominator', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Denominator'])),
@@ -268,7 +256,6 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('indicator', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Indicator'])),
             ('value_operator', self.gf('django.db.models.fields.CharField')(max_length='255')),
-            ('value_operator_range', self.gf('django.db.models.fields.CharField')(max_length='255', null=True, blank=True)),
             ('display_value', self.gf('django.db.models.fields.CharField')(max_length='255')),
             ('data_type', self.gf('django.db.models.fields.CharField')(default='COUNT', max_length=30)),
             ('supress', self.gf('django.db.models.fields.BooleanField')(default=False)),
@@ -400,9 +387,6 @@ class Migration(SchemaMigration):
         # Removing M2M table for field indicator_tasks on 'Indicator'
         db.delete_table('profiles_indicator_indicator_tasks')
 
-        # Deleting model 'DataFile'
-        db.delete_table(u'profiles_datafile')
-
         # Deleting model 'IndicatorPart'
         db.delete_table(u'profiles_indicatorpart')
 
@@ -459,7 +443,7 @@ class Migration(SchemaMigration):
         },
         u'auth.user': {
             'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 5, 20, 13, 26, 20, 31795)'}),
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 3, 6, 13, 39, 33, 346653)'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -467,7 +451,7 @@ class Migration(SchemaMigration):
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 5, 20, 13, 26, 20, 31283)'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 3, 6, 13, 39, 33, 345958)'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -499,8 +483,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'indicator': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['profiles.Indicator']"}),
             'supress': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'value_operator': ('django.db.models.fields.CharField', [], {'max_length': "'255'"}),
-            'value_operator_range': ('django.db.models.fields.CharField', [], {'max_length': "'255'", 'null': 'True', 'blank': 'True'})
+            'value_operator': ('django.db.models.fields.CharField', [], {'max_length': "'255'"})
         },
         u'profiles.datadomain': {
             'Meta': {'ordering': "['weight']", 'object_name': 'DataDomain'},
@@ -521,14 +504,6 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'order': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1', 'db_index': 'True'})
-        },
-        u'profiles.datafile': {
-            'Meta': {'object_name': 'DataFile'},
-            'added': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'file': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'profiles.datapoint': {
             'Meta': {'unique_together': "(('indicator', 'record', 'time'),)", 'object_name': 'DataPoint'},
@@ -558,7 +533,7 @@ class Migration(SchemaMigration):
         },
         u'profiles.denominatorpart': {
             'Meta': {'object_name': 'DenominatorPart'},
-            'data': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['profiles.DataFile']", 'null': 'True'}),
+            'data': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'data_source': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['profiles.DataSource']"}),
             'denominator': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['profiles.Denominator']"}),
             'formula': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
@@ -594,7 +569,7 @@ class Migration(SchemaMigration):
             'value_type': ('django.db.models.fields.CharField', [], {'max_length': "'100'"})
         },
         u'profiles.geolevel': {
-            'Meta': {'ordering': "['summary_level']", 'object_name': 'GeoLevel'},
+            'Meta': {'object_name': 'GeoLevel'},
             'data_sources': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['profiles.DataSource']", 'symmetrical': 'False', 'blank': 'True'}),
             'display_name': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -622,15 +597,14 @@ class Migration(SchemaMigration):
             'slug': ('django.db.models.fields.SlugField', [], {'db_index': 'True', 'max_length': '100', 'blank': 'True'})
         },
         u'profiles.group': {
-            'Meta': {'ordering': "['name']", 'object_name': 'Group'},
-            'domain': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'domain_index'", 'symmetrical': 'False', 'through': u"orm['profiles.DataDomainIndex']", 'to': u"orm['profiles.DataDomain']"}),
+            'Meta': {'object_name': 'Group'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'indicators': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['profiles.Indicator']", 'through': u"orm['profiles.GroupIndex']", 'symmetrical': 'False'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100', 'db_index': 'True'}),
             'order': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'})
         },
         u'profiles.groupindex': {
-            'Meta': {'ordering': "['name']", 'object_name': 'GroupIndex'},
+            'Meta': {'ordering': "['order']", 'object_name': 'GroupIndex'},
             'groups': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['profiles.Group']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'indicators': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'groups'", 'to': u"orm['profiles.Indicator']"}),
@@ -638,11 +612,10 @@ class Migration(SchemaMigration):
             'order': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1', 'db_index': 'True'})
         },
         u'profiles.indicator': {
-            'Meta': {'ordering': "['name']", 'object_name': 'Indicator'},
-            'data_as_of': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'data_domains': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['profiles.Group']", 'through': u"orm['profiles.GroupIndex']", 'symmetrical': 'False'}),
+            'Meta': {'ordering': "['display_name', 'name']", 'object_name': 'Indicator'},
+            'data_domains': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['profiles.DataDomain']", 'through': u"orm['profiles.IndicatorDomain']", 'symmetrical': 'False'}),
             'data_type': ('django.db.models.fields.CharField', [], {'default': "'COUNT'", 'max_length': '30'}),
-            'display_change': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'display_change': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'display_distribution': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'display_name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'display_percent': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
@@ -653,7 +626,6 @@ class Migration(SchemaMigration):
             'limitations': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'long_definition': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100', 'db_index': 'True'}),
-            'next_update_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'notes': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'published': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'purpose': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
@@ -672,7 +644,7 @@ class Migration(SchemaMigration):
         },
         u'profiles.indicatorpart': {
             'Meta': {'object_name': 'IndicatorPart'},
-            'data': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['profiles.DataFile']", 'null': 'True'}),
+            'data': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'data_source': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['profiles.DataSource']"}),
             'formula': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -715,7 +687,7 @@ class Migration(SchemaMigration):
             'traceback': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
         },
         u'profiles.time': {
-            'Meta': {'ordering': "['name']", 'object_name': 'Time'},
+            'Meta': {'object_name': 'Time'},
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '20'}),

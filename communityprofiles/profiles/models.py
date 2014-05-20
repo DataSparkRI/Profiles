@@ -14,10 +14,10 @@ from django.contrib.gis.db.models import Union
 from django.core.exceptions import ValidationError
 from decimal import Decimal
 from django.core import serializers
-from django.utils.text import slugify
 import json
 from adminsortable.fields import SortableForeignKey
 from adminsortable.models import Sortable
+from django.core.files.storage import FileSystemStorage
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -32,7 +32,7 @@ class IndicatorDomain(models.Model):
         return u"%s - %s" % (self.indicator, self.domain)
 
 class Group(models.Model):
-
+    domain = models.ManyToManyField('DataDomain', through='DataDomainIndex', related_name="domain_index")
     name = models.CharField(max_length=100, unique=True, db_index=True, help_text="Display Name for this Group")
     order = models.PositiveIntegerField(null=True, blank=True)
     indicators = models.ManyToManyField('Indicator', through='GroupIndex')
@@ -51,7 +51,7 @@ class Group(models.Model):
         return indicators
 
     class Meta:
-        pass
+        ordering = ["name"]
 
     def __unicode__(self):
         return self.name
@@ -62,7 +62,7 @@ class GroupIndex(Sortable):
     indicators = models.ForeignKey('Indicator', related_name='groups')
 
     class Meta(Sortable.Meta):
-        pass
+        ordering = ["name"]
 
     def __unicode__(self):
         return self.name
@@ -152,6 +152,8 @@ class GeoLevel(models.Model):
             p.geo_level = self.id
             p.save()
 
+    class Meta:
+        ordering = ["summary_level"]
 
     def __unicode__(self):
         if self.year:
@@ -166,7 +168,7 @@ class GeoRecord(models.Model):
     """
     level = models.ForeignKey(GeoLevel)
     name = models.CharField(max_length=100, db_index=True)
-    slug = models.SlugField(max_length=100, blank=True, db_index=True, unique=True)
+    slug = models.SlugField(max_length=100, blank=True, db_index=True)
 
     # GIS properties
     #shapefile = models.ForeignKey(ShapeFile, blank=True, null=True, on_delete=models.SET_NULL, help_text="The shapefile that contains the geometries for this GeoRecord. Profiles expects this to be a Polygon type shapefile")
@@ -288,7 +290,6 @@ class GeoRecord(models.Model):
     def save(self, *args, **kwargs):
         super(GeoRecord ,self).save(*args,**kwargs)
         default_levels = get_default_levels()
-
         try:
             if self.level.name in default_levels and self.level.year == None: # When Year is none, This is base geography
                 # Lets "Reparent all the layers related to this main level so the user doesnt have to
@@ -343,6 +344,9 @@ class Time(models.Model):
     sort = models.DecimalField(max_digits=5, decimal_places=1)  # a numeric value# used for sorting
     description = models.TextField(blank=True, null=True)
 
+    class Meta:
+        ordering = ["name"]
+
     def __unicode__(self):
         return self.name
 
@@ -359,32 +363,33 @@ DATA_TYPE_CHOICES = (
 
 class Indicator(models.Model):
     #levels = models.ManyToManyField(GeoLevel)
-    name = models.CharField(max_length=100, unique=True, db_index=True)
-    slug = models.SlugField(max_length=100, unique=True, db_index=True)
-    data_domains = models.ManyToManyField(DataDomain, through='IndicatorDomain')
-    data_type = models.CharField(max_length=30, choices=DATA_TYPE_CHOICES, default='COUNT')
+    name = models.CharField(max_length=100, unique=True, db_index=True, help_text="(required)")
+    slug = models.SlugField(max_length=100, unique=True, db_index=True, help_text="(required)")
+    data_domains = models.ManyToManyField(Group, through='GroupIndex')
+    data_type = models.CharField(max_length=30, choices=DATA_TYPE_CHOICES, default='COUNT', help_text="(required)")
 
     # metadata
-    display_name = models.CharField(max_length=100)
-    short_definition = models.TextField(blank=True)
-    long_definition = models.TextField(blank=True)
+    display_name = models.CharField(max_length=100, help_text="(required) External Field - Displayed as the indicator name in the data tables and in the dropdown selector on the map page.")
+    short_definition = models.TextField(blank=True, help_text="Internal use only")
+    long_definition = models.TextField(blank=True, help_text="External Field - Displayed in the indicator information lightbox.")
     purpose = models.TextField(blank=True)  # aka rationale/implications
-    universe = models.CharField(max_length=300, blank=True)
+    universe = models.CharField(max_length=300, blank=True, help_text="External Field - Displayed in the indicator information lightbox.")
     limitations = models.TextField(blank=True)
     routine_use = models.TextField(blank=True)
     notes = models.TextField(blank=True)  # internal use misc notes
-    source = models.CharField(max_length=300, blank=True, default='U.S. Census Bureau')
+    source = models.CharField(max_length=300, blank=True, default='U.S. Census Bureau', help_text="External Field - Displayed in the indicator information lightbox.")
     display_percent = models.BooleanField(default=True)
-    display_change = models.BooleanField(default=True)  # Generates a change value between the highest and lowest time part
+    display_change = models.BooleanField(default=False)  # Generates a change value between the highest and lowest time part
     display_distribution = models.BooleanField(default=True)
     published = models.BooleanField(default=True)
     data_as_of = models.DateTimeField(verbose_name="Data As Of", blank=True, null=True, help_text='')
     last_generated_at = models.DateTimeField(verbose_name="Data Last Generated at", blank=True, null=True, help_text='This field is auto populated when the Indicator Data gets generated.') # save a date time when this indicator gets generated
-    last_modified_at = models.DateTimeField(verbose_name="Indicator Meta Data Last Modified", blank=True, null=True, help_text="Last modified time. Updated everytime Indicator Meta data is saved")
+    next_update_date = models.DateTimeField(verbose_name="Next update date at", blank=True, null=True, help_text='Next Project update')
+    last_modified_at = models.DateTimeField(verbose_name="Indicator Meta Data Last Modified", blank=True, null=True, help_text="This field is auto populated every time Indicator metadata is saved.")
     indicator_tasks = models.ManyToManyField('IndicatorTask', null=True, blank=True, related_name="ind_tasks")
 
     class Meta:
-        ordering = ["display_name", "name"]
+        ordering = ["name"]
 
     def save(self, *args, **kwargs):
         self.last_modified_at = datetime.today()
@@ -404,7 +409,10 @@ class Indicator(models.Model):
 
     def get_parts(self):
         """ Returns all Indicator Parts for this indicator"""
-        return IndicatorPart.objects.filter(indicator=self).order_by('time__name')
+        return IndicatorPart.objects.filter(indicator=self, published=True).order_by('time__name')
+    def get_custom_values(self):
+        """ Returns all Indicator Custom values for this indicator"""
+        return CustomValue.objects.filter(indicator=self)
 
     def get_times(self, name_only=False):
         """ Returns all time objects related to this Indicator"""
@@ -910,6 +918,26 @@ class Indicator(models.Model):
     def __unicode__(self):
         return '%s -- %s' % (self.name, self.display_name)
 
+class OverwriteStorage(FileSystemStorage):
+
+    def get_available_name(self, name):
+        """
+        Returns a filename that's free on the target storage system, and
+        available for new content to be written to.
+        """
+        # If the filename already exists, remove it as if it was a true file system
+        if self.exists(name):
+            self.delete(name)
+        return name
+
+class DataFile(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    file = models.FileField(upload_to='data_files',storage=OverwriteStorage(),null=True,blank=True)
+    added = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.name
 
 class DataGenerator(models.Model):
     """ Abstract model class for any model that generates data.
@@ -919,7 +947,7 @@ class DataGenerator(models.Model):
     """
     data_source = models.ForeignKey(DataSource)
     formula = models.TextField(blank=True)
-    data = models.FileField(upload_to='data_files', null=True, blank=True)
+    data = models.ForeignKey(DataFile,null=True)
     levels = models.ManyToManyField(GeoLevel, null=True, blank=True, help_text="Levels for which this Part applies.")
     published = models.BooleanField(default=True)
 
@@ -929,7 +957,7 @@ class DataGenerator(models.Model):
     def value_for_geo(self, geo_record):
         data_source_kwargs = {}
         if self.data:
-            data_source_kwargs['data_file'] = self.data
+            data_source_kwargs['data_file'] = self.data.file
         data_source = self.data_source.get_implementation()(**data_source_kwargs)
         result = data_source.data(self.formula, geo_record)
         if result is None:
@@ -979,8 +1007,8 @@ class Denominator(models.Model):
     the "default". If > 1 has the lowest sort value, behavior is undefined and
     one will be chosen at random.
     """
-    label = models.CharField(max_length=50, blank=False)
-    table_label = models.CharField(max_length=100, blank=True, null=True, help_text="A Short label that will be displayed in a table")
+    label = models.CharField(max_length=50, blank=False, help_text="External Field - Displayed in the dropdown selector on the map page.")
+    table_label = models.CharField(max_length=100, blank=True, null=True, help_text="External Field - A short label displayed in the table header on the map page.")
     multiplier = models.PositiveIntegerField(null=True, blank=True)
     indicator = models.ForeignKey(Indicator)
     sort = models.PositiveIntegerField(default = 1)
@@ -1241,7 +1269,9 @@ class CustomValue(models.Model):
     )
 
     indicator = models.ForeignKey('Indicator')
-    value_operator = models.CharField(max_length="255", blank=False, null=False, help_text="The value or An optional comparison operator. Example: '< 5' would map a value less than 5 to the display value. '10' would map a value equal to 10 to a the display value")
+    value_operator = models.CharField(max_length="255", blank=False, null=False, help_text="The value or An optional comparison operator. Example: '< 5' would map a value less than 5 to the display value. '===10' would map a value equal to 10 to a the display value")
+    value_operator_range = models.CharField(max_length="255", blank=True, null=True, help_text="The value or An optional comparison operator range. Example: '> 1' would map a value more than 1 to the display value. 1 < value < 5")
+
     display_value = models.CharField(max_length="255", blank=False, null=False)
     data_type = models.CharField(max_length=30, choices=CV_DATA_TYPE_CHOICES, default='COUNT')
     supress = models.BooleanField(default=False)
@@ -1373,7 +1403,6 @@ class IndicatorTask(models.Model):
         except TaskStatus.DoesNotExist:
             return "Task for %s pending or does not exist" % self.indicator.display_name
 
-
 @receiver(pre_delete, sender=TaskStatus)
 def task_cleanup(sender, instance, **kwargs):
     """ Delete indicator Task Meta data when we delete a TaskStatus"""
@@ -1381,6 +1410,10 @@ def task_cleanup(sender, instance, **kwargs):
         IndicatorTask.objects.get(task_id=instance.t_id).delete()
     except IndicatorTask.DoesNotExist:
         pass
+
+@receiver(pre_save, sender=GeoRecord)
+def slug_handler(sender, instance, **kwargs):
+    unique_slugify(instance, instance.name, queryset=GeoRecord.objects.filter(level=instance.level))
 
 @receiver(pre_save, sender=Denominator)
 def slug_handler(sender, instance, **kwargs):

@@ -32,11 +32,18 @@ ProfilesMap.prototype.init = function(){
 	var self = this;
 	self.polys = {};
 	this.map = L.map(this.mapDivId, { zoomControl: false }).setView(this.defaultView, this.defaultZoom);
-    //new L.Control.Zoom({ position: 'topright' }).addTo(self.map);
+	try{
+		L.esri.basemapLayer("Gray").addTo(this.map);//add esri basemap
+	}
+	catch(e){
+		this.tileLayer = L.tileLayer(this.tileSet, {maxZoom: this.maxZoom}).addTo(this.map);
+	}
+
+    	//new L.Control.Zoom({ position: 'topright' }).addTo(self.map);
 	this.map.on('zoomend',function(){
 		self.updateLayers(self.map.getZoom());
 	});
-	this.tileLayer = L.tileLayer(this.tileSet, {maxZoom: this.maxZoom}).addTo(this.map);
+	//this.tileLayer = L.tileLayer(this.tileSet, {maxZoom: this.maxZoom}).addTo(this.map);
 	this.layers = L.featureGroup([]);// instantiate our mininum layerGroup
 	this.layers.addTo(this.map);
 	// create homeButton

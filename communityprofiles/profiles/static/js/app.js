@@ -354,7 +354,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                             times.push(p.time);
                             
                             try{
-                                indicators[p.slg]['vals'][p.time] = {value:results[i].data.objects[0].f_number, moe:$scope.moe(results[i].data.objects[0].moe)};
+                                indicators[p.slg]['vals'][p.time] = {value:results[i].data.objects[0].f_number, moe:$scope.moe(results[i].data.objects[0].moe), integer:parseInt(results[i].data.objects[0].f_number.replace(/\,/g,''))};
                             }catch(e){
                                 indicators[p.slg]['vals'][p.time] = {value:"-", moe: null};
                             }
@@ -715,9 +715,18 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                     }
                     info_text += value_text;
                   }else{
-                    info_text += "<h5>" + $scope.value_formatter(vals[valueKey]||-999999);
+                    try{
+                        custom = custom_value(vals[valueKey]);
+                        if (custom==vals[valueKey]){
+                           info_text += "<h5>" + $scope.value_formatter(vals[valueKey]||-999999);
+                        }
+                        else{
+                           info_text += "<h5>" + custom;}
+                    }
+                    catch(err){
+                        info_text += "<h5>" + $scope.value_formatter(vals[valueKey]||-999999);
+                    }
                   }
-
                   if(vals.moe){
                     info_text+= " +/- " + vals["f_moe"];
                   }
@@ -745,6 +754,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
 
             }  
         }
+        console.log("click")
         var data = {'objects':$scope.data_cache[$scope.indicator.slug][$scope.time][$scope.level.name]};
        
         var base_layer = $scope.pm.DataPolyFeatureGroup($scope.reference_layer_data, {
@@ -762,7 +772,6 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                 $scope.disp_opts['value_format'],
                 "<h3>%s</h3><div class='clear'></div>".replace("%s", $scope.time)
                 );
-        
         if(!angular.isUndefined($scope.active_layers)){
             $scope.pm.map.removeLayer($scope.active_layers.base);
 

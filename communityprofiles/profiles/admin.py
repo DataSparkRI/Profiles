@@ -8,8 +8,40 @@ from django.db.models import Q
 from adminsortable.admin import (SortableAdmin, SortableTabularInline, SortableStackedInline, SortableGenericStackedInline)
 from django.http import HttpResponse
 import csv
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.admin import SimpleListFilter
 
-admin.site.register(Time)
+class NextUpdateDateField(SimpleListFilter):
+    title = _('next update data at')
+    parameter_name = 'nextUpdate'
+    def lookups(self, request, model_admin):
+
+        return (
+                ('past_date',_('Past date')),
+                ('this_month',_('This month')),
+                ('next_6',_('Next 6 months')),
+                ('this_year',_('This year')),
+        )
+    def queryset(self, request, queryset):
+        import datetime
+        now = datetime.datetime.now()
+        if self.value() == 'past_date':
+            day = now + datetime.timedelta(-2)
+            return queryset.filter(next_update_date__range=(day, now)).order_by('next_update_date')
+        elif self.value() == 'this_month':
+            return queryset.filter(next_update_date__year=now.year,
+                                   next_update_date__month=now.month,).order_by('next_update_date')
+        elif self.value() == 'next_6':
+            day = now + datetime.timedelta(183)
+            return queryset.filter(next_update_date__range=(now, day)).order_by('next_update_date')
+        elif self.value() == 'this_year':
+            return queryset.filter(next_update_date__year=now.year).order_by('next_update_date')
+        else:
+            return queryset
+
+class TimeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'sort' )
+admin.site.register(Time, TimeAdmin)
 
 class DataDomainIndexInline(SortableTabularInline):
     model = DataDomainIndex
@@ -32,7 +64,7 @@ admin.site.register(GeoLevel, GeoLevelAdmin)
 
 class GeoRecordAdmin(admin.OSMGeoAdmin):
     prepopulated_fields = {"slug": ("name",)}
-    list_display = ('name', 'level', 'geo_id' )
+    list_display = ('name', 'level', )
     list_filter = ('level', )
     #filter_horizontal = ['mappings', ]
     exclude = ('components','parent','mappings')
@@ -111,11 +143,11 @@ class LegendOptionInline(admin.TabularInline):
 class GroupAdmin(SortableAdmin):
 
     inlines = [GroupIndexInline,]
-    list_filter = ("name",)
+    list_filter = ("domain",)
     list_display = ("name",)
     search_fields = ['name']
     exclude = ('order',)
-
+    ordering = ('name',)
 admin.site.register(Group, GroupAdmin)
 
 
@@ -128,8 +160,8 @@ admin.site.register(Denominator, DenominatorAdmin)
 
 class IndicatorAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
-    list_filter = ('published','data_type', 'indicatorpart__data_source', 'indicatorpart__time', 'data_domains')
-    list_display = ('name','published','display_name','levels_str', 'data_type', 'sources_str', 'times_str', 'domains_str', 'short_definition')
+    list_filter = (NextUpdateDateField,'published','data_type', 'indicatorpart__data_source', 'indicatorpart__time', 'data_domains__domain')
+    list_display = ('name','published','display_name','levels_str', 'data_type', 'sources_str', 'times_str', 'domains_str', 'short_definition', 'last_generated_at')
     search_fields = ['display_name', 'name']
     # There seems to a bug in Django admin right now, which prevents making these fields editable
     #list_editable = ('short_definition', 'long_definition',)
@@ -145,7 +177,7 @@ class IndicatorAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('name', 'display_name', 'slug', 'display_change','data_type','published', 'data_as_of',
-                       'last_generated_at', 'last_modified_at')
+                       'last_generated_at', 'last_modified_at', 'next_update_date')
         }),
         ('Extended Metadata', {
 
@@ -184,11 +216,23 @@ admin.site.register(IndicatorPart, IndicatorPartAdmin)
 
 class DataDomainAdmin(SortableAdmin):
     inlines = [DataDomainIndexInline,]
-    list_display = ('name', 'weight', )
+    list_display = ('name','all_domains','all_subdomains', 'all_groups', 'subdomain_only', 'weight')
     list_editable = ('weight', )
+    list_filter = ('subdomain_only',)
+    ordering = ('name',)
+    search_fields = ['name']
     exclude = ('order',)
     prepopulated_fields = {"slug": ("name",)}
 
+    def all_domains(self, obj):
+        return ",<br>\n".join([i.name for i in DataDomain.objects.filter(subdomains=obj)])
+    all_domains.allow_tags = True
+    def all_subdomains(self, obj):
+        return ",<br>\n ".join([i.name for i in obj.subdomains.all()])
+    all_subdomains.allow_tags = True
+    def all_groups(self,obj):
+        return ",<br>\n ".join([i.name for i in obj.group.all()])
+    all_groups.allow_tags = True
 admin.site.register(DataDomain, DataDomainAdmin)
 
 
@@ -235,6 +279,8 @@ class TaskStatusAdmin(admin.ModelAdmin):
 admin.site.register(TaskStatus, TaskStatusAdmin)
 #admin.site.register(IndicatorTask,)
 admin.site.register(FlatValue, FlatValueAdmin)
+
+admin.site.register(DataFile)
 
 #--------radmin console------------
 console.register_to_all('Clear Memcache', 'profiles.utils.clear_memcache', True)
