@@ -24,9 +24,9 @@ class DataVisualizationPartInline(admin.TabularInline):
 class DataVisualizationAdmin(admin.ModelAdmin):
 	inlines=[DataVisualizationPartInline]
 
-admin.site.register(DataDisplayTemplate, DataDisplayTemplateAdmin)
-admin.site.register(DataVisualizationResource)
-admin.site.register(DataVisualization,DataVisualizationAdmin)
+#admin.site.register(DataDisplayTemplate, DataDisplayTemplateAdmin)
+#admin.site.register(DataVisualizationResource)
+#admin.site.register(DataVisualization,DataVisualizationAdmin)
 
 console.register_to_model(DataDisplayTemplate, 'Render Display', 'data_displays.utils.admin_generate_data_display', True)
 

@@ -271,7 +271,7 @@ class FlatValueAdmin(admin.ModelAdmin):
     list_display = ('display_title', 'geography_name','geography_geo_key', 'time_key', 'f_number', 'f_percent')
 
 
-admin.site.register(DataPoint, DataPointAdmin)
+#admin.site.register(DataPoint, DataPointAdmin)
 
 class TaskStatusAdmin(admin.ModelAdmin):
     pass
