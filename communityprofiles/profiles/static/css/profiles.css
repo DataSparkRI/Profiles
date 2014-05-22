@@ -613,6 +613,11 @@ td.indicator-options .admin-link{
 }
 
 
+.nav-tabs>li>a {
+	margin-right: -6px !important; 
+}
+
+
 /* Show and affix the side nav when space allows it */
 @media (min-width: 992px) {
   .sb-fix .nav > .active > ul {
