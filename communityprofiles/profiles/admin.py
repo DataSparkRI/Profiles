@@ -169,7 +169,7 @@ class IndicatorAdmin(admin.ModelAdmin):
         IndicatorPartInline,
         DenominatorInline,
         DenominatorPartInline,
-        IndicatorDomainInline,
+        #IndicatorDomainInline,
         CustomValueInline,
         LegendOptionInline,
     ]
