@@ -532,6 +532,6 @@ class FileAdapter(BaseCensusDataAdapter):
         reader = csv.DictReader(self.data_file, delimiter=",")
         for row in reader:
             if row['level'].lower() == geo_record.level.name.lower() and row['geo_id'] == geo_record.geo_id:
-                return Value(self.parse_value(row['value']), moe=self.parse_value(row['moe']))
+                return Value(self.parse_value(row[formula]), moe=self.parse_value(row['moe']))
 
         return None
