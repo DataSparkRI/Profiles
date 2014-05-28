@@ -195,7 +195,7 @@ class IndicatorAdmin(admin.ModelAdmin):
 
     def domains_str(self, obj):
         return ', '.join(map(lambda d: d.name, obj.data_domains.all().order_by('name')))
-    domains_str.short_description = 'Data Domains'
+    domains_str.short_description = 'Groups'
 
     def times_str(self, obj):
         return ', '.join(map(lambda d: d.time.name, obj.indicatorpart_set.all().order_by('time__sort')))
