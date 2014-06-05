@@ -651,6 +651,7 @@ td.indicator-options .admin-link{
  .domain-groups table {
     margin-left:20px;
     width:825px;
+    margin-top:1px;
   }
 
 }
