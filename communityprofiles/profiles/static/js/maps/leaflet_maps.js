@@ -346,6 +346,11 @@ ProfilesMap.prototype.getFormatter = function(formatter){
                 return self.formatDollar(value);
             }
         break;
+        case 'year':
+           format_func = function(value){
+                return value;
+            }
+        break;
          case 'percent':
             format_func = function(value){
                 return self.formatPercent(value);
@@ -572,7 +577,7 @@ ProfilesMap.prototype.formatDollar = function(value){
     if(v){
         return v
     }else{
-        return "$" + self.formatCommafy(value, true);
+        return "$" + self.formatCommafy(value, false);
     }
 }
 
