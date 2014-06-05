@@ -98,6 +98,8 @@ def format_number(num, data_type='COUNT', num_decimals=None, grouping=True):
             num_decimals = 1
         else:
             num_decimals = 0
+    if data_type == 'YEAR':
+        num_decimals = 0
 
     format_str = "%%s%%.%df" % num_decimals
     return locale.format_string(format_str, (prefix, num,), grouping=grouping)

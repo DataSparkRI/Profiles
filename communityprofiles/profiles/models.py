@@ -358,7 +358,7 @@ DATA_TYPE_CHOICES = (
     ('AVERAGE_OR_MEDIAN_DOLLARS','$ Average or Median'),
     ('AVERAGE_OR_MEDIAN', 'Average or Median'),
     ('CUSTOM', 'Custom'),
-    #('YEAR', 'Year'),
+    ('YEAR', 'Year'),
 )
 
 
@@ -889,7 +889,8 @@ class Indicator(models.Model):
         """ Return a dict that represents how this value should be formated"""
         if self.data_type == "DOLLARS" or self.data_type == "AVERAGE_OR_MEDIAN_DOLLARS":
             return {'type':'dollars'}
-
+        elif self.data_type == 'YEAR':
+            return {'type':'year'}
         elif self.data_type == 'CUSTOM':
             cvs = CustomValue.objects.filter(indicator=self)
             f = {'type':'custom'}
