@@ -557,7 +557,12 @@ ProfilesMap.prototype.formatCommafy = function(value, decimal){
     while (rgx.test(x1)) {
         x1 = x1.replace(rgx, '$1' + ',' + '$2');
     }
-    return x1 + x2;
+    if(decimal){
+        return x1 + x2;
+    }
+    else{
+        return x1;
+    }
 }
 
 ProfilesMap.prototype.formatCount = function(value, decimal){
