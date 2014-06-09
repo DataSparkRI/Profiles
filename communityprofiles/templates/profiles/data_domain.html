@@ -24,7 +24,7 @@
             initScrollSpy();
         }
         {% if user.is_authenticated %}var AUTHN=true;{%endif%}
-
+        var index = new Array();
     </script>
 
 {%endblock%}
@@ -145,6 +145,12 @@
                                 <td class="indicator-info hidden-print"></td>
                                 <td class="indicator-options hidden-print"><div class="wrap"></div></td>
                             </tr>
+<script>
+{%for indicator in g|group_filter:geo_level %}
+index["{{indicator.slug}}"] = '{{indicator.data_type}}';
+{%endfor%}
+
+</script>
 
                             {#<!--- inddata -->#}
                             <tr id="{[{indicator.slug}]}" class="indicator-data-row" data-indicator="{[{indicator.id}]}" ng-repeat-start="indicator in time.indicators | orderBy:'order_key'">
@@ -152,7 +158,7 @@
 
                                 <td class="indicator-time" colspan="{[{indicator.times.length | col}]}" ng-repeat='t in indicator.times'>
                                     <div ng-if = "indicator.vals[t].value==''" class="val-wrap">N/A</div>
-                                    <div ng-if = "indicator.vals[t].value !=''" class="val-wrap">{[{indicator.vals[t].value}]}</div>
+                                    <div ng-if = "indicator.vals[t].value !=''" class="val-wrap"><div ng-if = "indicator.vals[t].type =='YEAR'" class="val-wrap">{[{indicator.vals[t].integer}]}</div><div ng-if = "indicator.vals[t].type !='YEAR'" class="val-wrap">{[{indicator.vals[t].value}]}</div></div>
 
                                     <div class="moe-wrap" ng-bind-html=indicator.vals[t].moe|safehtml></div>
                                 </td>

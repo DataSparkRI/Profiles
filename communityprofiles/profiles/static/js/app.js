@@ -352,9 +352,10 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                         if(p.t == "i"){
                             k = p.slg; // always use the ind slug as the authoriative key
                             times.push(p.time);
-                            
                             try{
-                                indicators[p.slg]['vals'][p.time] = {value:results[i].data.objects[0].f_number, moe:$scope.moe(results[i].data.objects[0].moe), integer:parseInt(results[i].data.objects[0].f_number.replace(/\,/g,''))};
+                                try{
+                                    indicators[p.slg]['vals'][p.time] = {value:results[i].data.objects[0].f_number, moe:$scope.moe(results[i].data.objects[0].moe), type:index[results[i].data.objects[0].indicator_slug], integer:parseInt(results[i].data.objects[0].f_number.replace(/\,/g,''))};}
+                                catch(e){indicators[p.slg]['vals'][p.time] = {value:results[i].data.objects[0].f_number, moe:$scope.moe(results[i].data.objects[0].moe), integer:parseInt(results[i].data.objects[0].f_number.replace(/\,/g,''))};}
                             }catch(e){
                                 indicators[p.slg]['vals'][p.time] = {value:"-", moe: null};
                             }
@@ -754,7 +755,6 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
 
             }  
         }
-        console.log("click")
         var data = {'objects':$scope.data_cache[$scope.indicator.slug][$scope.time][$scope.level.name]};
        
         var base_layer = $scope.pm.DataPolyFeatureGroup($scope.reference_layer_data, {
