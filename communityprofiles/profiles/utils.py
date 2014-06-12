@@ -224,8 +224,13 @@ def generate_indicator_data(ind_id):
     from profiles.models import Indicator, IndicatorTask, TaskStatus
     ind = Indicator.objects.get(pk=int(ind_id))
     async_obj = generate_indicator_data(ind)
-    obj, created = TaskStatus.objects.get_or_create(status = "Pending", traceback="", error=False, t_id = str(async_obj.task.task_id))
+    #obj, created = TaskStatus.objects.get_or_create(status = "Pending", traceback="", error=False, t_id = str(async_obj.task.task_id))
     ind_task = IndicatorTask.objects.create(task_id = async_obj.task.task_id, indicator = ind)
+    try:
+        obj = TaskStatus.objects.get(t_id = str(async_obj.task.task_id))
+    except TaskStatus.DoesNotExist:
+        TaskStatus.objects.get_or_create(status = "Pending", traceback="", error=False, t_id = str(async_obj.task.task_id))
+
     return "Generating Data for Indicator %s TaskId: %s" % (ind.display_name, async_obj.task.task_id)
 
 def values_to_lists(value_list):
