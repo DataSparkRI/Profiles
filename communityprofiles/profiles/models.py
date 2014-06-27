@@ -355,8 +355,8 @@ DATA_TYPE_CHOICES = (
     ('DECIMAL_1', 'Decimal 1'),
     ('DECIMAL_2', 'Decimal 2'),
     ('DOLLARS', 'Dollars'),
-    ('AVERAGE_OR_MEDIAN_DOLLARS','$ Average or Median'),
-    ('AVERAGE_OR_MEDIAN', 'Average or Median'),
+    #('AVERAGE_OR_MEDIAN_DOLLARS','$ Average or Median'),
+    #('AVERAGE_OR_MEDIAN', 'Average or Median'),
     ('CUSTOM', 'Custom'),
     ('YEAR', 'Year'),
 )
@@ -1260,8 +1260,8 @@ class CustomValue(models.Model):
         ('DECIMAL_1', 'Decimal 1'),
         ('DECIMAL_2', 'Decimal 2'),
         ('DOLLARS', 'Dollars'),
-        ('AVERAGE_OR_MEDIAN_DOLLARS','$ Average or Median'),
-        ('AVERAGE_OR_MEDIAN', 'Average or Median'),
+        #('AVERAGE_OR_MEDIAN_DOLLARS','$ Average or Median'),
+        #('AVERAGE_OR_MEDIAN', 'Average or Median'),
     )
 
     indicator = models.ForeignKey('Indicator')
