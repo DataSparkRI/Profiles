@@ -90,7 +90,7 @@ class DataSourceAdmin(admin.ModelAdmin):
 admin.site.register(DataSource, DataSourceAdmin)
 
 
-class IndicatorPartInline(admin.TabularInline):
+class IndicatorPartInline(SortableTabularInline):
     model = IndicatorPart
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "levels":
@@ -99,9 +99,9 @@ class IndicatorPartInline(admin.TabularInline):
         return super(IndicatorPartInline, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 
-class DenominatorPartInline(admin.TabularInline):
+class DenominatorPartInline(SortableTabularInline):
     model = DenominatorPart
-
+    
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "levels":
             levs= get_default_levels()
@@ -158,7 +158,7 @@ class DenominatorAdmin(admin.ModelAdmin):
 admin.site.register(Denominator, DenominatorAdmin)
 
 
-class IndicatorAdmin(admin.ModelAdmin):
+class IndicatorAdmin(SortableAdmin):
     prepopulated_fields = {"slug": ("name",)}
     list_filter = (NextUpdateDateField,'published','data_type', 'indicatorpart__data_source', 'indicatorpart__time', 'data_domains__domain')
     list_display = ('name','published','display_name','levels_str', 'data_type', 'sources_str', 'times_str', 'domains_str', 'short_definition', 'last_generated_at','last_modified_at')

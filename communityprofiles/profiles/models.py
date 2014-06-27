@@ -368,7 +368,7 @@ class Indicator(models.Model):
     slug = models.SlugField(max_length=100, unique=True, db_index=True, help_text="(required)")
     data_domains = models.ManyToManyField(Group, through='GroupIndex')
     data_type = models.CharField(max_length=30, choices=DATA_TYPE_CHOICES, default='COUNT', help_text="(required)")
-
+    order = models.PositiveIntegerField(null=True, blank=True)
     # metadata
     display_name = models.CharField(max_length=100, help_text="(required) External Field - Displayed as the indicator name in the data tables and in the dropdown selector on the map page.")
     short_definition = models.TextField(blank=True, help_text="Internal use only")
@@ -410,7 +410,7 @@ class Indicator(models.Model):
 
     def get_parts(self):
         """ Returns all Indicator Parts for this indicator"""
-        return IndicatorPart.objects.filter(indicator=self, published=True).order_by('time__name')
+        return IndicatorPart.objects.filter(indicator=self, published=True).order_by('order')
     def get_custom_values(self):
         """ Returns all Indicator Custom values for this indicator"""
         return CustomValue.objects.filter(indicator=self)
@@ -419,14 +419,18 @@ class Indicator(models.Model):
         """ Returns all time objects related to this Indicator"""
         times_uq = []
         times = []
+        print "-----------"
         for part in self.get_parts():
             if part.time.name not in times_uq:
                 times_uq.append(part.time.name)
                 if name_only:
                     times.append(part.time.name)
+                    print part.time.name
                 else:
                     times.append(part.time)
                     times.sort(key=lambda tm: tm.name)
+
+        print times
         return times
 
     def get_slug_time_props(self):
@@ -941,7 +945,7 @@ class DataFile(models.Model):
     def __unicode__(self):
         return self.name
 
-class DataGenerator(models.Model):
+class DataGenerator(Sortable):
     """ Abstract model class for any model that generates data.
 
     This consolidates the fields and logic necessary to talk to data sources,
@@ -953,7 +957,7 @@ class DataGenerator(models.Model):
     levels = models.ManyToManyField(GeoLevel, null=True, blank=True, help_text="Levels for which this Part applies.")
     published = models.BooleanField(default=True)
 
-    class Meta:
+    class Meta(Sortable.Meta):
         abstract = True
 
     def value_for_geo(self, geo_record):
