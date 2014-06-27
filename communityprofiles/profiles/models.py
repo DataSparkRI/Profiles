@@ -576,11 +576,6 @@ class Indicator(models.Model):
         for part in self.indicatorpart_set.all():
 
             for level in part.levels.all():
-                try:
-                    denominator_part = self.denominatorpart_set.filter(part=part)[0] # always return just one
-                except IndexError:
-                    denominator_part = None
-
                 for record in level.georecord_set.filter(owner=None):
                     part_value = part.value_for_geo(record)
                     datapoint = DataPoint.objects.create(
@@ -598,11 +593,7 @@ class Indicator(models.Model):
                         moe=part_value.moe
                     )
 
-                    # lets grab denoms here. Its kinda crappy to have to do a
-                    # dumb query like what follows but since this process is
-                    # admin initiated and goes into the task queue, I'm not
-                    # gonna bother much with it.
-                    if denominator_part != None:
+                    for denominator_part in part.denominatorpart_set.all():
                         denominator_value = denominator_part.value_for_geo(record)
                         if part_value is not None and not part_value.value is None and part_value.value != 0 \
                         and not denominator_value is None and denominator_value.value is not None and not denominator_value.value == 0:
@@ -618,7 +609,6 @@ class Indicator(models.Model):
                                 percent=divided_result.value,
                                 moe=divided_result.moe
                             )
-
         self.last_generated_at = datetime.now()
         self.save()
 
