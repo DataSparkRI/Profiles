@@ -98,6 +98,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
     $scope.data_cache = {};
     $scope.enabled_times = [];
     $scope.$storage = $localStorage.$default({levelstate:null})
+    $scope.predicate = 'label';
 
     $scope.onGeoRollover = function(e){
         var l = e.target;

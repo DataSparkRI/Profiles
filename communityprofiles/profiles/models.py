@@ -419,18 +419,15 @@ class Indicator(models.Model):
         """ Returns all time objects related to this Indicator"""
         times_uq = []
         times = []
-        print "-----------"
         for part in self.get_parts():
             if part.time.name not in times_uq:
                 times_uq.append(part.time.name)
                 if name_only:
                     times.append(part.time.name)
-                    print part.time.name
                 else:
                     times.append(part.time)
                     times.sort(key=lambda tm: tm.name)
 
-        print times
         return times
 
     def get_slug_time_props(self):

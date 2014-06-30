@@ -136,7 +136,7 @@
                     </thead>
                     {#<tbody style="display:block;" class="shim"></tbody>#}
                     <tbody>
-                        <tr ng-repeat="val in tval" id="{[{val.label}]}">
+                        <tr ng-repeat="val in tval | orderBy:predicate:reverse" id="{[{val.label}]}">
                             <td class="geo-label"><div>{[{val.label}]}</div></td>{# geo label #}                            
                             <td ng-repeat-start="t in indicator.times" id="{[{t}]}">{# main value #}
                                 <div class="val-wrap" ng-show="indicator.key =='percent'">
