@@ -1262,7 +1262,7 @@ class CustomValue(models.Model):
     )
 
     indicator = models.ForeignKey('Indicator')
-    value_operator = models.CharField(max_length="255", blank=False, null=False, help_text="The value or An optional comparison operator. Available operators include ===, >, <, and !=")
+    value_operator = models.CharField(max_length="255", blank=False, null=False, help_text="The value or An optional comparison operator. Available operators include '===', '>', '<', and '!='. Example: '< 5' would map a value less than 5 to the display value. '===10' would map a value equal to 10 to a the display value.")
     value_operator_range = models.CharField(max_length="255", blank=True, null=True, help_text="The value or An optional comparison operator range. Example: '> 1' would map a value more than 1 to the display value. 1 < value < 5")
 
     display_value = models.CharField(max_length="255", blank=False, null=False)
