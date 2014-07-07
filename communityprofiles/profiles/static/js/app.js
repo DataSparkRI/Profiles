@@ -249,6 +249,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
     }
 
     $scope.updateLev = function(level, updateTS){
+        console.log(level)
         if(angular.isUndefined(updateTS)){ updateTS = false; }
         $scope.level = level;
         $scope.onLevChange(updateTS);
@@ -954,13 +955,14 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                     // check to see if this level change history hasnt expired
                     if((Date.now() - l.time) < (lStateExpire * 60000)){
                         //update scope level
-                        if($scope.init_level.slug != l.level.slug){
+                        //can not load to state level
+                        /*if($scope.init_level.slug != l.level.slug){
                             $scope.updateLev(l.level);
-                        }else{
+                        }else{*/
                             // behave normally
                             $scope.getGeoms();
                             $scope.getRecordsByLev($scope.level.slug, true);
-                        }
+                        //}
                     }else{
                         // expired level history
                         // behave normally
