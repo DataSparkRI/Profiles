@@ -13,6 +13,11 @@ from django.utils.safestring import mark_safe
 from django.contrib.flatpages.models import FlatPage
 
 import re
+from maps.models import Setting
+setting = Setting.objects.filter(active=True)
+if len(setting) == 0:
+   raise ImproperlyConfigured('DEFAULT_GEO_RECORD_ID must be defined')
+setting = setting[0]
 
 register = template.Library()
 
@@ -80,7 +85,9 @@ def record_href(context, record):
 
 @register.inclusion_tag('profiles/includes/data_domains.html', takes_context=True)
 def data_domains(context, geo_record=None, selected_domain=None):
-    if geo_record == None:
+    setting = Setting.objects.filter(active=True);
+    if len(setting) == 0:
+    #if geo_record == None:
         geo_record = GeoRecord.objects.get(pk=getattr(settings, "DEFAULT_GEO_RECORD_ID", 1))
 
     data_domains = [{'domain':domain,'href':_domain_href(domain, geo_record), }for domain in DataDomain.objects.filter(subdomain_only=False)]
@@ -482,10 +489,10 @@ def _geo_nav_context(context):
         data_domain = context['data_domain']
 
     if geo_record == None:
-        if not hasattr(settings, 'DEFAULT_GEO_RECORD_ID'):
-            raise Exception('No geo_record was selected, and DEFAULT_GEO_RECORD_ID was not configured.')
+        #if not hasattr(settings, 'DEFAULT_GEO_RECORD_ID'):
+        #    raise Exception('No geo_record was selected, and DEFAULT_GEO_RECORD_ID was not configured.')
         try:
-            geo_record = GeoRecord.objects.get(pk=settings.DEFAULT_GEO_RECORD_ID)
+            geo_record = GeoRecord.objects.get(pk=setting.DEFAULT_GEO_RECORD_ID)
         except GeoRecord.DoesNotExist:
             geo_record = GeoRecord.objects.filter(level=GeoLevel.objects.get(slug=levels[0].lower()))[0]
 
@@ -511,7 +518,7 @@ def _geo_nav_context(context):
         lev['geos'] = GeoRecord.objects.filter(level__pk=lev['pk']).only('slug', 'pk', 'name')
 
     try:
-        default_geo = GeoRecord.objects.get(pk=settings.DEFAULT_GEO_RECORD_ID)
+        default_geo = GeoRecord.objects.get(pk=setting.DEFAULT_GEO_RECORD_ID)
     except GeoRecord.DoesNotExist:
         default_geo = GeoRecord.objects.filter(level=GeoLevel.objects.get(slug=levels[0].lower()))[0]
     try:

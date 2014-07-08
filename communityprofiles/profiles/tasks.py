@@ -154,3 +154,9 @@ def generate_data_display_image(data_display_template):
 @task()
 def update_search_index():
     call_command('rebuild_index',interactive=False)
+
+@task()
+def generate_geo_date(geo_file):
+    for geo in geo_file:
+        call_command('load_geographies', settings.MEDIA_ROOT+"/"+str(geo.file), str(geo.year), verbosity=0)
+

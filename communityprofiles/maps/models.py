@@ -179,6 +179,23 @@ class MapLayer(models.Model):
     def __unicode__(self):
         return self.name
 
+class GeoFile(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    year = models.CharField(max_length=100)
+    file = models.FileField(upload_to='data_files',help_text=' NOTE: Avoid naming your files with "_#.zip". Example "myfile_1.zip" This is due to how Django handles file name collisions. "01_myFile.zip" is fine.')
+    added = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.name
+
+class Setting(models.Model):
+    DEFAULT_GEO_RECORD_ID = models.CharField(max_length=100)
+    active = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.DEFAULT_GEO_RECORD_ID
+
 def get_layers_for_geo(record):
     """ returns list of layers and features for given record"""
     map_layers = []
