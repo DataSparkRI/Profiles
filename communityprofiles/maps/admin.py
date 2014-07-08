@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib.gis import admin
 from maps.models import *
 from maps.forms import *
 
@@ -29,7 +29,7 @@ class ShapeFileAdmin(admin.ModelAdmin):
     #        LineStringMapFeatureInline,
     #]
 
-class MapFeatureAdmin(admin.ModelAdmin):
+class MapFeatureAdmin(admin.OSMGeoAdmin):
     list_display = ('label', 'geo_key', 'source')
 
 admin.site.register(ShapeFile, ShapeFileAdmin)
