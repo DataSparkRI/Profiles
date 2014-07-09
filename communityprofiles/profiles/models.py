@@ -507,18 +507,22 @@ class Indicator(models.Model):
             notes.append({'label':'Source', 'text':self.source})
         if self.data_as_of:
             notes.append({'label':'Data As Of', 'text':self.data_as_of.strftime("%B, %d %Y")})
-
+        def remove_underscore(str):
+            if(str[-1]=='_'): 
+               return str[:-1]
+            else: 
+               return str
         #construct the tables string
         if num_tbls:
             txt = ""
             for t in num_tbls:
-                txt += "%s: %s<br/>\n" % (t['time'], t['tables_str'])
+                txt += "%s: %s<br/>\n" % (t['time'], remove_underscore(t['tables_str']))
             notes.append({'label':'Numerator Tables', 'text':txt})
 
         if denom_tbls:
             txt = ""
             for t in denom_tbls:
-                txt += "%s: %s<br/>\n" % (t['time'], t['tables_str'])
+                txt += "%s: %s<br/>\n" % (t['time'], remove_underscore(t['tables_str']))
             notes.append({'label':'Denominator Tables', 'text':txt})
 
 
