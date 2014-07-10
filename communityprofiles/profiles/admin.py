@@ -10,6 +10,7 @@ from django.http import HttpResponse
 import csv
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.admin import SimpleListFilter
+from django.contrib import messages
 
 class NextUpdateDateField(SimpleListFilter):
     title = _('next update data at')
@@ -53,11 +54,17 @@ class GroupIndexInline(SortableTabularInline):
     model = GroupIndex
     fields = ('indicators',)
 
+def generate_geo_record(modeladmin, request, queryset):
+    from profiles.tasks import generate_geo_record_task
+    from django.utils.safestring import mark_safe
+    generate_geo_record_task(queryset)
+    messages.add_message(request, messages.INFO,mark_safe("Add to task. It will create geo record based on your shape file."))
 
 class GeoLevelAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     exclude = ('parent','data_sources')
     list_display = ('name', 'year' )
+    actions = [generate_geo_record]
 
 admin.site.register(GeoLevel, GeoLevelAdmin)
 

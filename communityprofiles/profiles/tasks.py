@@ -160,3 +160,20 @@ def generate_geo_date(geo_file):
     for geo in geo_file:
         call_command('load_geographies', settings.MEDIA_ROOT+"/"+str(geo.file), str(geo.year), verbosity=0)
 
+@task()
+def generate_geo_record_task(queryset):
+    from maps.models import PolygonMapFeature
+    from profiles.models import GeoRecord, GeoLevel
+    for geolevel in queryset:
+
+        all = PolygonMapFeature.objects.filter(source = geolevel.shapefile)
+
+    
+        for e in all:
+            GeoRecord(level=geolevel,
+               name = e.geo_key,
+               slug = e.geo_key,
+               geo_id = e.geo_key,
+               geo_searchable = True,
+               geo_id_segments = '{"'+geolevel.summary_level+'":"'+e.geo_key+'"}').save()
+
