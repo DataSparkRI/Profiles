@@ -89,7 +89,7 @@
                  </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                {% if print %}<div class="col-md-11"><style>#map {width: 1000px;height: 300px;}</style>{% else %}<div class="col-md-6">{% endif %}
                     <div id="map">
                     </div>{#end map#}  
                 </div> 

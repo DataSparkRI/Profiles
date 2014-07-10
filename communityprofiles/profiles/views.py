@@ -113,7 +113,12 @@ def data_view(request, level_slug, geo_slug, indicator_slug):
         'value_key':value_key,
 
     }
-
+    is_status = "status" in request.GET
+    if is_status:
+        ctx.update({'print':True})
+        #return render_to_response('profiles/dataprint.html', ctx, context_instance=RequestContext(request))
+    else:
+        ctx.update({'print':False})
     return render_to_response('profiles/dataview.html', ctx, context_instance=RequestContext(request))
 
 def indicator_info(request):

@@ -919,7 +919,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
 
     $scope.launchPrintFriendly = function(){
         // launch a print friendly version of the dataview page we are in
-        window.open($window.location.href);
+        window.open($window.location.pathname+"?status=print");
     }
     
     $scope.init = function(){
