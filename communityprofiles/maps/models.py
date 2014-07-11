@@ -47,7 +47,6 @@ class PointMapFeature(MapFeature):
 class ShapeFile(models.Model):
     """ Defines a shapefile and its associated layers."""
     name = models.CharField(max_length=255, blank=True)
-    #layer = models.ForeignKey('MapLayer')
     label_column = models.CharField(max_length=255, blank=False, null=False, help_text="The Shape file column that should be used as a label")
     geo_key_column = models.CharField(max_length=255, blank=False, null=False, help_text="The Shape file column that should be used as to link this to a Geo Record's Name")
     geo_meta_key_column = models.CharField(max_length=255, blank=True, null=True, help_text="Meta values such as the containing geography's geo_key. Ex: What Muni is this tract in?")
@@ -169,11 +168,17 @@ class ShapeFile(models.Model):
     def __unicode__(self):
         return self.name
 
-class MapLayer(models.Model):
-    name = models.CharField(max_length=255, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    shapefiles = models.ManyToManyField(ShapeFile)
+class PointOverlayIcon(models.Model):
+    name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='point_icons')
+
+    def __unicode__(self):
+        return self.name
+
+class PointOverlay(models.Model):
+    name = models.CharField(max_length=255)
+    shapefile =  models.ForeignKey(ShapeFile, limit_choices_to={'geom_type': 'point'})
+    icon =  models.ForeignKey(PointOverlayIcon)
     available_on_maps = models.BooleanField(default=False)
 
     def __unicode__(self):

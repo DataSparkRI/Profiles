@@ -6,7 +6,11 @@ class ShapeFileInline(admin.StackedInline):
     model = ShapeFile
     extra = 1
 
-class MapLayerAdmin(admin.ModelAdmin):
+class PointOverlayIconAdmin(admin.ModelAdmin):
+    inlines = [
+    ]
+
+class PointOverlayAdmin(admin.ModelAdmin):
     inlines = [
     ]
 
@@ -36,4 +40,5 @@ admin.site.register(ShapeFile, ShapeFileAdmin)
 admin.site.register(PolygonMapFeature, MapFeatureAdmin)
 admin.site.register(LineStringMapFeature, MapFeatureAdmin)
 admin.site.register(PointMapFeature, MapFeatureAdmin)
-admin.site.register(MapLayer, MapLayerAdmin)
+admin.site.register(PointOverlay, PointOverlayAdmin)
+admin.site.register(PointOverlayIcon, PointOverlayIconAdmin)

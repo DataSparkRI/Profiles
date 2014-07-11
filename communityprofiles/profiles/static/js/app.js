@@ -201,6 +201,15 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
         }
     }
 
+    $scope.addPointOverlays = function() {
+        $http.get($scope.api_url + '/point-overlays/')
+        .success(function (overlays, status, headers, config){
+           for(var title in overlays) {
+               $scope.pm.addPointOverlay(title, overlays[title]);
+           }
+        });
+    }
+
     $scope.getRecordsByLev = function(levSlug, updateLevRecs, callback) {
         /*Return a list of Records at a specified Level*/
         if(angular.isUndefined(updateLevRecs)){
@@ -1003,6 +1012,8 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                 }
 
             }
+
+            $scope.addPointOverlays();
                          
         });
         try{

@@ -14,41 +14,43 @@ function ProfilesMap(){
 	this.defaultZoom = 10;
 	this.mapDivId = 'map';
 	this.maxZoom = 18;
-	//this.tileSet='http://{s}.tile.osm.org/{z}/{x}/{y}.png';
-	this.tileSet='http://{s}.tile.cloudmade.com/7fa441524a5e40f580929fae29a885e6/83513/256/{z}/{x}/{y}.png';
 	this.map;
 	this.nbreaks;
 	this.layers; // all layers are containd in this main L.featureGroup
-	this.overlays={}
-	this.tileLayer;
 	this.colorList = ["#E4F7FF", "#AADFF7", "#72B5F2", "#3383e5", "#2767dd", "#345999"];
 	this.homeLocation;
 	this.managedLayers = []; //push an array into this list [<Layer>,<zoom_theshold>] what i really want is a tuple :(
 	this.defaultStyle = {color:"#444", opacity:.4, fillColor:"#72B5F2", weight:1, fillOpacity:0.6};
 	this.polys; // keeps track of the polys add to our map
+        this.controls;
+
 }
 
 ProfilesMap.prototype.init = function(){
 	var self = this;
 	self.polys = {};
-	this.map = L.map(this.mapDivId, { zoomControl: false }).setView(this.defaultView, this.defaultZoom);
-	try{
-		L.esri.basemapLayer("Gray").addTo(this.map);//add esri basemap
-	}
-	catch(e){
-		this.tileLayer = L.tileLayer(this.tileSet, {maxZoom: this.maxZoom}).addTo(this.map);
-	}
 
-    	//new L.Control.Zoom({ position: 'topright' }).addTo(self.map);
+	var esri_imagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+		attribution: 'Tiles &copy; Esri',
+		maxZoom: 16
+	});
+
+	var esri_gray = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+		attribution: 'Tiles &copy; Esri',
+		maxZoom: 16
+	});
+
+	this.map = L.map(this.mapDivId, { zoomControl: true, layers: [esri_imagery, esri_gray]}).setView(this.defaultView, this.defaultZoom);
+
+	this.controls = L.control.layers({"Imagery": esri_imagery, "Gray": esri_gray}, {}, {position: 'topleft'}).addTo(this.map);
+
 	this.map.on('zoomend',function(){
 		self.updateLayers(self.map.getZoom());
 	});
-	//this.tileLayer = L.tileLayer(this.tileSet, {maxZoom: this.maxZoom}).addTo(this.map);
 	this.layers = L.featureGroup([]);// instantiate our mininum layerGroup
 	this.layers.addTo(this.map);
 	// create homeButton
 	this.createHomeButton();
-
 	this.getPoint();
 }
 
@@ -102,6 +104,21 @@ ProfilesMap.prototype.createGeoLineStringLayer = function(feat, style, funcList)
 	return this.createGeoJsonLayer(feat, style, funclist);
 }
 
+ProfilesMap.prototype.addPointOverlay = function(title, data){
+	var self = this;
+
+	var overlay = L.geoJson(data, {
+            onEachFeature: function(feature, layer) {
+                layer.setIcon(L.icon({
+                          iconUrl: feature.properties.image,
+                          iconSize: [30, 30]
+                      }))
+                     .bindPopup(feature.properties.label);
+            }
+	});
+	
+        this.controls.addOverlay(overlay, title);
+}
 
 ProfilesMap.prototype.createGeoLabelLayer = function(feat, style){
 	/*Creates a L.geoJsonLayer with divIcon for Marker
