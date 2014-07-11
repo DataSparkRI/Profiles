@@ -26,9 +26,20 @@
         {% if user.is_authenticated %}var AUTHN=true;{%endif%}
         var index = new Array();
     </script>
-
+<script>FEEDBACK_FORM_URL="http://feedback.provplan.org"</script> 
+<script src="http://feedback.provplan.org/static/js/embedFeedback.js"></script>     
+    
+<style>
+img.feedback_fixed
+{
+position:fixed;
+top:130px;
+right:5px;
+}
+</style> 
 {%endblock%}
 {% block content %}
+<a href="#" id="site-feedback"><img class="feedback_fixed" src="http://feedback.provplan.org/static/images/feedbackBtn.png" alt="feedback"></a>
     <div ng-controller="MapCntrl">
        
             {%comment%}

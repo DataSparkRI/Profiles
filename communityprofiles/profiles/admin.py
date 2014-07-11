@@ -10,6 +10,26 @@ from django.http import HttpResponse
 import csv
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.admin import SimpleListFilter
+from django.contrib import messages
+
+#------------- ACTIONS -----------------#
+def export_indicator_info(modeladmin, request, queryset):
+    """ Export indicator info """
+    response = HttpResponse(content_type="application/csv")
+    response['Content-Disposition'] = 'attachment; filename="indicators.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['Indicator', 'Part Formulas', 'Denom Formulas', 'Data Sources'])
+
+    for q in queryset:
+        ifs = ""
+        dfs = ""
+        for ip in q.indicatorpart_set.all():
+            ifs += "{time}: {formula}|".format(time=ip.time.name, formula=ip.formula)
+        for dp in q.denominatorpart_set.all():
+            dfs += "{time}: {formula}|".format(time=dp.part.time.name, formula =dp.formula)
+        writer.writerow([q.display_name, ifs, dfs, "|".join(q.get_source_names())])
+
+    return response
 
 class NextUpdateDateField(SimpleListFilter):
     title = _('next update data at')
@@ -53,11 +73,17 @@ class GroupIndexInline(SortableTabularInline):
     model = GroupIndex
     fields = ('indicators',)
 
+def generate_geo_record(modeladmin, request, queryset):
+    from profiles.tasks import generate_geo_record_task
+    from django.utils.safestring import mark_safe
+    generate_geo_record_task(queryset)
+    messages.add_message(request, messages.INFO,mark_safe("Add to task. It will create geo record based on your shape file."))
 
 class GeoLevelAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     exclude = ('parent','data_sources')
     list_display = ('name', 'year' )
+    actions = [generate_geo_record]
 
 admin.site.register(GeoLevel, GeoLevelAdmin)
 
@@ -173,7 +199,7 @@ class IndicatorAdmin(SortableAdmin):
         CustomValueInline,
         LegendOptionInline,
     ]
-
+    actions = [export_indicator_info]
     fieldsets = (
         (None, {
             'fields': ('name', 'display_name', 'slug', 'display_change','data_type','published', 'data_as_of',
@@ -288,23 +314,4 @@ console.register_to_all('Update Search Index', 'profiles.utils.rebuild_search_in
 console.register_to_model(Indicator, 'Generate Indicator Data', 'profiles.utils.generate_indicator_data', True)
 
 
-#------------- ACTIONS -----------------#
-def export_indicator_info(modeladmin, request, queryset):
-    """ Export indicator info """
-    response = HttpResponse(content_type="application/csv")
-    response['Content-Disposition'] = 'attachment; filename="indicators.csv"'
-    writer = csv.writer(response)
-    writer.writerow(['Indicator', 'Part Formulas', 'Denom Formulas', 'Data Sources'])
-
-    for q in queryset:
-        ifs = ""
-        dfs = ""
-        for ip in q.indicatorpart_set.all():
-            ifs += "{time}: {formula}|".format(time=ip.time.name, formula=ip.formula)
-        for dp in q.denominatorpart_set.all():
-            dfs += "{time}: {formula}|".format(time=dp.part.time.name, formula =dp.formula)
-        writer.writerow([q.display_name, ifs, dfs, "|".join(q.get_source_names())])
-
-    return response
-
-admin.site.add_action(export_indicator_info, "Export Indicators Meta data")
+#admin.site.add_action(export_indicator_info, "Export Indicators Meta data")

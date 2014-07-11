@@ -89,7 +89,7 @@
                  </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                {% if print %}<div class="col-md-11"><style>#map {width: 1000px;height: 300px;}</style>{% else %}<div class="col-md-6">{% endif %}
                     <div id="map">
                     </div>{#end map#}  
                 </div> 
@@ -136,7 +136,7 @@
                     </thead>
                     {#<tbody style="display:block;" class="shim"></tbody>#}
                     <tbody>
-                        <tr ng-repeat="val in tval" id="{[{val.label}]}">
+                        <tr ng-repeat="val in tval | orderBy:predicate:reverse" id="{[{val.label}]}">
                             <td class="geo-label"><div>{[{val.label}]}</div></td>{# geo label #}                            
                             <td ng-repeat-start="t in indicator.times" id="{[{t}]}">{# main value #}
                                 <div class="val-wrap" ng-show="indicator.key =='percent'">

@@ -113,7 +113,12 @@ def data_view(request, level_slug, geo_slug, indicator_slug):
         'value_key':value_key,
 
     }
-
+    is_status = "status" in request.GET
+    if is_status:
+        ctx.update({'print':True})
+        #return render_to_response('profiles/dataprint.html', ctx, context_instance=RequestContext(request))
+    else:
+        ctx.update({'print':False})
     return render_to_response('profiles/dataview.html', ctx, context_instance=RequestContext(request))
 
 def indicator_info(request):
@@ -675,7 +680,11 @@ def search(request, template='search/search.html', load_all=True,
         # the navigation template tag would pick DEFAULT_GEO_RECORD_ID if no
         # georecord is passed, but we should select it manually here so
         # thumbnails can be rendered in the proper context
-        geo_record = GeoRecord.objects.get(id=settings.DEFAULT_GEO_RECORD_ID)
+        from maps.models import Setting
+        setting = Setting.objects.filter(active=True);
+        if len(setting) == 0:
+           raise ImproperlyConfigured('DEFAULT_GEO_RECORD_ID must be defined')
+        geo_record = GeoRecord.objects.get(id=setting[0].DEFAULT_GEO_RECORD_ID)
 
     indicator_results = None
     data_display_results = None

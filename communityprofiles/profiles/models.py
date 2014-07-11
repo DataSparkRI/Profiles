@@ -355,8 +355,8 @@ DATA_TYPE_CHOICES = (
     ('DECIMAL_1', 'Decimal 1'),
     ('DECIMAL_2', 'Decimal 2'),
     ('DOLLARS', 'Dollars'),
-    ('AVERAGE_OR_MEDIAN_DOLLARS','$ Average or Median'),
-    ('AVERAGE_OR_MEDIAN', 'Average or Median'),
+    #('AVERAGE_OR_MEDIAN_DOLLARS','$ Average or Median'),
+    #('AVERAGE_OR_MEDIAN', 'Average or Median'),
     ('CUSTOM', 'Custom'),
     ('YEAR', 'Year'),
 )
@@ -419,18 +419,15 @@ class Indicator(models.Model):
         """ Returns all time objects related to this Indicator"""
         times_uq = []
         times = []
-        print "-----------"
         for part in self.get_parts():
             if part.time.name not in times_uq:
                 times_uq.append(part.time.name)
                 if name_only:
                     times.append(part.time.name)
-                    print part.time.name
                 else:
                     times.append(part.time)
                     times.sort(key=lambda tm: tm.name)
 
-        print times
         return times
 
     def get_slug_time_props(self):
@@ -510,18 +507,22 @@ class Indicator(models.Model):
             notes.append({'label':'Source', 'text':self.source})
         if self.data_as_of:
             notes.append({'label':'Data As Of', 'text':self.data_as_of.strftime("%B, %d %Y")})
-
+        def remove_underscore(str):
+            if(str[-1]=='_'): 
+               return str[:-1]
+            else: 
+               return str
         #construct the tables string
         if num_tbls:
             txt = ""
             for t in num_tbls:
-                txt += "%s: %s<br/>\n" % (t['time'], t['tables_str'])
+                txt += "%s: %s<br/>\n" % (t['time'], remove_underscore(t['tables_str']))
             notes.append({'label':'Numerator Tables', 'text':txt})
 
         if denom_tbls:
             txt = ""
             for t in denom_tbls:
-                txt += "%s: %s<br/>\n" % (t['time'], t['tables_str'])
+                txt += "%s: %s<br/>\n" % (t['time'], remove_underscore(t['tables_str']))
             notes.append({'label':'Denominator Tables', 'text':txt})
 
 
@@ -1260,12 +1261,12 @@ class CustomValue(models.Model):
         ('DECIMAL_1', 'Decimal 1'),
         ('DECIMAL_2', 'Decimal 2'),
         ('DOLLARS', 'Dollars'),
-        ('AVERAGE_OR_MEDIAN_DOLLARS','$ Average or Median'),
-        ('AVERAGE_OR_MEDIAN', 'Average or Median'),
+        #('AVERAGE_OR_MEDIAN_DOLLARS','$ Average or Median'),
+        #('AVERAGE_OR_MEDIAN', 'Average or Median'),
     )
 
     indicator = models.ForeignKey('Indicator')
-    value_operator = models.CharField(max_length="255", blank=False, null=False, help_text="The value or An optional comparison operator. Example: '< 5' would map a value less than 5 to the display value. '===10' would map a value equal to 10 to a the display value")
+    value_operator = models.CharField(max_length="255", blank=False, null=False, help_text="The value or An optional comparison operator. Available operators include '===', '>', '<', and '!='. Example: '< 5' would map a value less than 5 to the display value. '===10' would map a value equal to 10 to a the display value.")
     value_operator_range = models.CharField(max_length="255", blank=True, null=True, help_text="The value or An optional comparison operator range. Example: '> 1' would map a value more than 1 to the display value. 1 < value < 5")
 
     display_value = models.CharField(max_length="255", blank=False, null=False)
