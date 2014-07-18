@@ -219,20 +219,6 @@ def rebuild_search_index():
     task_data = update_search_index()
     return "Search Index Updated! TaskId: " + task_data.task.task_id
 
-def generate_indicator_data(ind_id):
-    from profiles.tasks import generate_indicator_data
-    from profiles.models import Indicator, IndicatorTask, TaskStatus
-    ind = Indicator.objects.get(pk=int(ind_id))
-    async_obj = generate_indicator_data(ind)
-    #obj, created = TaskStatus.objects.get_or_create(status = "Pending", traceback="", error=False, t_id = str(async_obj.task.task_id))
-    ind_task = IndicatorTask.objects.create(task_id = async_obj.task.task_id, indicator = ind)
-    try:
-        obj = TaskStatus.objects.get(t_id = str(async_obj.task.task_id))
-    except TaskStatus.DoesNotExist:
-        TaskStatus.objects.get_or_create(status = "Pending", traceback="", error=False, t_id = str(async_obj.task.task_id))
-
-    return "Generating Data for Indicator %s TaskId: %s" % (ind.display_name, async_obj.task.task_id)
-
 def values_to_lists(value_list):
     """ Turn a list of Value Objects into 3 clean lists """
     numbers = []

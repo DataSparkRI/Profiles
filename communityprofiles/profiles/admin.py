@@ -11,6 +11,7 @@ import csv
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.admin import SimpleListFilter
 from django.contrib import messages
+from profiles.tasks import generate_indicator_data as generate_indicator_data_task
 
 #------------- ACTIONS -----------------#
 def export_indicator_info(modeladmin, request, queryset):
@@ -183,6 +184,23 @@ class DenominatorAdmin(admin.ModelAdmin):
 
 admin.site.register(Denominator, DenominatorAdmin)
 
+def generate_indicator_data(modeladmin, request, queryset):
+
+    names = []
+    for indicator in queryset:
+
+        huey_task = generate_indicator_data_task(indicator)
+
+        huey_task_id = huey_task.task.task_id
+
+        indicator_task = IndicatorTask.objects.create(task_id=huey_task_id, indicator=indicator)
+
+        if not TaskStatus.objects.filter(t_id = str(huey_task_id)).exists():
+            TaskStatus.objects.create(status="pending", traceback="", error=False, t_id = str(huey_task_id))
+
+        names.append(indicator.name)
+
+    messages.add_message(request, messages.INFO, "Generating %s." % ', '.join(names))
 
 class IndicatorAdmin(SortableAdmin):
     prepopulated_fields = {"slug": ("name",)}
@@ -199,7 +217,7 @@ class IndicatorAdmin(SortableAdmin):
         CustomValueInline,
         LegendOptionInline,
     ]
-    actions = [export_indicator_info]
+    actions = [generate_indicator_data, export_indicator_info]
     fieldsets = (
         (None, {
             'fields': ('name', 'display_name', 'slug', 'display_change','data_type','published', 'data_as_of',
@@ -311,7 +329,4 @@ admin.site.register(DataFile)
 #--------radmin console------------
 console.register_to_all('Clear Memcache', 'profiles.utils.clear_memcache', True)
 console.register_to_all('Update Search Index', 'profiles.utils.rebuild_search_index', True)
-console.register_to_model(Indicator, 'Generate Indicator Data', 'profiles.utils.generate_indicator_data', True)
 
-
-#admin.site.add_action(export_indicator_info, "Export Indicators Meta data")
