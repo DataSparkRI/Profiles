@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.admin import SimpleListFilter
 from django.contrib import messages
 from profiles.tasks import generate_indicator_data as generate_indicator_data_task
+from time import sleep
 
 #------------- ACTIONS -----------------#
 def export_indicator_info(modeladmin, request, queryset):
@@ -194,6 +195,8 @@ def generate_indicator_data(modeladmin, request, queryset):
         huey_task_id = huey_task.task.task_id
 
         indicator_task = IndicatorTask.objects.create(task_id=huey_task_id, indicator=indicator)
+
+        sleep(1) #stagger the check to see if TaskStatus exists (task has started)
 
         if not TaskStatus.objects.filter(t_id = str(huey_task_id)).exists():
             TaskStatus.objects.create(status="pending", traceback="", error=False, t_id = str(huey_task_id))
