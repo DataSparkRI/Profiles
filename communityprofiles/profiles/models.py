@@ -1378,7 +1378,22 @@ class TaskStatus(models.Model):
     t_id = models.CharField(max_length=255, null=True, blank=True) # this is a UUID cast as a string
     error = models.BooleanField(default=False, blank=True)
     traceback = models.TextField(null=True, blank=True)
+    unicode_name = models.CharField(max_length=255, null=True, blank=True)
+     
+    def save(self, **kwargs):
+        try:
+            label = IndicatorTask.objects.get(task_id= self.t_id).indicator.name
+        except IndicatorTask.DoesNotExist:
+            label = self.task
 
+        unicode_name = "%s: %s -- %s: First seen: %s, Last Updated: %s" % (label,
+                                                                   self.t_id,
+                                                                   self.status,
+                                                                   self.first_seen,
+                                                                   self.last_updated)
+        self.unicode_name = unicode_name
+        super(TaskStatus, self).save()
+    
     def __unicode__(self):
         try:
             label = IndicatorTask.objects.get(task_id= self.t_id).indicator.name

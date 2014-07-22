@@ -60,6 +60,33 @@ class NextUpdateDateField(SimpleListFilter):
         else:
             return queryset
 
+class LastGeneratedDateField(SimpleListFilter):
+    title = _('last generated data at')
+    parameter_name = 'lastGenerated'
+    def lookups(self, request, model_admin):
+
+        return (
+                ('last_day',_('Last day')),
+                ('last_7_days',_('Last 7 days')),
+                ('last_30_days',_('Last 30 days')),
+        )
+    def queryset(self, request, queryset):
+        import datetime
+        now = datetime.datetime.now()
+        if self.value() == 'last_day':
+            day = now + datetime.timedelta(-2)
+            return queryset.filter(last_generated_at__range=(day, now)).order_by('last_generated_at')
+        elif self.value() == 'last_7_days':
+            day = now + datetime.timedelta(-8)
+            return queryset.filter(last_generated_at__range=(day, now)).order_by('last_generated_at')
+        elif self.value() == 'last_30_days':
+            day = now + datetime.timedelta(-31)
+            return queryset.filter(last_generated_at__range=(day, now)).order_by('last_generated_at')
+        else:
+            return queryset
+
+
+
 class TimeAdmin(admin.ModelAdmin):
     list_display = ('name', 'sort' )
 admin.site.register(Time, TimeAdmin)
@@ -204,7 +231,7 @@ def generate_indicator_data(modeladmin, request, queryset):
 
 class IndicatorAdmin(SortableAdmin):
     prepopulated_fields = {"slug": ("name",)}
-    list_filter = (NextUpdateDateField,'published','data_type', 'indicatorpart__data_source', 'indicatorpart__time', 'data_domains__domain')
+    list_filter = (LastGeneratedDateField, NextUpdateDateField,'published','data_type', 'indicatorpart__data_source', 'indicatorpart__time', 'data_domains__domain')
     list_display = ('name','published','display_name','levels_str', 'data_type', 'sources_str', 'times_str', 'domains_str', 'short_definition', 'last_generated_at','last_modified_at')
     search_fields = ['display_name', 'name']
     # There seems to a bug in Django admin right now, which prevents making these fields editable
@@ -318,7 +345,9 @@ class FlatValueAdmin(admin.ModelAdmin):
 #admin.site.register(DataPoint, DataPointAdmin)
 
 class TaskStatusAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['unicode_name']
+    list_display = ('__unicode__','last_updated')
+    list_filter = ('status',)
 
 admin.site.register(TaskStatus, TaskStatusAdmin)
 #admin.site.register(IndicatorTask,)
