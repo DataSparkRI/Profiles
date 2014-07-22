@@ -33,6 +33,19 @@ def export_indicator_info(modeladmin, request, queryset):
 
     return response
 
+def delete_all_lower_level_geo_record(modeladmin, request, queryset):
+    from profiles.models import GeoRecord
+    count = 0
+    for obj in queryset:
+        search = obj.geo_id_segments
+        all = GeoRecord.objects.filter(geo_id_segments__icontains=search[:-1])
+        count = count + all.count()
+        all.delete()
+    
+    messages.add_message(request, messages.INFO, "%d geo records was removed."%count)
+
+#---------------------------------------#
+
 class NextUpdateDateField(SimpleListFilter):
     title = _('next update data at')
     parameter_name = 'nextUpdate'
@@ -123,7 +136,8 @@ class GeoRecordAdmin(admin.OSMGeoAdmin):
     list_filter = ('level', )
     #filter_horizontal = ['mappings', ]
     exclude = ('components','parent','mappings')
-
+    actions = [delete_all_lower_level_geo_record]
+    
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name=='parent':
             querystring = request.path.split('/')[-2]
@@ -361,4 +375,6 @@ admin.site.register(DataFile)
 #--------radmin console------------
 console.register_to_all('Clear Memcache', 'profiles.utils.clear_memcache', True)
 console.register_to_all('Update Search Index', 'profiles.utils.rebuild_search_index', True)
+
+
 
