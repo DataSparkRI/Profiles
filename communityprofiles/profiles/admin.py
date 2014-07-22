@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.admin import SimpleListFilter
 from django.contrib import messages
 from profiles.tasks import generate_indicator_data as generate_indicator_data_task
+from time import sleep
 
 #------------- ACTIONS -----------------#
 def export_indicator_info(modeladmin, request, queryset):
@@ -222,6 +223,8 @@ def generate_indicator_data(modeladmin, request, queryset):
 
         indicator_task = IndicatorTask.objects.create(task_id=huey_task_id, indicator=indicator)
 
+        sleep(1) #stagger the check to see if TaskStatus exists (task has started)
+
         if not TaskStatus.objects.filter(t_id = str(huey_task_id)).exists():
             TaskStatus.objects.create(status="pending", traceback="", error=False, t_id = str(huey_task_id))
 
@@ -233,7 +236,7 @@ class IndicatorAdmin(SortableAdmin):
     prepopulated_fields = {"slug": ("name",)}
     list_filter = (LastGeneratedDateField, NextUpdateDateField,'published','data_type', 'indicatorpart__data_source', 'indicatorpart__time', 'data_domains__domain')
     list_display = ('name','published','display_name','levels_str', 'data_type', 'sources_str', 'times_str', 'domains_str', 'short_definition', 'last_generated_at','last_modified_at')
-    search_fields = ['display_name', 'name']
+    search_fields = ['display_name', 'name', 'id']
     # There seems to a bug in Django admin right now, which prevents making these fields editable
     #list_editable = ('short_definition', 'long_definition',)
     inlines = [
