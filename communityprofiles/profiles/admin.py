@@ -169,7 +169,7 @@ class FormulaAdminFormset(forms.models.BaseInlineFormSet):
                   raise forms.ValidationError('Please remove extra Enter on end of formula.')
                elif str1[1][0]==' ':
                   raise forms.ValidationError('Please remove extra Space on start of formula')
-               elif str1[-1][-1]==' ':
+               elif str1[-1][-12]==' ':
                   raise forms.ValidationError('Please remove extra Space on end of formula')
                else:
                   pass
