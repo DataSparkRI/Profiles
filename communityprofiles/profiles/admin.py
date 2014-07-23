@@ -158,9 +158,24 @@ class DataSourceAdmin(admin.ModelAdmin):
 
 admin.site.register(DataSource, DataSourceAdmin)
 
+class FormulaAdminFormset(forms.models.BaseInlineFormSet):
+    def clean(self):
+        for form in self.forms:
+            str1 = str(form["formula"]).splitlines()
+            if len(str1) > 2 or len(str1[1])>11: # have data
+               if any("" == s for s in str1):
+                  print str1
+                  raise forms.ValidationError('Please remove extra Empty line in the formula.')
+               if str1[-1][0]=='<':
+                  raise forms.ValidationError('Please remove extra Enter on end of formula.')
+               elif str1[1][0]==' ':
+                  raise forms.ValidationError('Please remove extra Space on start of formula')
+               else:
+                  pass
 
 class IndicatorPartInline(SortableTabularInline):
     model = IndicatorPart
+    formset= FormulaAdminFormset
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "levels":
             levs= get_default_levels()
@@ -170,7 +185,7 @@ class IndicatorPartInline(SortableTabularInline):
 
 class DenominatorPartInline(SortableTabularInline):
     model = DenominatorPart
-    
+    formset= FormulaAdminFormset
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "levels":
             levs= get_default_levels()
