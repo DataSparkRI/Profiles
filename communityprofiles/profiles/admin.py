@@ -164,12 +164,13 @@ class FormulaAdminFormset(forms.models.BaseInlineFormSet):
             str1 = str(form["formula"]).splitlines()
             if len(str1) > 2 or len(str1[1])>11: # have data
                if any("" == s for s in str1):
-                  print str1
                   raise forms.ValidationError('Please remove extra Empty line in the formula.')
                if str1[-1][0]=='<':
                   raise forms.ValidationError('Please remove extra Enter on end of formula.')
                elif str1[1][0]==' ':
                   raise forms.ValidationError('Please remove extra Space on start of formula')
+               elif str1[-1][-1]==' ':
+                  raise forms.ValidationError('Please remove extra Space on end of formula')
                else:
                   pass
 
