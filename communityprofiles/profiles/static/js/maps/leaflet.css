@@ -204,9 +204,9 @@
 .leaflet-bar a, .leaflet-bar a:hover {
 	background-color: #fff;
 	border-bottom: 1px solid #ccc;
-	width: 26px;
-	height: 26px;
-	line-height: 26px;
+	width: 16px;
+	height: 16px;
+	line-height: 16px;
 	display: block;
 	text-align: center;
 	text-decoration: none;
@@ -292,8 +292,8 @@
 	}
 .leaflet-control-layers-toggle {
 	background-image: url(images/layers.png);
-	width: 36px;
-	height: 36px;
+	width: 29px;
+	height: 29px;
 	}
 .leaflet-retina .leaflet-control-layers-toggle {
 	background-image: url(images/layers-2x.png);
