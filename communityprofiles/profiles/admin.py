@@ -387,7 +387,11 @@ admin.site.register(TaskStatus, TaskStatusAdmin)
 #admin.site.register(IndicatorTask,)
 admin.site.register(FlatValue, FlatValueAdmin)
 
-admin.site.register(DataFile)
+class DataFileAdmin(admin.ModelAdmin):
+    search_fields = ['name', 'description']
+    list_display= ('name',)
+
+admin.site.register(DataFile, DataFileAdmin)
 
 #--------radmin console------------
 console.register_to_all('Clear Memcache', 'profiles.utils.clear_memcache', True)
