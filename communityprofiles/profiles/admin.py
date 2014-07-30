@@ -134,6 +134,7 @@ class GeoRecordAdmin(admin.OSMGeoAdmin):
     prepopulated_fields = {"slug": ("name",)}
     list_display = ('name', 'level', )
     list_filter = ('level', )
+    search_fields = ['name','notes']
     #filter_horizontal = ['mappings', ]
     exclude = ('components','parent','mappings')
     actions = [delete_all_lower_level_geo_record]
