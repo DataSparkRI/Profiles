@@ -24,176 +24,9 @@ from collections import OrderedDict
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-#------------------------------------ OLD WAY------------------------------------
-def _to_local_2000_acs_geo_dict(p_geo_record, fileid):
-    geo_template = {
-        'FILEID': 'ACSSF',
-        'STUSAB': 'RI',
-        'CHARITER': '000',
-        'CIFSN': '01',
-    }
-    results = []
-
-    if p_geo_record.level.name == 'State':
-        geo_record = p_geo_record
-        target = GeoLevel.objects.get(name='ACS 2010e5 State')
-        mapped = geo_record.mapped_to(target)
-        for g in mapped:
-            r = geo_template.copy()
-            r['LOGRECNO'] = g.geo_id
-            r['SUMLEV'] = '040'
-            results.append(r)
-
-    if p_geo_record.level.name == 'Census Tract':
-        geo_record = p_geo_record
-        target = GeoLevel.objects.get(name='ACS 2010e5 Tract')
-        mapped = geo_record.mapped_to(target)
-        for g in mapped:
-            r = geo_template.copy()
-            r['LOGRECNO'] = g.geo_id
-            r['SUMLEV'] = '140'
-            results.append(r)
-
-    if p_geo_record.level.name == 'Municipality':
-        geo_record = p_geo_record
-        target = GeoLevel.objects.get(name='ACS 2010e5 Municipality')
-        mapped = geo_record.mapped_to(target)
-        for g in mapped:
-            r = geo_template.copy()
-            r['LOGRECNO'] = g.geo_id
-            r['SUMLEV'] = '060'
-            results.append(r)
-    return results
-
-
-def _to_local_2000_sf1_geo_dict(geo_record, fileid):
-    geo_template = {
-        'FILEID': 'uSF1',
-        'STUSAB': 'RI',
-        'CHARITER': '000',
-        'CIFSN': '01',
-    }
-    results = []
-
-    if geo_record.level.name == 'State':
-        target = GeoLevel.objects.get(name='Census 2000 SF1 State')
-        mapped = geo_record.mapped_to(target)
-        for g in mapped:
-            r = geo_template.copy()
-            r['LOGRECNO'] = g.geo_id
-            r['SUMLEV'] = '040'
-            results.append(r)
-    if geo_record.level.name == 'Census Tract':
-        target = GeoLevel.objects.get(name='Census 2000 SF1 Tract')
-        mapped = geo_record.mapped_to(target)
-        if len(mapped)==0:
-            #using block groups
-            target = GeoLevel.objects.get(name='Census 2000 SF1 Block')
-            mapped = geo_record.mapped_to(target)
-        for g in mapped:
-            r = geo_template.copy()
-            r['LOGRECNO'] = g.geo_id
-            r['SUMLEV'] = '101'
-            results.append(r)
-    if geo_record.level.name == '':
-        target = GeoLevel.objects.get(name='Census 2000 SF1 Municipality')
-        mapped = geo_record.mapped_to(target)
-        for g in mapped:
-            r = geo_template.copy()
-            r['LOGRECNO'] = g.geo_id
-            r['SUMLEV'] = '060'
-            results.append(r)
-    return results
-
-
-def _to_local_2000_sf3_geo_dict(geo_record, fileid):
-    geo_template = {
-        'FILEID': 'uSF3',
-        'STUSAB': 'RI',
-        'CHARITER': '000',
-        'CIFSN': '01',
-    }
-    results = []
-    if geo_record.level.name == 'State':
-        target = GeoLevel.objects.get(name='Census 2000 SF3 State')
-        mapped = geo_record.mapped_to(target)
-        for g in mapped:
-            r = geo_template.copy()
-            r['LOGRECNO'] = g.geo_id
-            r['SUMLEV'] = '040'
-            results.append(r)
-    if geo_record.level.name == 'Census Tract':
-        target = GeoLevel.objects.get(name='Census 2000 SF3 Tract')
-        mapped = geo_record.mapped_to(target)
-
-        if len(mapped)==0:
-            #using block groups
-            target = GeoLevel.objects.get(name='Census 2000 SF3 Block Group')
-            mapped = geo_record.mapped_to(target)
-
-        for g in mapped:
-            r = geo_template.copy()
-            r['LOGRECNO'] = g.geo_id
-            r['SUMLEV'] = '090'
-            results.append(r)
-    if geo_record.level.name == 'Municipality':
-        target = GeoLevel.objects.get(name='Census 2000 SF3 Municipality')
-        mapped = geo_record.mapped_to(target)
-        for g in mapped:
-            r = geo_template.copy()
-            r['LOGRECNO'] = g.geo_id
-            r['SUMLEV'] = '060'
-            results.append(r)
-    return results
-
-
-def _to_local_2010sf1_geo_dict(geo_record):
-    results = []
-    if geo_record.level.name == 'State':
-        target = GeoLevel.objects.get(name='Census 2010 State')
-        mapped = geo_record.mapped_to(target)
-        for g in mapped:
-            results.append({
-                'FILEID': 'SF1ST',
-                'STUSAB': 'RI',
-                'SUMLEV': '040',
-                'CHARITER': '000',
-                'CIFSN': '01',
-                'LOGRECNO': g.geo_id,
-            })
-
-    if geo_record.level.name == 'Census Tract':
-        target = GeoLevel.objects.get(name='Census 2010 Tract')
-        mapped = geo_record.mapped_to(target)
-        for g in mapped:
-            results.append({
-                'FILEID': 'SF1ST',
-                'STUSAB': 'RI',
-                'SUMLEV': '140',
-                'CHARITER': '000',
-                'CIFSN': '01',
-                'LOGRECNO': g.geo_id,
-            })
-
-    if geo_record.level.name == 'Municipality':
-        target = GeoLevel.objects.get(name='Census 2010 Municipality')
-        mapped = geo_record.mapped_to(target)
-        for g in mapped:
-            results.append({
-                'FILEID': 'SF1ST',
-                'STUSAB': 'RI',
-                'SUMLEV': '060',
-                'CHARITER': '000',
-                'CIFSN': '01',
-                'LOGRECNO': g.geo_id,
-            })
-    return results
-
-#------------------------------------END OLD WAY------------------------------------
 
 def check_for_cached_value(data_adapter, formula, geo_record):
     pass
-
 
 
 def check_for_precalculated_value(data_adapter, formula, geo_record):
@@ -223,43 +56,6 @@ class BaseCensusDataAdapter(object):
         else:
             local_geos = self.map_to_local_geos(geo_record)
             return self.source.data(formula, local_geos,**kwargs)  # map(lambda g: self.source.data(formula, g), local_geos)
-
-
-class Census2000SF1(BaseCensusDataAdapter):
-    def __init__(self):
-        self.source = Census2000('SF1')
-        super(Census2000SF1, self).__init__()
-
-    def map_to_local_geos(self, geo_record):
-        return _to_local_2000_sf1_geo_dict(geo_record, 'uSF1')
-
-
-class Census2000SF3(BaseCensusDataAdapter):
-    def __init__(self):
-        self.source = Census2000('SF3')
-        super(Census2000SF3, self).__init__()
-
-    def map_to_local_geos(self, geo_record):
-        return _to_local_2000_sf3_geo_dict(geo_record, 'uSF3')
-
-
-class Census2010SF1(BaseCensusDataAdapter):
-    def __init__(self):
-        self.source = _Census2010('sf1')
-        super(Census2010SF1, self).__init__()
-
-    def map_to_local_geos(self, geo_record):
-        return _to_local_2010sf1_geo_dict(geo_record)
-
-
-class ACS2010e5(BaseCensusDataAdapter):
-    def __init__(self):
-        self.source = _ACS2010e5()
-        super(ACS2010e5, self).__init__()
-
-    def map_to_local_geos(self, geo_record):
-
-        return _to_local_2000_acs_geo_dict(geo_record, 'ACSSF')
 
 
 class CensusAPI(object):
@@ -502,6 +298,22 @@ class CensusAPI_ACS5_2012(CensusAPI):
     def __init__(self):
 
         super(CensusAPI_ACS5_2012, self).__init__('2012', 'acs5',
+                api_levs={
+                    '010':'us',
+                    '040':'state',
+                    '050':'county',
+                    '060': 'county+subdivision',
+                    '101':'block',
+                    '140':'tract',
+                    '150':'block+group',
+                    '160': 'place',
+                })
+
+class CensusAPI_ACS5_2012_Profile(CensusAPI):
+    # API levs supported by api
+    def __init__(self):
+
+        super(CensusAPI_ACS5_2012_Profile, self).__init__('2012', 'acs5/profile',
                 api_levs={
                     '010':'us',
                     '040':'state',
