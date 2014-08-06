@@ -28,7 +28,18 @@ def ind_qfilter(qs, level):
 register.filter('ind_qfilter', ind_qfilter)
 
 def group_filter(group, level):
-    return group.sorted_indicators(level)
+    from profiles.models import GroupIndex
+    index = GroupIndex.objects.filter(groups = group)
+    list = group.sorted_indicators(level)
+    a = []
+    for i in index:
+        a.append(i.order)
+    b = sorted(a)
+    order = []
+    for i in b:
+        order.append(a.index(i))
+    return [list[i] for i in order]
+    #return group.sorted_indicators(level)
 
 register.filter('group_filter', group_filter)
 

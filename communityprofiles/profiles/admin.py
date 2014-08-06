@@ -114,6 +114,7 @@ class DataDomainIndexInline(SortableTabularInline):
 class GroupIndexInline(SortableTabularInline):
     model = GroupIndex
     fields = ('indicators',)
+    ordering = ('order',)
 
 def generate_geo_record(modeladmin, request, queryset):
     from profiles.tasks import generate_geo_record_task
