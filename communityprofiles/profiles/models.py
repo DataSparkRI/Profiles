@@ -993,7 +993,10 @@ class IndicatorPart(DataGenerator):
     time = models.ForeignKey(Time)
 
     def __unicode__(self):
-        return u"%s %s" % (self.time.name, self.data_source.name)
+        try:
+            return u"%s %s (%s ...)" % (self.time.name, self.data_source.name, self.formula[:6])
+        except:
+            return u"%s %s" % (self.time.name, self.data_source.name)
 
 
 class Denominator(models.Model):
