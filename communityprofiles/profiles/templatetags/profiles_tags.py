@@ -38,8 +38,10 @@ def group_filter(group, level):
     order = []
     for i in b:
         order.append(a.index(i))
-    return [list[i] for i in order]
-    #return group.sorted_indicators(level)
+    try:
+       return [list[i] for i in order]
+    except:
+       return group.sorted_indicators(level)
 
 register.filter('group_filter', group_filter)
 
