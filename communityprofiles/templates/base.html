@@ -20,6 +20,7 @@
  		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profiles.css">
         {%block head%}
         {%endblock head%}
+
 	</head> 
 	 
 	<body> 
@@ -33,6 +34,11 @@
                     
             </div>
             <form class="navbar-form navbar-right search-form" role="search" action="/search/" method="get">
+                <ul class="nav navbar-nav navbar-left"><li style="color: rgb(209, 229, 247);font-family: cursive;font-size: x-large; font-weight: bold;">|</li></ul>
+                <ul class="nav navbar-nav navbar-left"><li><a href="#" style="color: rgb(209, 229, 247);font-family: Impact, Charcoal, sans-serif; font-size: large;padding-top:7px; font-weight: bold;">ABOUT</a></li></ul>
+                <ul class="nav navbar-nav navbar-left"><li style="color: rgb(209, 229, 247);font-family: cursive;font-size: x-large; font-weight: bold;">|</li></ul>
+                <ul class="nav navbar-nav navbar-left"><li><a href="#" style="color: rgb(209, 229, 247);font-family: Impact, Charcoal, sans-serif; font-size: large;padding-top:7px; font-weight: bold;">FAQ</a></li></ul>
+                <ul class="nav navbar-nav navbar-left" style="margin-right: 20px;"><li style="color: rgb(209, 229, 247);font-family: cursive;font-size: x-large; font-weight: bold;">|</li></ul>
                 <div class="form-group">
                     <input name="q" type="text" class="form-control" placeholder="Find an Indicator">
                     <input name="rid" type="hidden" value="{{geo_record.id}}">

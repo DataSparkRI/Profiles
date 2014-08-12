@@ -15,7 +15,7 @@ html{
 }
 
 .navbar-default {
-    background:none;
+    background:#428bce;
     border:none;
 }
 
@@ -60,7 +60,18 @@ html{
 }
 
 .navbar-default .navbar-brand{
-    color:#444;
+    color:#fff;
+    font-size: xx-large;
+}
+
+.navbar {
+border-radius: inherit;
+padding-bottom: 60px;
+margin-bottom:0px;
+}
+
+.sub-nav{
+    color: #fff;
 }
 
 #map-tools h3{
