@@ -15,7 +15,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 		<link rel="shortcut icon" href="/favicon.ico"> 
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png"> 
-        
+                <style>@font-face { font-family: helvetica; src: url('{{STATIC_URL}}fonts/HelveticaNeueLTStd-MdCn.otf'); } </style>        
  		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css">
  		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profiles.css">
         {%block head%}
@@ -29,8 +29,8 @@
     <img id="beta-icon" src="{{STATIC_URL}}images/beta-icon.png" />
     <nav class="navbar navbar-default" role="navigation">
         <div class="container hidden-print">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="/">{{BANNER_TEXT}}</a>
+            <div class="navbar-header" style="margin-top: -20px;">
+                <a class="navbar-brand" href="/">{%comment%}{{BANNER_TEXT}}{%endcomment%}<img src="{{STATIC_URL}}images/logo1.png" height="100px"></a>
                     
             </div>
             <form class="navbar-form navbar-right search-form" role="search" action="/search/" method="get">
