@@ -39,7 +39,6 @@ python-dateutil==2.1
 python-ptrace==0.6.5
 redis==2.8.0
 requests==2.0.1
--e git+git@github.com:ProvidencePlan/rigeocoder.git#egg=rigeocoder
 six==1.3.0
 sorl-thumbnail==11.05.2
 ssh==1.7.14
