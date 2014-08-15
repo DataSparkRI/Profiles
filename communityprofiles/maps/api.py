@@ -7,11 +7,11 @@ from maps.models import *
 from profiles.models import GeoRecord, GeoLevel, Time, Indicator, Denominator, FlatValue
 from django.contrib.gis.geos import Point
 from profiles.utils import format_number
-from rigeocoder import geocode_address
 import json
 from decimal import Decimal
 from django.conf import settings
 import HTMLParser
+from geopy import geocoders
 
 class PolygonMapFeatureResource(ModelResource):
     class Meta:
@@ -239,8 +239,53 @@ class GeoRecordResource(ModelResource):
                 url(r"^(?P<resource_name>%s)/(?P<slug>[\w\d_.-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
         ]
 
-#TODO: This needs to be abstracted so we can use different geo coders for different cities
 class GeoCoder(object):
+    def geocode_address_google(self, street, city, zip_code=''):
+        address = "%s %s %s" % (street, city, zip_code)
+        results = []
+        google = geocoders.GoogleV3()
+        try:
+            place, geocode = google.geocode(address)
+            results.append({'address':place,
+                            'lat':geocode[0],
+                            'lng':geocode[1]
+                           })
+        except Exception as e:
+            # Found more than one
+            for r in google.doc['results']:
+                d = r['geometry']['location'].copy()
+                d['address'] = r['formatted_address']
+                results.append(d)
+
+        return results
+
+    def geocode_address_dotus(self, street, city, zip_code='', state=None):
+        """ NOTE: This geocoder is particular about having a state"""
+        if state:
+            state = ", " + state
+        else:
+            state = ""
+        address = "%s,  %s, %s" % (street, city, state)
+        us = geocoders.GeocoderDotUS(format_string="%s")
+        results = []
+        try:
+            place, (lat, lng) = us.geocode(address)
+
+            results.append({'address':place,
+                            'lat':lat,
+                            'lng':lng})
+        except Exception as e:
+            pass
+
+        return results
+
+    def geocode_address(self, street, city, zip_code=''):
+        result = self.geocode_address_dotus(street, city, zip_code)
+        if len(result) == 0:
+            result = self.geocode_address_google(street, city, zip_code)
+
+        return result
+
     def __init__(self, street='', city='', zip_code=''):
         self.results = []
         self.status = None
@@ -253,7 +298,7 @@ class GeoCoder(object):
             if zip_code != '':
                 self.raw_address += ',' + zip_code
 
-            geo_result = geocode_address(street, city, zip_code)
+            geo_result = self.geocode_address(street, city, zip_code)
             if geo_result:
                 self.status = 'success'
                 used_addresses = []

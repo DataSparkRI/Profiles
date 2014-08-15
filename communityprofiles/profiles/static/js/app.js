@@ -490,7 +490,11 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
         $scope.geocode_mssg = "";
         $scope.addr_results = []; 
         addr.location.address = addr.location.address.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-        addr.message = "<h5> " + addr.location.address + "</h5> <h6> Choose a Geography </h6>";
+        if(addr.geography.length == 0) {
+            addr.message = "<h5> " + addr.location.address + "</h5> <h6> Corresponding geographies and data not available for this address </h6>";
+        } else {
+            addr.message = "<h5> " + addr.location.address + "</h5> <h6> Choose a Geography </h6>";
+        }
         $scope.selected_address = addr;
     }
     
