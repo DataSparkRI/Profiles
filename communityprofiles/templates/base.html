@@ -27,18 +27,16 @@
 		<!--[if lt IE 9]>
 		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p> <![endif]-->
     <img id="beta-icon" src="{{STATIC_URL}}images/beta-icon.png" />
-    <nav class="navbar navbar-default" role="navigation">
+    <nav class="navbar navbar-default" id ="navbar" role="navigation">
         <div class="container hidden-print">
             <div class="navbar-header" style="margin-top: -20px;">
                 <a class="navbar-brand" href="/">{%comment%}{{BANNER_TEXT}}{%endcomment%}<img src="{{STATIC_URL}}images/logo1.png" height="100px"></a>
                     
             </div>
             <form class="navbar-form navbar-right search-form" role="search" action="/search/" method="get">
-                <ul class="nav navbar-nav navbar-left"><li style="color: rgb(209, 229, 247);font-family: cursive;font-size: x-large; font-weight: bold;">|</li></ul>
-                <ul class="nav navbar-nav navbar-left"><li><a href="#" style="color: rgb(209, 229, 247);font-family: Impact, Charcoal, sans-serif; font-size: large;padding-top:7px; font-weight: bold;">ABOUT</a></li></ul>
-                <ul class="nav navbar-nav navbar-left"><li style="color: rgb(209, 229, 247);font-family: cursive;font-size: x-large; font-weight: bold;">|</li></ul>
-                <ul class="nav navbar-nav navbar-left"><li><a href="#" style="color: rgb(209, 229, 247);font-family: Impact, Charcoal, sans-serif; font-size: large;padding-top:7px; font-weight: bold;">FAQ</a></li></ul>
-                <ul class="nav navbar-nav navbar-left" style="margin-right: 20px;"><li style="color: rgb(209, 229, 247);font-family: cursive;font-size: x-large; font-weight: bold;">|</li></ul>
+                <ul class="nav navbar-nav navbar-left"><li><a href="#" style="color: #fff;font-family: Impact, Charcoal, sans-serif; font-size: large;padding-top:7px;">About</a></li></ul>
+                <ul class="nav navbar-nav navbar-left"><li style="color:#fff;font-family: cursive;font-size: xx-large; font-weight: bold; top:-18px">.</li></ul>
+                <ul class="nav navbar-nav navbar-left"><li><a href="#" style="color:#fff;font-family: Impact, Charcoal, sans-serif; font-size: large;padding-top:7px;">FAQ</a></li></ul>
                 <div class="form-group">
                     <input name="q" type="text" class="form-control" placeholder="Find an Indicator">
                     <input name="rid" type="hidden" value="{{geo_record.id}}">
@@ -106,6 +104,33 @@
 
 	</script>
    <script src="{{STATIC_URL}}js/jquery.min.js"></script>   
+   <script>
+   function resize(w){
+       var nav = document.getElementById('navbar');
+       var bar = document.getElementById('bar');
+       if (w < 1200){
+           nav.className = 'navbar navbar-default navbar-down';
+           bar.className = 'col-md-12 bar-up bar-up-up'; 
+       }
+       else{
+           nav.className = 'navbar navbar-default';
+           bar.className = 'col-md-12 bar-up';
+       }
+
+   }
+   $(window).resize(function() {
+       if(this.resizeTO) clearTimeout(this.resizeTO);
+       this.resizeTO = setTimeout(function() {
+           $(this).trigger('resizeEnd');
+       }, 500);
+   });
+
+   $(window).bind('resizeEnd', function() {
+       resize($(this).width());
+   });
+
+   resize(window.innerWidth);
+   </script>
    <script src="{{ STATIC_URL }}js/libs/angular.min.js"></script>
    <script src="{{ STATIC_URL }}js/libs/angular-sanitize.min.js"></script>
    <script src="{{ STATIC_URL }}js/libs/ngStorage.min.js"></script>

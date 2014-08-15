@@ -49,6 +49,8 @@ html{
 
 #sb #geo-rec-title{
     margin-bottom:0px;
+    font-size:xx-large;
+    color:#92D3D2;
 }
 
 .sb-fix{
@@ -67,7 +69,21 @@ html{
 .navbar {
 border-radius: inherit;
 padding-top:20px;
+padding-bottom:0px;
 margin-bottom:0px;
+}
+
+.navbar-down{
+padding-bottom:40px;
+}
+
+.bar-up{
+width: 100%;
+top:-41px;
+}
+.bar-up-up{
+width:100%;
+top:-82px;
 }
 .nav-tabs {
 border-bottom: 0px solid #ddd;
@@ -181,7 +197,7 @@ border-bottom: 0px solid #ddd;
 
 .panel-heading h5{
     font-size:20px;
-    font-weight:300;
+    //font-weight:300;
     font-family: 'Lato', sans-serif;
 }
 
@@ -233,7 +249,7 @@ ul.domain-groups, ul.domain-groups li{
     margin-bottom:10px;
     list-style:none;
 }
-
+ul.nav a:hover { background-color: #92D3D2 !important; }
 .domain-groups table{
     margin-top:-15px;
     font-size:14px;
@@ -249,6 +265,7 @@ ul.domain-groups, ul.domain-groups li{
 #domain-title{
     margin-top:0px;
     padding-top:0px;
+    color:#408BCA;
 }
 
 #wrap{
@@ -258,6 +275,8 @@ ul.domain-groups, ul.domain-groups li{
 #map-tools{
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
+    background-color:#86BEF1;
+    color:#fff;
 }
 
 #similar-nav {
@@ -453,6 +472,8 @@ select.form-control{
 
 .panel-heading.sub-domain{
     position:relative;
+    background-color:#86BEF1;
+    color:#fff;
 }
 .panel-heading .dl-form{
     position:absolute;
