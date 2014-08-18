@@ -1,0 +1,43 @@
+{% extends 'base.html' %}{% load profiles_tags %}{% load thumbnail %}{% load markup %}
+{% block head %}
+<script type="text/javascript" charset="utf-8">
+var INIT_RECORD = {name:'{{geo_record.name}}', slug:'{{geo_record.slug}}'};
+var INIT_LEVEL = {name:'{{geo_record.level.name}}', slug:'{{geo_record.level.slug}}'};
+</script>
+{% endblock %}
+{% block search %}{% endblock %}
+
+{% block geo_nav %}{% endblock geo_nav %}
+
+{% block content %}
+
+
+
+
+{% endblock %}
+{% block extrafoot %}
+<div id="footer">
+      <div class="container">
+        <div class="row clearfix">
+		        <div class="col-md-4 column">
+			        <h5 class="footer-head">General Question:</h5>
+                    <p class="footer-text">401.455.8880 <br> profiles@provplan.org</p>
+		        </div>
+		        <div class="col-md-4 column">
+			        <h5 class="footer-head">Requests for Access to Data:</h5>
+                    <p class="footer-text">Rebecca Lee <br> 401.445.8880 x203 <br> rlee@provplan.org</p>
+		        </div>
+		        <div class="col-md-4 column">
+			        <h5 class="footer-head">Subscribe to our E-News:</h5>
+                    <p class="footer-text"> 
+						<input type="email"/> <br><br> <input type="email" /> <br> <br>
+						<img src="{{ STATIC_URL }}images/facebook_icon.png" height="20px"/>
+						<img src="{{ STATIC_URL }}images/twitter-icon.png" height="20px"/>
+						<img src="{{ STATIC_URL }}images/medium_blog-icon.png" height="20px"/>
+					</p>
+		        </div>
+	    </div>
+      </div>
+</div>
+{% endblock %}
+

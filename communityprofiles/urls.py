@@ -21,6 +21,7 @@ data_api.register(IndicatorResource())
 
 urlpatterns = patterns('',
     (r'^api/',include(data_api.urls)),
+    (r'^about/',include('userguides.urls')),
     url(r'^radmin/', include('radmin.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^media/(?P<path>.*)$', 'django.views.static.serve',{'document_root': os.path.join(os.path.dirname(__file__), 'media')}),

@@ -142,6 +142,7 @@ INSTALLED_APPS = (
     'huey.djhuey',
     'south',
     'lilbox',
+    'userguides',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (

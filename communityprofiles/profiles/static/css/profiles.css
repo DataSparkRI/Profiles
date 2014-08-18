@@ -735,5 +735,58 @@ td.indicator-options .admin-link{
 
 .modal-dialog{
     width:75%;
-};
+}
 
+
+      /* Set the fixed height of the footer here */
+      #push,
+      #footer {
+        height: 160px;
+        color:#fff;
+        background-color: #408BCA;
+      }
+
+      /* Lastly, apply responsive CSS fixes as necessary */
+      @media (max-width: 767px) {
+        #footer {
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
+
+
+.footer-head{
+   font-weight:bold;
+}
+.footer-text{
+  font-size: 12px;
+}
+.topic-header{
+  font-size: 22pt;
+  padding-bottom: 50px;
+  font-weight:bold;
+}
+.topic-body{
+  font-size: 15pt;
+}
+.post-header{
+  font-size: 16pt;
+  font-weight:bold;
+}
+.post-body{
+  font-size: 12pt;
+}
+.topic-footer{
+  padding-bottom:50px;
+}
+.faq-header{
+  font-size: 22pt;
+  padding-bottom: 50px;
+  font-weight:bold;
+}
+.faq-question{
+  font-size: 16pt;
+  font-weight:bold;
+}

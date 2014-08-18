@@ -1,0 +1,21 @@
+{% extends 'userguides/base.html' %}{% load profiles_tags %}{% load thumbnail %}{% load markup %}
+
+{% block content %}
+<h3 class="text-center faq-header">Frequently Asked Questions</h3>
+
+{% for faq in faqs %}
+				<div class="panel">
+					<div class="panel-heading faq-question">
+						 <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-{{faq.id}}" href="#panel-element-{{faq.id}}">{{faq.question}}</a>
+					</div>
+					<div id="panel-element-{{faq.id}}" class="panel-collapse collapse">
+						<div class="panel-body">
+							{{faq.answer|markdown}}
+							<hr style="margin:10px; padding-bottom:40px; border:0; border-top:10px dotted #408BCA; type: circle;" />
+						</div>
+					</div>
+				</div>
+{% endfor %}
+
+{% endblock %}
+

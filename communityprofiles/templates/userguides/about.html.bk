@@ -1,0 +1,96 @@
+{% extends 'base.html' %}{% load profiles_tags %}{% load thumbnail %}{% load markup %}
+{% block head %}
+<script type="text/javascript" charset="utf-8">
+var INIT_RECORD = {name:'{{geo_record.name}}', slug:'{{geo_record.slug}}'};
+var INIT_LEVEL = {name:'{{geo_record.level.name}}', slug:'{{geo_record.level.slug}}'};
+</script>
+{% endblock %}
+{% block search %}{% endblock %}
+
+{% block geo_nav %}{% endblock geo_nav %}
+
+{% block content %}
+
+
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+		{% for topic in topics %}
+		   {% if forloop.last %}
+		
+		   <hr style="margin:10px; padding-bottom:40px; border:0; border-top:10px dotted #408BCA; type: circle;" />
+		
+           {% endif %}		
+			<h3 class="text-center topic-header">
+				{{topic.title}}
+			</h3>
+			<p>
+				{{topic.description|markdown}}
+			</p>
+			<div class="row clearfix topic-footer">
+			    {% for post in topic.get_Post %}
+				<div class="col-md-3 column">
+					<h2 class="post-header">
+						<img src="{{ MEDIA_URL }}{{ post.icon }}" height="20px" style="margin-top:-10px;"> {{post.post_title}}
+					</h2>
+					<p>
+						{{post.get_Text|markdown}}
+					</p>
+					<p>
+						<a id="modal-425571" href="#modal-container-{{post.id}}" role="button" class="btn" data-toggle="modal">View details »</a>
+						    <div class="modal fade" id="modal-container-{{post.id}}" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h4 class="modal-title" id="myModalLabel">
+								                        {{post.post_title}}
+                                                </h4>
+                                        </div>
+                                        <div class="modal-body">
+							                {{post.description|markdown}}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+					</p>
+				</div>
+				{% endfor %}
+				
+		    </div>
+	    {% endfor %}
+		</div>
+	</div>
+
+
+
+
+{% endblock %}
+{% block extrafoot %}
+<div id="footer">
+      <div class="container">
+        <div class="row clearfix">
+		        <div class="col-md-4 column">
+			        <h5 class="footer-head">General Question:</h5>
+                    <p class="footer-text">401.455.8880 <br> profiles@provplan.org</p>
+		        </div>
+		        <div class="col-md-4 column">
+			        <h5 class="footer-head">Requests for Access to Data:</h5>
+                    <p class="footer-text">Rebecca Lee <br> 401.445.8880 x203 <br> rlee@provplan.org</p>
+		        </div>
+		        <div class="col-md-4 column">
+			        <h5 class="footer-head">Subscribe to our E-News:</h5>
+                    <p class="footer-text"> 
+						<input type="email"/> <br><br> <input type="email" /> <br> <br>
+						<img src="{{ STATIC_URL }}images/facebook_icon.png" height="20px"/>
+						<img src="{{ STATIC_URL }}images/twitter-icon.png" height="20px"/>
+						<img src="{{ STATIC_URL }}images/medium_blog-icon.png" height="20px"/>
+					</p>
+		        </div>
+	    </div>
+      </div>
+</div>
+{% endblock %}
+
