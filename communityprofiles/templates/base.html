@@ -30,7 +30,7 @@
     <nav class="navbar navbar-default" id ="navbar" role="navigation">
         <div class="container hidden-print">
             <div class="navbar-header" style="margin-top: -20px;">
-                <a class="navbar-brand" href="/">{%comment%}{{BANNER_TEXT}}{%endcomment%}<img src="{{STATIC_URL}}images/logo1.png" height="100px"></a>
+                <a class="navbar-brand" href="/">{%comment%}{{BANNER_TEXT}}{%endcomment%}<img src="{{STATIC_URL}}images/logo1.png" height="100px" style="margin-bottom:-40px"></a>
                     
             </div>
             <form class="navbar-form navbar-right search-form" role="search" action="/search/" method="get">
@@ -44,12 +44,12 @@
                 <button type="submit" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-search"</button>
             </form>
         </div>
+        <div class="row hidden-print">
+           {% data_domains geo_record data_domain %}
+        </div>
     </nav>
   <div class="container"> 
 
-    <div class="row hidden-print">
-        {% data_domains geo_record data_domain %}
-    </div>
 
         {% block content %}{% endblock %}
         <!-- Modal -->
@@ -108,33 +108,6 @@
 
 	</script>
    <script src="{{STATIC_URL}}js/jquery.min.js"></script>   
-   <script>
-   function resize(w){
-       var nav = document.getElementById('navbar');
-       var bar = document.getElementById('bar');
-       if (w < 1200){
-           nav.className = 'navbar navbar-default navbar-down';
-           bar.className = 'col-md-12 bar-up bar-up-up'; 
-       }
-       else{
-           nav.className = 'navbar navbar-default';
-           bar.className = 'col-md-12 bar-up';
-       }
-
-   }
-   $(window).resize(function() {
-       if(this.resizeTO) clearTimeout(this.resizeTO);
-       this.resizeTO = setTimeout(function() {
-           $(this).trigger('resizeEnd');
-       }, 500);
-   });
-
-   $(window).bind('resizeEnd', function() {
-       resize($(this).width());
-   });
-
-   resize(window.innerWidth);
-   </script>
    <script src="{{ STATIC_URL }}js/libs/angular.min.js"></script>
    <script src="{{ STATIC_URL }}js/libs/angular-sanitize.min.js"></script>
    <script src="{{ STATIC_URL }}js/libs/ngStorage.min.js"></script>

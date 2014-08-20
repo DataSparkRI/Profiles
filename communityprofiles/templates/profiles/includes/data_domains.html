@@ -1,7 +1,7 @@
 {% spaceless %}
-<div class="col-md-12 bar-up" id="bar">
+<div class="col-md-12">
 
-<ul id="domains-wrap" class="nav nav-tabs" style="padding-left: 200px;">
+<ul id="domains-wrap" class="nav nav-tabs" style="padding-left: 300px;">
 {% for domain in data_domains %}
 <li class="domain {% if domain.domain == selected_domain %}active{% endif %}">
     <a href="{{domain.href}}" class="sub-nav">

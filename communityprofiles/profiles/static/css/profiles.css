@@ -69,7 +69,6 @@ html{
 .navbar {
 border-radius: inherit;
 padding-top:20px;
-padding-bottom:40px;
 margin-bottom:0px;
 }
 
@@ -77,14 +76,6 @@ margin-bottom:0px;
 padding-bottom:80px;
 }
 
-.bar-up{
-width: 100%;
-top:-82px;
-}
-.bar-up-up{
-width:100%;
-top:-123px;
-}
 .nav-tabs {
 border-bottom: 0px solid #ddd;
 }
