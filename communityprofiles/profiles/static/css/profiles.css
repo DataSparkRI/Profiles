@@ -15,7 +15,7 @@ html{
 }
 
 .navbar-default {
-    background:#428bce;
+    background:#408BCA;
     border:none;
 }
 
@@ -42,7 +42,7 @@ html{
 }
 
 #sb h1, #sb h2, #sb h3, #sb h4, #sb h5{
-    font-weight:300;
+    font-weight:500;
     font-family: 'Lato', sans-serif;
 
 }
@@ -778,6 +778,10 @@ td.indicator-options .admin-link{
   padding-top:20px;
   font-weight:bold;
 }
+ul.about-faq a:hover {
+  background-color: #428bca !important;
+  text-decoration:underline;
+}
 .faq-question{
   font-size: 16pt;
   font-weight:bold;
@@ -790,6 +794,6 @@ td.indicator-options .admin-link{
   margin-top: -20px;
 }
 .hr-line{
-  background-image: url('http://support.apple.com/library/APPLE/APPLECARE_ALLGEOS/Product_Help/en_US/PUBLIC_USERS/PP185/IL_BlueDot.png');
+  background-image: url('https://s3.amazonaws.com/uploads.hipchat.com/10690/195680/hjugsJWO3ZMZlXj/dot_small.png');
   background-repeat: repeat-x;
 }
