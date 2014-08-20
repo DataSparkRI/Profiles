@@ -782,3 +782,14 @@ td.indicator-options .admin-link{
   font-size: 16pt;
   font-weight:bold;
 }
+.log{
+  margin-bottom:-60px;
+  height:100px;
+}
+.navbar-header{
+  margin-top: -20px;
+}
+.hr-line{
+  background-image: url('http://support.apple.com/library/APPLE/APPLECARE_ALLGEOS/Product_Help/en_US/PUBLIC_USERS/PP185/IL_BlueDot.png');
+  background-repeat: repeat-x;
+}
