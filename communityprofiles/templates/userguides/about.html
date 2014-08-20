@@ -11,7 +11,7 @@
 		   <hr style="margin:10px; padding-bottom:40px; border:0; border-top:10px dotted #408BCA; type: circle;" />
 		
            {% endif %}		
-			<h3 class="text-center">
+			<h3 class="text-center" style="padding-top:20px;">
 				{{topic.title|markdown}}
 			</h3>
 			<p>
@@ -21,7 +21,7 @@
 			    {% for post in topic.get_Post %}
 				<div class="col-md-3 column">
 					<h2 class="post-header">
-						<img src="{{ MEDIA_URL }}{{ post.icon }}" height="20px" style="margin-top:-10px;"> {{post.post_title|markdown}}
+						<img src="{{ MEDIA_URL }}{{ post.icon }}" height="20px" style="margin-top:-10px;"> {{post.post_title}}
 					</h2>
 					<p>
 						{{post.get_Text|markdown}}
