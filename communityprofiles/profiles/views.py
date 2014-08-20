@@ -722,5 +722,8 @@ def search(request, template='search/search.html', load_all=True,
         }
     else:
         context = {}
-    return render_to_response(template, context, context_instance=context_class(request))
-
+    try:
+        return render_to_response(template, context, context_instance=context_class(request))
+    except AttributeError:
+        context={'geo_record' : GeoRecord.objects.get(id=setting[0].DEFAULT_GEO_RECORD_ID)}
+        return render_to_response(template, context, context_instance=context_class(request))
