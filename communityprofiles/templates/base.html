@@ -118,6 +118,38 @@
    <script src = "{{STATIC_URL}}js/ui.js"></script>
 
 
+   <script>
+   function resize(h){
+       var sb = document.getElementById('sb');
+       var tb = document.getElementById('tb');
+       console.log(h)
+       if (h < 845){
+
+           //window.innerWidth = 1239;
+           sb.className = 'col-md-12';
+           tb.className = 'col-md-12'; 
+       }
+       else{
+           sb.className = 'col-md-3';
+           tb.className = 'col-md-9';
+       }
+
+   }
+   $(window).resize(function() {
+       if(this.resizeTO) clearTimeout(this.resizeTO);
+       this.resizeTO = setTimeout(function() {
+           $(this).trigger('resizeEnd');
+       }, 500);
+   });
+
+   $(window).bind('resizeEnd', function() {
+       resize($(this).height());
+   });
+
+   resize(window.innerHeight);
+   </script>
+
+
    {% block extrafoot %}
    {% endblock extrafoot%}
    
