@@ -732,7 +732,6 @@ td.indicator-options .admin-link{
       /* Set the fixed height of the footer here */
       #push,
       #footer {
-        height: 160px;
         color:#fff;
         background-color: #408BCA;
       }
