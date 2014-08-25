@@ -945,7 +945,7 @@ class DataGenerator(Sortable):
     data_source = models.ForeignKey(DataSource)
     formula = models.TextField(blank=True)
     data = models.ForeignKey(DataFile,null=True, blank=True)
-    levels = models.ManyToManyField(GeoLevel, null=True, blank=True, help_text="Levels for which this Part applies.")
+    levels = models.ManyToManyField(GeoLevel, help_text="Levels for which this Part applies.")
     published = models.BooleanField(default=True)
 
     class Meta(Sortable.Meta):
