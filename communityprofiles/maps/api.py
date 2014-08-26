@@ -308,16 +308,12 @@ class GeoCoder(object):
                     try:
                         if result['address'] not in used_addresses:
                             sfs = PolygonMapFeature.objects.filter(geom__contains=GEOS_point).only('geo_key', 'geo_level')
-                            d['geography'] = []
+                            d.update({'geography':[]})
                             for s in sfs:
-                                # we essentially link over these polys to a
-                                # georecord
-                                try:
-                                    rec = GeoRecord.objects.get(geo_id=s.geo_key, level__id = s.geo_level, geo_searchable=True)
-                                except GeoRecord.MultipleObjectsReturned:
-                                    rec = GeoRecord.objects.filter(geo_id=s.geo_key, level__id = s.geo_level, geo_searchable=True)[0]
-
-                                d['geography'].append({
+                                result_rec = GeoRecord.objects.filter(geo_id=s.geo_key, level__id = s.geo_level, geo_searchable=True)
+                                if len(result_rec) > 0:
+                                   rec = result_rec[0]
+                                   d['geography'].append({
                                         'name':rec.name,
                                         'slug':rec.slug,
                                         'level':{
@@ -325,14 +321,12 @@ class GeoCoder(object):
                                             'slug':rec.level.slug,
                                         }
 
-                                })
-
-                            d['location'] = {
+                                   })
+                            d.update({'location': {
                                 'address': result['address'],
                                 'lat': result['lat'],
                                 'lng': result['lng'],
-                            }
-
+                            }})
                             used_addresses.append(result['address'])
                             self.results.append(d)
                         else:
@@ -340,7 +334,6 @@ class GeoCoder(object):
 
                     except GeoRecord.DoesNotExist:
                         pass
-                        #self.results.append(d)
             else:
                 self.status = 'fail'
                 self.results = []
