@@ -170,10 +170,12 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                 if(angular.isUndefined($scope.indicator)){
                     $scope.getGeoms();
                     $scope.options_records = data.objects;
+                    $("#level-unavliable-msg").addClass("hidden");
                     $("#geo-level-recs-wrap").removeClass("hidden");
                 }
 
             }else{
+                $("#level-unavliable-msg").removeClass("hidden");
                 $("#geo-level-recs-wrap").addClass("hidden");
             }
         });
@@ -258,7 +260,6 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
     }
 
     $scope.updateLev = function(level, updateTS){
-        console.log(level)
         if(angular.isUndefined(updateTS)){ updateTS = false; }
         $scope.level = level;
         $scope.onLevChange(updateTS);
@@ -472,7 +473,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                     $scope.addr_results = data.objects[0].results;
 
                 }else{
-                    $scope.geocode_mssg = "Sorry, we couldnt find that address";
+                    $scope.geocode_mssg = "Address not found";
                     $scope.geocode_mssg_type = "default";
                 }
             });
