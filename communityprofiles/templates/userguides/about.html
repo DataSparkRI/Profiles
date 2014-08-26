@@ -11,13 +11,19 @@
                    <div class="hr-line"><br></div>
 		   {%comment%}<hr style="margin:10px; padding-bottom:40px; border:0; border-top:10px dotted #408BCA; type: circle;" />{% endcomment %}
 		
-                   {% endif %}		
+                   {% endif %}
+                   
+                   {% if forloop.first %} <div class="backgroundimage" >{% endif %}
 			<h3 class="text-center" style="padding-top:20px;">
 				{{topic.title|markdown}}
 			</h3>
-			<p>
+                        {% if forloop.first %}
+			<div class="about-first">
 				{{topic.description|markdown}}
-			</p>
+			</div>
+                        {% else %} {{topic.description|markdown}}
+                        {% endif %}
+                   
 			<div class="row clearfix topic-footer">
 			    {% for post in topic.get_Post %}
 				<div class="col-md-3 column">
@@ -50,8 +56,8 @@
 					</p>
 				</div>
 				{% endfor %}
-				
-		    </div>
+		    </div>		
+		{% if forloop.first %}</div>{% endif %}
 	    {% endfor %}
 		</div>
 	</div>

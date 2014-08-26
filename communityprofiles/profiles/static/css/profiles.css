@@ -796,3 +796,18 @@ ul.about-faq a:hover {
   background-image: url('https://s3.amazonaws.com/uploads.hipchat.com/10690/195680/hjugsJWO3ZMZlXj/dot_small.png');
   background-repeat: repeat-x;
 }
+.backgroundimage{
+  background-image: url('https://s3.amazonaws.com/uploads.hipchat.com/10690/195680/kIjVaV7hSFzAOz5/Providence_Underlay.png');
+  padding-right: 47px;
+  padding-left: 47px;
+}
+.about-first{
+background: white;
+border-bottom-width: 5px;
+border-left-width: 0px;
+border-style: solid;
+border-color: gainsboro;
+border-top: 0px;
+padding-top: 6px;
+padding-left: 8px;
+}
