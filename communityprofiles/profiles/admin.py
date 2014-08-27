@@ -80,6 +80,8 @@ class LastGeneratedDateField(SimpleListFilter):
     def lookups(self, request, model_admin):
 
         return (
+                ('not_null',_('Not null/none')),
+                ('null',_('Null/none')),
                 ('last_day',_('Last day')),
                 ('last_7_days',_('Last 7 days')),
                 ('last_30_days',_('Last 30 days')),
@@ -87,7 +89,11 @@ class LastGeneratedDateField(SimpleListFilter):
     def queryset(self, request, queryset):
         import datetime
         now = datetime.datetime.now()
-        if self.value() == 'last_day':
+        if self.value() == 'not_null':
+            return queryset.filter(last_generated_at__isnull=False)
+        elif self.value() == 'null':
+            return queryset.filter(last_generated_at__isnull=True)
+        elif self.value() == 'last_day':
             day = now + datetime.timedelta(-2)
             return queryset.filter(last_generated_at__range=(day, now)).order_by('last_generated_at')
         elif self.value() == 'last_7_days':
@@ -285,7 +291,7 @@ class IndicatorAdmin(SortableAdmin):
             'fields': ('name', 'display_name', 'slug', 'display_change','data_type','published', 'data_as_of',
                        'last_generated_at', 'last_modified_at', 'next_update_date')
         }),
-        ('Extended Metadata', {
+        ('Extended netadaty', {
 
             'fields': ('short_definition', 'long_definition', 'purpose', 'universe', 'limitations', 'routine_use', 'notes','source' )
         }),
