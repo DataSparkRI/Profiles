@@ -106,6 +106,24 @@ class LastGeneratedDateField(SimpleListFilter):
             return queryset
 
 
+class FinishedField(SimpleListFilter):
+    title = _('Task statuses')
+    parameter_name = 'statuses'
+    def lookups(self, request, model_admin):
+
+        return (
+                ('not_finished',_('Not Finished')),
+                ('finished',_('Finished')),
+        )
+    def queryset(self, request, queryset):
+        from django.db.models import Q
+        if self.value() == 'not_finished':
+            return queryset.filter(~Q(status="finished"))
+        elif self.value() == 'finished':
+            return queryset.filter(status="finished")
+        else:
+            return queryset
+
 
 class TimeAdmin(admin.ModelAdmin):
     list_display = ('name', 'sort' )
@@ -388,7 +406,7 @@ class FlatValueAdmin(admin.ModelAdmin):
 class TaskStatusAdmin(admin.ModelAdmin):
     search_fields = ['unicode_name']
     list_display = ('__unicode__','last_updated')
-    list_filter = ('status',)
+    list_filter = ('status',FinishedField)
 
 admin.site.register(TaskStatus, TaskStatusAdmin)
 #admin.site.register(IndicatorTask,)
