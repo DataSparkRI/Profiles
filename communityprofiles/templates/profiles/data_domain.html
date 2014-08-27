@@ -222,6 +222,36 @@ index["{{indicator.slug}}"] = '{{indicator.data_type}}';
 
 <div id ="f-foot" ><a href="#" class="hidden-print"><span class="glyphicon glyphicon-chevron-up"></span></a></div>
 </div>
+   <script>
+   function resize(h){
+       var sb = document.getElementById('sb');
+       var tb = document.getElementById('tb');
+       if (h < 765){
+
+           //window.innerWidth = 1239;
+           sb.className = 'col-md-12';
+           tb.className = 'col-md-12'; 
+       }
+       else{
+           sb.className = 'col-md-3';
+           tb.className = 'col-md-9';
+       }
+
+   }
+   $(window).resize(function() {
+       if(this.resizeTO) clearTimeout(this.resizeTO);
+       this.resizeTO = setTimeout(function() {
+           $(this).trigger('resizeEnd');
+       }, 500);
+   });
+
+   $(window).bind('resizeEnd', function() {
+       resize($(this).height());
+   });
+
+   resize(window.innerHeight);
+   </script>
+
 
 {% endblock extrafoot%}
 

@@ -650,7 +650,7 @@ td.indicator-options .admin-link{
 
 
 /* Show and affix the side nav when space allows it */
-@media (min-width: 992px) and (min-height:845px) {
+@media (min-width: 992px) and (min-height:765px) {
   .sb-fix .nav > .active > ul {
     display: block;
   }
@@ -671,7 +671,7 @@ td.indicator-options .admin-link{
     margin-bottom: 0;
   }
 }
-@media (min-width: 1200px) and (min-height:845px) {
+@media (min-width: 1200px) and (min-height:765px) {
   /* Widen the fixed sidebar again */
   .sb-fix.affix-bottom,
   .sb-fix.affix {
@@ -800,6 +800,7 @@ ul.about-faq a:hover {
   background-image: url('https://s3.amazonaws.com/uploads.hipchat.com/10690/195680/kIjVaV7hSFzAOz5/Providence_Underlay.png');
   padding-right: 47px;
   padding-left: 47px;
+  padding-bottom: 100px;
 }
 .about-first{
 background: white;
