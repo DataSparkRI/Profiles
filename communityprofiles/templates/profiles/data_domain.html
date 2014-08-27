@@ -79,7 +79,7 @@ right:5px;
                     <option value="">{[{level.name}]}</option>
                 </select>
 
-                <span id="level-unavliable-msg" class="label label-default hidden">Corresponding geography level and data not available</span>
+                <span id="level-unavliable-msg" class="label wrap-label label-warning hidden">Corresponding geography level and data not available</span>
 
                 <div id="geo-level-recs-wrap" class="hidden">
                     <select class="form-control input-sm" ng-model="selected_record" ng-options="rec.label for rec in options_records | orderBy:geoLabelSort" ng-change="updateRecord()">

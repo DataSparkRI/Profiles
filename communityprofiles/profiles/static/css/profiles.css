@@ -294,6 +294,8 @@ ul.nav a:hover { background-color: #92D3D2 !important; }
 
 #address-results{
     margin-top:5px;
+    max-height: 80px;
+    overflow-y: auto;
 }
 
 #find-address-form{
@@ -811,3 +813,9 @@ border-top: 0px;
 padding-top: 6px;
 padding-left: 8px;
 }
+
+.wrap-label {
+    white-space: normal;
+    display: inline-block;
+}
+
