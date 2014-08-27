@@ -44,6 +44,32 @@ def delete_all_lower_level_geo_record(modeladmin, request, queryset):
     
     messages.add_message(request, messages.INFO, "%d geo records was removed."%count)
 
+def rename_with_upper_level(modeladmin, request, queryset):
+    from profiles.models import GeoRecord
+    count = 0
+    for obj in queryset:
+        tt = obj.geo_id_segments[:obj.geo_id_segments.rfind(",")]+"}"
+        a = GeoRecord.objects.filter(geo_id_segments__icontains=tt)
+
+        if len(a) > 0:           #have upper level
+           upper_name = GeoRecord.objects.filter(geo_id_segments__icontains=tt)[0].name
+           name = upper_name +" - "+obj.name
+           obj.name = name
+           obj.save()
+           count = count + 1
+    messages.add_message(request, messages.INFO, "%d geo records was updated."%count)
+
+def rename_back_only_current_level(modeladmin, request, queryset):
+    from profiles.models import GeoRecord
+    count = 0
+    for obj in queryset:
+           name = obj.name.split("- ")[-1]
+           obj.name = name
+           obj.save()
+           count = count + 1
+    messages.add_message(request, messages.INFO, "%d geo records was updated."%count)
+
+
 #---------------------------------------#
 
 class NextUpdateDateField(SimpleListFilter):
@@ -162,7 +188,7 @@ class GeoRecordAdmin(admin.OSMGeoAdmin):
     search_fields = ['name','notes']
     #filter_horizontal = ['mappings', ]
     exclude = ('components','parent','mappings')
-    actions = [delete_all_lower_level_geo_record]
+    actions = [delete_all_lower_level_geo_record, rename_back_only_current_level, rename_with_upper_level]
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name=='parent':
