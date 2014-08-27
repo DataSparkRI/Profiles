@@ -151,6 +151,37 @@
 
    {% block extrafoot %}
    {% endblock extrafoot%}
+
+   {% block extrafooter %}
+<div id="footer">
+      <div class="container">
+        <div class="row clearfix">
+                        <div class="col-md-6 column text-center">
+                                <h5 class="footer-head">Stay in touch for updates</h5>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <input type="text" class="form-control" placeholder="Name">
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <a href="#"><img src="{{ STATIC_URL }}images/sign_up_button.png" style="margin-top:-2px;" height=36/></a>
+                                    </div>
+                                 </div>
+                        </div>
+                        <div class="col-md-6 column">
+                    <p class="footer-head pull-right" style="padding-top:10px;">
+                                                <img src="{{ STATIC_URL }}images/email_icon.png"/>
+                                                <img src="{{ STATIC_URL }}images/twitter-icon.png"/>
+                                                <img src="{{ STATIC_URL }}images/git_profile-icons.png"/>
+                                        </p>
+                        </div>
+            </div>
+      </div>
+</div>
+
+   {% endblock extrafooter %}
    
    {{SENTRY_JS|safe}}
 
