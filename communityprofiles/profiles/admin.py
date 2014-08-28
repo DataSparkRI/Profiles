@@ -44,7 +44,19 @@ def delete_all_lower_level_geo_record(modeladmin, request, queryset):
     
     messages.add_message(request, messages.INFO, "%d geo records was removed."%count)
 
+def rename_FlatValue(name,geography_id):
+        from profiles.models import FlatValue
+        objs = FlatValue.objects.filter(geography_id=geography_id)
+        if objs[0].geography_name != name:
+           objs.update(geography_name = name)
+        #for obj in objs:
+        #    if obj.geography_name != name:
+        #       obj.geography_name = name
+        #       obj.save()
+
+
 def rename_with_upper_level(modeladmin, request, queryset):
+
     from profiles.models import GeoRecord
     count = 0
     for obj in queryset:
@@ -54,6 +66,7 @@ def rename_with_upper_level(modeladmin, request, queryset):
         if len(a) > 0:           #have upper level
            upper_name = GeoRecord.objects.filter(geo_id_segments__icontains=tt)[0].name
            name = upper_name +" - "+obj.name
+           rename_FlatValue(name,obj.id)
            obj.name = name
            obj.save()
            count = count + 1
@@ -64,6 +77,7 @@ def rename_back_only_current_level(modeladmin, request, queryset):
     count = 0
     for obj in queryset:
            name = obj.name.split("- ")[-1]
+           rename_FlatValue(name,obj.id)
            obj.name = name
            obj.save()
            count = count + 1
