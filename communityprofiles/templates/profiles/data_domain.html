@@ -74,10 +74,7 @@ right:5px;
                 </div>
 
                 <h5>Change Geography Level </h5>
-                <select class="form-control input-sm" ng-model="level" ng-options="level.name for level in levels" ng-change="updateLev(level, true)">
-                                        
-                    <option value="">{[{level.name}]}</option>
-                </select>
+                <select class="form-control input-sm" ng-model="level" ng-options="level.name for level in levels" ng-change="updateLev(level, true)"></select>
 
                 <span id="level-unavliable-msg" class="label wrap-label label-warning hidden">Corresponding geography level and data not available</span>
 
