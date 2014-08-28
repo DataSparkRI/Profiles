@@ -118,36 +118,6 @@
    <script src = "{{STATIC_URL}}js/ui.js"></script>
 
 
-   <script>
-   function resize(h){
-       var sb = document.getElementById('sb');
-       var tb = document.getElementById('tb');
-       if (h < 845){
-
-           //window.innerWidth = 1239;
-           sb.className = 'col-md-12';
-           tb.className = 'col-md-12'; 
-       }
-       else{
-           sb.className = 'col-md-3';
-           tb.className = 'col-md-9';
-       }
-
-   }
-   $(window).resize(function() {
-       if(this.resizeTO) clearTimeout(this.resizeTO);
-       this.resizeTO = setTimeout(function() {
-           $(this).trigger('resizeEnd');
-       }, 500);
-   });
-
-   $(window).bind('resizeEnd', function() {
-       resize($(this).height());
-   });
-
-   resize(window.innerHeight);
-   </script>
-
 
    {% block extrafoot %}
    {% endblock extrafoot%}
@@ -172,9 +142,10 @@
                         </div>
                         <div class="col-md-6 column">
                     <p class="footer-head pull-right" style="padding-top:10px;">
-                                                <img src="{{ STATIC_URL }}images/email_icon.png"/>
-                                                <img src="{{ STATIC_URL }}images/twitter-icon.png"/>
-                                                <img src="{{ STATIC_URL }}images/git_profile-icons.png"/>
+                                                <a href="mailto:profiles@provplan.org"><img src="{{ STATIC_URL }}images/email_icon.png"/></a>
+                                                <a href="https://twitter.com/ProvPlan" target="_blank"><img src="{{ STATIC_URL }}images/twitter-icon.png"/></a>
+                                                <a href="https://github.com/ProvidencePlan/Profiles" target="_blank"><img src="{{ STATIC_URL }}images/git_profile-icons.png"/></a>
+                                               <!-- <script type="text/javascript" src="{{STATIC_URL}}js/github-watchers-button/github-watchers.js"></script> -->
                                         </p>
                         </div>
             </div>
