@@ -15,7 +15,7 @@ var INIT_LEVEL = {name:'{{geo_record.level.name}}', slug:'{{geo_record.level.slu
 {% if query %}
 <div class="row" ng-controller="SearchCtrl">
     <div class = "col-md-12">
-        <h2>Your search for &ldquo;<strong>{{ query }}</strong>&rdquo; returned {{ total_results }} result{{ total_results|pluralize }}...</h2>
+        <h2 style="padding-top:50px;">Your search for &ldquo;<strong>{{ query }}</strong>&rdquo; returned {{ total_results }} result{{ total_results|pluralize }}...</h2>
     </div>
     <div class="col-md-12">
     {% for result, indicator_data in indicator_results %}
@@ -29,8 +29,9 @@ var INIT_LEVEL = {name:'{{geo_record.level.name}}', slug:'{{geo_record.level.slu
             {%endfor%}</p>
         </div>
     {% empty %}
-    <p>No Indicators were found matching your search criteria</p>
+    <p style="padding-top:50px;">No Indicators were found matching your search criteria</p>
     {% endfor %}
+    </div>
  </div>
 {%endif%}                           
 {% endblock %}
