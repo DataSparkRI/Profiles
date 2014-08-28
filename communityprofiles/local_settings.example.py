@@ -32,7 +32,7 @@ ALLOWED_HOSTS = [
 #MEDIA_URL="/media/"
 PROFILES_API_URL = "http://127.0.0.1:8080" # NOTE no trailing /
 BANNER_TEXT = "Community Profiles"
-
+LOGO_ICON = ""
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.

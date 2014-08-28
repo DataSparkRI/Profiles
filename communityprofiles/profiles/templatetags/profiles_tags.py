@@ -641,6 +641,10 @@ profiles_admin_submit_row = register.inclusion_tag('admin/submit_line.html', tak
 def google_analytics():
     return settings.GOOGLE_ANALYTICS_UID
 
+@register.simple_tag
+def logo_icon():
+    return settings.LOGO_ICON
+
 @register.assignment_tag
 def search_domainId(domain_id):
     from profiles.models import DataDomainIndex
