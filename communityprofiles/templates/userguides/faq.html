@@ -1,7 +1,7 @@
 {% extends 'userguides/base.html' %}{% load profiles_tags %}{% load thumbnail %}{% load markup %}
 
 {% block content %}
-<h3 class="text-center faq-header">Frequently Asked Questions</h3>
+{% if faqs %}<h3 class="text-center faq-header">{% else %}<h3 class="text-center faq-header" style ="padding-bottom:500px">{% endif %}Frequently Asked Questions</h3>
 
 {% for faq in faqs %}
 				<div class="panel">

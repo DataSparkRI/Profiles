@@ -4,7 +4,8 @@
 
 
 	<div class="row clearfix">
-		<div class="col-md-12 column">
+		{% if topics %}<div class="col-md-12 column">{% else %}<div class="col-md-12 column" style ="padding-top:550px">{% endif %}
+                
 		{% for topic in topics %}
 		   {% if forloop.last %}
 
