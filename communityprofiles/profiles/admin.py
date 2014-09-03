@@ -47,12 +47,9 @@ def delete_all_lower_level_geo_record(modeladmin, request, queryset):
 def rename_FlatValue(name,geography_id):
         from profiles.models import FlatValue
         objs = FlatValue.objects.filter(geography_id=geography_id)
-        if objs[0].geography_name != name:
-           objs.update(geography_name = name)
-        #for obj in objs:
-        #    if obj.geography_name != name:
-        #       obj.geography_name = name
-        #       obj.save()
+        if len(objs) >0:
+           if objs[0].geography_name != name:
+              objs.update(geography_name = name)
 
 
 def rename_with_upper_level(modeladmin, request, queryset):
