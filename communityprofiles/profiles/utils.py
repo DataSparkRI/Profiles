@@ -22,13 +22,13 @@ def get_levels_as_list(exclude=None):
     levs_objs = GeoLevel.objects.filter(Q(year='') | Q(year=None))
     levs = []
     for l in levs_objs:
-        if exclude!= None:
+        if exclude != None:
             if l.name != exclude.name:
-                levs.append({'id':l.id, 'name':l.name, 'slug':l.slug, 'sumlev':l.summary_level})
+                levs.append({'id':l.id, 'name':l.lev_name, 'slug':l.slug, 'sumlev':l.summary_level})
             else:
                 pass
         else:
-            levs.append({'id':l.id, 'name':l.name, 'slug':l.slug, 'sumlev':l.summary_level})
+            levs.append({'id':l.id, 'name':l.lev_name, 'slug':l.slug, 'sumlev':l.summary_level})
     return sorted(levs, key=lambda k: k['sumlev'])
 
 def get_indicator_levels_as_list(resource):
@@ -43,7 +43,7 @@ def get_indicator_levels_as_list(resource):
 
     levs = []
     for l in levs_objs:
-        levs.append({'id':l.id, 'name':l.name, 'slug':l.slug, 'sumlev':l.summary_level})
+        levs.append({'id':l.id, 'name':l.lev_name, 'slug':l.slug, 'sumlev':l.summary_level})
     return sorted(levs, key=lambda k: k['sumlev'])
 
 def get_default_levels():

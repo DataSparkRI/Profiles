@@ -38,6 +38,7 @@ def geo_record(request, geo_level_slug, geo_record_slug):
 def data_domain(request, geo_level_slug, geo_record_slug, data_domain_slug):
     """ Overview of a data domain for a geo record """
     level = get_object_or_404(GeoLevel, slug=geo_level_slug)
+
     try:
         record = GeoRecord.objects.defer('mappings', 'components', 'parent').get(level=level, slug=geo_record_slug)
     except GeoRecord.DoesNotExist:
@@ -52,7 +53,7 @@ def data_domain(request, geo_level_slug, geo_record_slug, data_domain_slug):
                 'geo_level': level,
                 'geo_record': record,
                 'data_domain': domain,
-                'level_json':json.dumps({'id':level.id, 'name':level.name, 'slug':level.slug, 'sumlev':level.summary_level}),
+                'level_json':json.dumps({'id':level.id, 'name':level.lev_name, 'slug':level.slug, 'sumlev':level.summary_level}),
                 'levels': json.dumps(levels),
                 'rec_json':json.dumps({'id':record.id, 'name': record.name, 'slug':record.slug, 'geom_id':record.get_geom_id(), 'geo_id':record.geo_id}),
              },
@@ -107,7 +108,7 @@ def data_view(request, level_slug, geo_slug, indicator_slug):
         'indicator': indicator,
         'times': json.dumps(indicator.get_times(True)),
         'levels': json.dumps(levels),
-        'level_json':json.dumps({'id':level.id, 'name':level.name, 'slug':level.slug, 'sumlev':level.summary_level}),
+        'level_json':json.dumps({'id':level.id, 'name':level.lev_name, 'slug':level.slug, 'sumlev':level.summary_level}),
         'rec_json':json.dumps({'id':record.id, 'name': record.name, 'slug':record.slug, 'geom_id':record.get_geom_id(), 'geo_id':record.geo_id}),
         'display_options':json.dumps(display_options),
         'value_key':value_key,
