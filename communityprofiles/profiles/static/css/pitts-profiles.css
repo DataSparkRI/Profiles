@@ -821,9 +821,18 @@ padding-left: 8px;
 }
 .btn-profile {
 color: #fff;
-background-color: #428bca;
+background-color: rgba(5, 100, 128, 0.92);
 padding: 0px;
 }
 .map-sub-header{
  color:rgba(146, 212, 210, 0.92);
+}
+.log-email{
+  content:url(/static/images/yellow_email_2_profiles.png);
+}
+.log-github{
+  content:url(/static/images/yellow_git_profiles.png);
+}
+.log-sign-up{
+  content:url(/static/images/yellow_sign_up_button.png);
 }
