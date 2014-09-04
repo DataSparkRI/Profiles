@@ -15,7 +15,9 @@ def stay(request):
        response_data['message'] = 'Must be POST request'
        return HttpResponse(json.dumps(response_data), content_type="application/json")
     elif request.method == 'POST':
-       name = request.POST["name"]
+       name = request.POST["first_name"]
+       first_name = request.POST["first_name"]
+       last_name = request.POST["last_name"]
        email = request.POST["mail"]
        result = StayInTouchUser.objects.filter(email=email)
        response_data = {'result':'success'} 

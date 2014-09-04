@@ -645,6 +645,13 @@ def google_analytics():
 def logo_icon():
     return settings.LOGO_ICON
 
+@register.simple_tag
+def style_css():
+    try:    
+       return settings.STYLE
+    except AttributeError:
+       return "css/profiles.css"
+
 @register.assignment_tag
 def search_domainId(domain_id):
     from profiles.models import DataDomainIndex

@@ -17,7 +17,7 @@
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png"> 
                 {% comment %}<style>@font-face { font-family: helvetica; src: url('{{STATIC_URL}}fonts/HelveticaNeueLTStd-MdCn.otf'); } </style>{% endcomment %}
  		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css">
- 		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profiles.css">
+ 		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}{% style_css %}">
         {%block head%}
         {%endblock head%}
 
@@ -126,14 +126,18 @@
 <div id="footer">
       <div class="container">
         <div class="row clearfix">
-                        <div class="col-md-6 column text-center">
+                        <div class="col-md-8 column">
                                 <h5 class="footer-head">Stay in touch for updates</h5>
                                 <form id="form" class="contact">
                                 <div class="row">
-                                    <div class="col-lg-4">
-                                        <input type="text" name="name" class="form-control" placeholder="Name" required>
+                                    <div class="col-lg-3">
+                                        <input type="text" name="first_name" class="form-control" placeholder="First Name" required>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
+                                        <input type="text" name="last_name" class="form-control" placeholder="Last Name" required>
+                                    </div>
+
+                                    <div class="col-lg-3">
                                         <input type="email" name="mail" class="form-control" id="inputEmail" placeholder="Enter email" data-error="Bruh, that email address is invalid" required>
                                     </div>
                                     <div class="col-lg-3">
@@ -142,10 +146,9 @@
                                  </div>
                                  </form>
                         </div>
-                        <div class="col-md-6 column">
+                        <div class="col-md-4 column">
                     <p class="footer-head pull-right" style="padding-top:10px;">
                                                 <a href="mailto:profiles@provplan.org"><img src="{{ STATIC_URL }}images/email_icon.png"/></a>
-                                                <a href="https://twitter.com/ProvPlan" target="_blank"><img src="{{ STATIC_URL }}images/twitter-icon.png"/></a>
                                                 <a href="https://github.com/ProvidencePlan/Profiles" target="_blank"><img src="{{ STATIC_URL }}images/git_profile-icons.png"/></a>
                                                <!-- <script type="text/javascript" src="{{STATIC_URL}}js/github-watchers-button/github-watchers.js"></script> -->
                                         </p>
@@ -169,8 +172,9 @@
                     type: "POST",
                     data: {csrfmiddlewaretoken: "{{ csrf_token }}",   // < here 
                            state:"inactive",
-                           name: $('form.contact').serializeArray()[0]['value'],
-                           mail: $('form.contact').serializeArray()[1]['value'],
+                           first_name: $('form.contact').serializeArray()[0]['value'],
+                           last_name: $('form.contact').serializeArray()[1]['value']
+                           mail: $('form.contact').serializeArray()[2]['value'],
                     },
                     success: function(data){
                         alert(data.message);

@@ -73,7 +73,7 @@ right:5px;
                     
                 </div>
 
-                <h5>Change Geography Level </h5>
+                <h5 class="map-sub-header">Change Geography Level </h5>
                 <select class="form-control input-sm" ng-model="level" ng-options="level.name for level in levels" ng-change="updateLev(level, true)"></select>
 
                 <span id="level-unavliable-msg" class="label wrap-label label-warning hidden">Corresponding geography level and data not available</span>
@@ -84,7 +84,7 @@ right:5px;
                     </select>
                 </div>
                 
-                <h5>Find an Address</h5> 
+                <h5 class="map-sub-header">Find an Address</h5> 
                   <form ng-submit="geocodeAddress($event)">
                         <div class="input-group" id="find-address-form">
                       
