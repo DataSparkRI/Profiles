@@ -1,6 +1,14 @@
 from django.db import models
 
 # Create your models here.
+class StayInTouchUser(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField(max_length=254)
+    create_time = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return "%s -- %s"%(self.name, self.email)
+
 
 class AboutPost(models.Model):
     post_title = models.CharField(max_length=100)

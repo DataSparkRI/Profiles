@@ -819,4 +819,8 @@ padding-left: 8px;
     white-space: normal;
     display: inline-block;
 }
-
+.btn-profile {
+color: #fff;
+background-color: #428bca;
+padding: 0px;
+}
