@@ -66,7 +66,7 @@ right:5px;
             <div id="map-tools" class="well hidden-print">
                 <h3> Explore </h3>
                 <div id="similar-nav" class="limited-dd" ng-show="lev_records.length > 1">
-                    <h5>More places like {{geo_record.name}}</h5>
+                    <h5 class="map-sub-header">More places like {{geo_record.name}}</h5>
                     <select class="form-control input-sm" ng-model="selected_record" ng-options="rec.name for rec in lev_records | orderBy:geoLabelSort" ng-change='updateRecordFromSimilar()'>
                         <option value="">{{geo_record.name}}</option>
                     </select>
