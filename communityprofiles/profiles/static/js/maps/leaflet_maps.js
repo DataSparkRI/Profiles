@@ -259,8 +259,10 @@ ProfilesMap.prototype.DataChoroplethFeatureGroup = function(data, valueKey, func
             obj.values['label'] = obj.properties.label;
             data_values.push(obj.values);
             if(self.valid_moe(obj.values)){
-               
-                v = parseFloat(obj.values[valueKey]) || -999999; // value or -99999 . -99999 here is a null value
+                if (parseFloat(obj.values[valueKey]) == 0 )
+                    v = parseFloat(obj.values[valueKey])
+                else
+                    v = parseFloat(obj.values[valueKey]) || -999999; // value or -99999 . -99999 here is a null value
                 values.push(v);
                 //fvalues[v] = obj.values["f_"+valueKey];
 
@@ -311,8 +313,11 @@ ProfilesMap.prototype.DataChoroplethFeatureGroup = function(data, valueKey, func
         for(var i in data.objects){
             obj = data.objects[i];
              if(obj.values != null){
-                
-                cval = obj.values[valueKey] || -999999; // the actual value
+                if (obj.values[valueKey] == 0)
+                   cval = 0
+                else
+                   cval = obj.values[valueKey] || -999999; // the actual value
+
                 var valid_moe = true;
                 // this is a regular value
                 if(!self.valid_moe(obj.values)){
@@ -549,7 +554,6 @@ ProfilesMap.prototype.getValueCodeFormat = function(value){
     if(value == null){
         value = -999999;
     }
-
     switch(value){
         case -999999:
         return "n/a"
