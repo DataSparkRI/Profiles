@@ -174,7 +174,7 @@
 
             <div class="row" ng-show="wTop">
                 <div class="col-12-md">
-                   {%load markup%}<div class="notes-wrap">
+                   {%load markup%}<div {% if print %}style="padding:10px 25px; max-height:600px;"{%else%}class="notes-wrap"{% endif %}>
                     {%for note in indicator.get_notes%}
                     <div class="note">
                         <h3 class="n-label">{{note.label}}</h3>
