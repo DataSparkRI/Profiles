@@ -727,7 +727,10 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                             break;
                         }
                         else{
-                            value_text = "<h5>" + $scope.value_formatter(vals[valueKey]||-999999);
+                            if (vals[valueKey]==0)
+                               value_text = "<h5>" + $scope.value_formatter(vals[valueKey]);
+                            else
+                               value_text = "<h5>" + $scope.value_formatter(vals[valueKey]||-999999);
                         }
                     }
                     info_text += value_text;
@@ -735,13 +738,19 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                     try{
                         custom = custom_value(vals[valueKey]);
                         if (custom==vals[valueKey]){
-                           info_text += "<h5>" + $scope.value_formatter(vals[valueKey]||-999999);
+                           if(vals[valueKey]==0)
+                              info_text += "<h5>" + $scope.value_formatter(vals[valueKey]);
+                           else
+                              info_text += "<h5>" + $scope.value_formatter(vals[valueKey]||-999999);
                         }
                         else{
                            info_text += "<h5>" + custom;}
                     }
                     catch(err){
-                        info_text += "<h5>" + $scope.value_formatter(vals[valueKey]||-999999);
+                        if(vals[valueKey]==0)
+                            info_text += "<h5>" + $scope.value_formatter(vals[valueKey]);
+                        else
+                            info_text += "<h5>" + $scope.value_formatter(vals[valueKey]||-999999);
                     }
                   }
                   if(vals.moe){
