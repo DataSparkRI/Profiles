@@ -87,6 +87,7 @@ class DataDomain(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True, db_index=True)
     weight = models.PositiveIntegerField(default=1)
+    publish = models.BooleanField(default=False)
     indicators = models.ManyToManyField('Indicator', through='IndicatorDomain')
     group = models.ManyToManyField('Group', through='DataDomainIndex')
     subdomains = models.ManyToManyField('self', symmetrical=False, blank=True) # a datadomain that is "nested" under this one

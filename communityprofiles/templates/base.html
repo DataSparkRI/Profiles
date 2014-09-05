@@ -173,7 +173,7 @@
                     data: {csrfmiddlewaretoken: "{{ csrf_token }}",   // < here 
                            state:"inactive",
                            first_name: $('form.contact').serializeArray()[0]['value'],
-                           last_name: $('form.contact').serializeArray()[1]['value']
+                           last_name: $('form.contact').serializeArray()[1]['value'],
                            mail: $('form.contact').serializeArray()[2]['value'],
                     },
                     success: function(data){

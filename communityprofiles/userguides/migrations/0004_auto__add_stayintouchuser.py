@@ -11,9 +11,10 @@ class Migration(SchemaMigration):
         # Adding model 'StayInTouchUser'
         db.create_table(u'userguides_stayintouchuser', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('email', self.gf('django.db.models.fields.EmailField')(max_length=254)),
-            ('create_time', self.gf('django.db.models.fields.DateTimeField')()),
+            ('create_time', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
         ))
         db.send_create_signal(u'userguides', ['StayInTouchUser'])
 
@@ -51,10 +52,11 @@ class Migration(SchemaMigration):
         },
         u'userguides.stayintouchuser': {
             'Meta': {'object_name': 'StayInTouchUser'},
-            'create_time': ('django.db.models.fields.DateTimeField', [], {}),
+            'create_time': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '254'}),
+            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '200'})
+            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         }
     }
 

@@ -116,6 +116,7 @@ right:5px;
             <div class="row" id ="main-tables">
                
                 {%for domain in data_domain.subdomains.all%}
+                {% if domain.publish %}
                 <div class="panel panel-default" id="{{domain.slug}}">
                     <div class="panel-heading sub-domain">
                         <h5>{{domain.name}}</h5>
@@ -208,6 +209,7 @@ index["{{indicator.slug}}"] = '{{indicator.data_type}}';
                 </div>
 
                 </div>
+                {%endif%}
                 {%endfor%}
                 <small id="moe-print-notice" class="visible-print"><b>Note:</b> MOEs are not included on the print tables, but are available through the data download option.</small>
 
