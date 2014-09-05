@@ -521,13 +521,21 @@ td.indicator-options .admin-link{
     position:static;
 }
 
-#activity{
+#data-view-loading {
     position: absolute;
     right: 50%;
     top: 40%;
     opacity: 1;
     z-index: 1000;
 }
+
+#data-domain-loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 1000;
+}
+
 
 
 .btn.active{
@@ -836,3 +844,22 @@ padding: 0px;
 .log-sign-up{
   content:url(/static/images/yellow_sign_up_button.png);
 }
+
+.loading-image{
+  content:url(/static/images/pitts-loading.gif);
+}
+
+#table-actions {
+    margin: 10px 10px 10px 10px;
+    padding-bottom: 20px;
+}
+
+#expand-all {
+    float: right;
+}
+
+#close-all {
+    float: right;
+    display: none;
+}
+

@@ -43,6 +43,13 @@ def data_domain(request, geo_level_slug, geo_record_slug, data_domain_slug):
         record = GeoRecord.objects.defer('mappings', 'components', 'parent').get(level=level, slug=geo_record_slug)
     except GeoRecord.DoesNotExist:
         raise Http404
+
+    filter_key = ''
+    if level.related_within:
+        geoids = json.loads(record.geo_id_segments)
+        sum_lev = level.related_within.summary_level
+        filter_key = geoids[sum_lev]
+
     domain = get_object_or_404(DataDomain, slug=data_domain_slug)
     #indicators = domain.indicators.filter(published=True, levels__in=[level])
     levels = get_levels_as_list()
@@ -56,6 +63,7 @@ def data_domain(request, geo_level_slug, geo_record_slug, data_domain_slug):
                 'level_json':json.dumps({'id':level.id, 'name':level.lev_name, 'slug':level.slug, 'sumlev':level.summary_level}),
                 'levels': json.dumps(levels),
                 'rec_json':json.dumps({'id':record.id, 'name': record.name, 'slug':record.slug, 'geom_id':record.get_geom_id(), 'geo_id':record.geo_id}),
+                'filter_key': filter_key,
              },
             context_instance=RequestContext(request))
     else:
@@ -112,8 +120,8 @@ def data_view(request, level_slug, geo_slug, indicator_slug):
         'rec_json':json.dumps({'id':record.id, 'name': record.name, 'slug':record.slug, 'geom_id':record.get_geom_id(), 'geo_id':record.geo_id}),
         'display_options':json.dumps(display_options),
         'value_key':value_key,
-
     }
+
     is_status = "status" in request.GET
     if is_status:
         ctx.update({'print':True})

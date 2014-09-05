@@ -152,6 +152,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
             } // keep track of the level state as it changes
         }
         // fetch geometry records that are at the selected level and are in or contain our current Record
+        $scope.startSpinner();
         $scope.geoQuery($scope.init_record, $scope.init_level, $scope.level, function(data){
             if(data.objects.length == 1){
                 $scope.selected_record = data.objects[0];
@@ -178,6 +179,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                 $("#level-unavliable-msg").removeClass("hidden");
                 $("#geo-level-recs-wrap").addClass("hidden");
             }
+            $scope.stopSpinner();
         });
     };
 
@@ -293,6 +295,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
         el.find(".glyphicon").toggleClass("glyphicon-chevron-down");
 
         if(!targ.hasClass("fetched")){
+            $scope.startSpinner();
             targ.children('table').removeClass('hidden');
             event.stopPropagation();
             //add a new group memeber to the datacache
@@ -356,6 +359,9 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
 
                 $q.all(proms).then(function(results){
                     /*at this point all of this indicator's data has come back including denoms*/
+
+                    $scope.stopSpinner();
+
                     var p;
                     var k;
                     var times = []
@@ -413,7 +419,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                 targ.children("table").toggle();
             });
             targ.addClass("fetched");
-                        
+
         }// end if !targ.hasClass("fetched")
 
     }
@@ -464,8 +470,10 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
         var zip = pAddr[2] || "";
         
         if(st != null){
+            $scope.startSpinner();
             $http.get("//" + $scope.app_url + "/" + "maps_api/v1/geocode/", {params:{street:st, city:city, zipcode:zip}})
             .success(function (data, status, headers, config){
+                $scope.stopSpinner();
                 if(data.objects[0].status == "success"){
                     $scope.geocode_mssg = "Found " + data.objects[0].results.length + " Results";
                     $scope.geocode_mssg_type = "info";
@@ -528,7 +536,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
         launchDataview(event, $scope);
     }
 
-    $scope.makeSpinner = function () { 
+    $scope.startSpinner = function () { 
         /*UTIL for creating and managing the loading dio*/
         $scope.activity = true;
     }
@@ -597,7 +605,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
         /*Routines that happen everytime you get a load of indicator data
          * This gets one set of data per time for given <level>
          * */
-        $scope.makeSpinner();
+        $scope.startSpinner();
         var url = $scope.api_url + "/indicator/" + slug + "/";
         var geoms;
         var proms = [];

@@ -14,8 +14,7 @@
         var LEVEL = JSON.parse('{{level_json|safe}}');
         var LEVELS = JSON.parse('{{levels|safe}}');
         var RECORD = JSON.parse('{{rec_json|safe}}');
-        var CENSUS_ID = '{{geo_record.census_id}}';
-        var FILTER_KEY = RECORD.geo_id.replace(CENSUS_ID, "");
+        var FILTER_KEY = "{{filter_key}}";
         var API_URL = '{{API_URL}}';
         var DOMAIN = {'name':'{{data_domain.name}}', 'slug':'{{data_domain.slug}}'};
         var APP_URL = "{{APP_HOST}}";
@@ -39,8 +38,11 @@ right:5px;
 </style> 
 {%endblock%}
 {% block content %}
+
 <a href="#" id="site-feedback" class="hidden-print"><img class="feedback_fixed" src="http://feedback.provplan.org/static/images/feedbackBtn.png" alt="feedback"></a>
     <div ng-controller="MapCntrl">
+        <span id="data-domain-loading" ng-show="activity"><img class="loading-image" src="{{ STATIC_URL }}images/profiles-loading.gif" /></span>
+
        
             {%comment%}
             <div id="data-domains">
@@ -80,7 +82,7 @@ right:5px;
 
                 <div id="geo-level-recs-wrap" class="hidden">
                     <select class="form-control input-sm" ng-model="selected_record" ng-options="rec.label for rec in options_records | orderBy:geoLabelSort" ng-change="updateRecord()">
-                       <option value="">{[{level.name}]}s in {{geo_record.name}}</option>
+                       <option value="">{[{level.name.substring(level.name.length-1) == 'y' && level.name.substring(0, level.name.length-1) + 'ie' || level.name}]}s in {{geo_record.name}}</option>
                     </select>
                 </div>
                 
@@ -114,6 +116,11 @@ right:5px;
 
         <div class="col-md-9" id ="tb" ng-class="{'hidden-print': dataViewActive}"> 
             <div class="row" id ="main-tables">
+
+                <div id="table-actions">
+                    <a id="expand-all" class="domain-title" href="#">Expand All <span class="glyphicon glyphicon-chevron-right"></span></a>
+                    <a id="close-all" class="domain-title" href="#">Close All <span class="glyphicon glyphicon-chevron-down"></span></a>
+                </div><!-- end table-actions -->
                
                 {%for domain in data_domain.subdomains.all%}
                 {% if domain.publish %}
@@ -249,6 +256,21 @@ index["{{indicator.slug}}"] = '{{indicator.data_type}}';
    });
 
    resize(window.innerHeight);
+
+        $(function() {
+                $("#expand-all").click(function(event) {
+                $(".title[ng-click]").not(".expanded").click();
+                $(this).hide();
+                $("#close-all").show();
+            });
+
+            $("#close-all").click(function(event) {
+                $(".title.expanded[ng-click]").click();
+                $(this).hide();
+                $("#expand-all").show();
+            });
+        });
+
    </script>
 
 

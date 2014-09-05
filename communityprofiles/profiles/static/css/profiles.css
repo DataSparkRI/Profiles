@@ -521,7 +521,7 @@ td.indicator-options .admin-link{
     position:static;
 }
 
-#activity{
+#data-view-loading {
     position: absolute;
     right: 50%;
     top: 40%;
@@ -529,6 +529,12 @@ td.indicator-options .admin-link{
     z-index: 1000;
 }
 
+#data-domain-loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 1000;
+}
 
 .btn.active{
     font-weight:bold;
@@ -824,3 +830,18 @@ color: #fff;
 background-color: #428bca;
 padding: 0px;
 }
+
+#table-actions {
+    margin: 10px 10px 10px 10px;
+    padding-bottom: 20px;
+}
+
+#expand-all {
+    float: right;
+}
+
+#close-all {
+    float: right;
+    display: none;
+}
+

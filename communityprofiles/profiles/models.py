@@ -114,10 +114,11 @@ class GeoLevel(models.Model):
     display_name = models.CharField(max_length = 200, db_index=True, blank=True, null=True)
     year = models.CharField(max_length=200, blank=True, null=True) # year this level represents Ex: 2000, 2010, acs
     slug = models.SlugField(max_length=200, unique=True, db_index=True)
-    parent = models.ForeignKey('self', null=True, blank=True)
+    parent = models.ForeignKey('self', related_name='children', null=True, blank=True)
     data_sources = models.ManyToManyField('DataSource', blank=True) # This isnt used anymore
     summary_level = models.CharField(max_length=200, blank=True, null=True)
     shapefile = models.ForeignKey(ShapeFile, blank=True, null=True, on_delete=models.SET_NULL, help_text="The shapefile that contains the geometries for this level of Geography. Profiles expects this to be a Polygon type shapefile")
+    related_within = models.ForeignKey('self', related_name='related_levels_within', blank=True, null=True, help_text='This selects the containing geo level in which related geo records will be displayed in the navigation dropdown.')
 
     @property
     def lev_name(self):
