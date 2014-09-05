@@ -292,10 +292,13 @@ class GroupAdmin(SortableAdmin):
 
     inlines = [GroupIndexInline,]
     list_filter = ("domain",)
-    list_display = ("name",)
+    list_display = ("name","domains")
     search_fields = ['name']
     exclude = ('order',)
     ordering = ('name',)
+    
+    def domains(self, obj):
+        return ", ".join([d.name for d in obj.domain.all()])
 admin.site.register(Group, GroupAdmin)
 
 
