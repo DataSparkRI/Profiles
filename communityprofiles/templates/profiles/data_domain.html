@@ -136,7 +136,7 @@ right:5px;
 {% if g|group_filter:geo_level %}
                     <a href="#" class="domain-title">
                         <span id="{{g.name}}" class="title {%if forloop.first%} first-group{%endif%}" ng-click='groupSelect([{%for indicator in g|group_filter:geo_level %}
-                            {{indicator.get_slug_time_props|order_key:forloop.counter|safe}}{%if forloop.last%}{%else%},{%endif%}{%endfor%}],"{{g.name}}", $event)'>{{g.name}} <span class="glyphicon glyphicon-chevron-right"></span></span></a>
+                           {% if indicator.published %}{{indicator.get_slug_time_props|order_key:forloop.counter|safe}}{%if forloop.last%}{%else%},{%endif%}{% endif %}{%endfor%}],"{{g.name}}", $event)'>{{g.name}} <span class="glyphicon glyphicon-chevron-right"></span></span></a>
 {% else %}
                     <a href="#" class="domain-title" rel="popover" data-trigger="hover" style="color:gray" data-title="No Data" data-content="Data not available at all geography levels">
                         <span id="{{g.name}}" class="title">{{g.name}}</span></a>
