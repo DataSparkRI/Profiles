@@ -39,7 +39,12 @@ def group_filter(group, level):
     for i in b:
         order.append(a.index(i))
     try:
-       return [list[i] for i in order]
+       result = []
+       for i in [list[i] for i in order]:
+           if i.published == True:
+              result.append(i)
+       
+       return result #[list[i] for i in order]
     except:
        return group.sorted_indicators(level)
 
