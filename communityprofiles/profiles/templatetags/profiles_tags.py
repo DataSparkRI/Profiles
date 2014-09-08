@@ -46,7 +46,11 @@ def group_filter(group, level):
        
        return result #[list[i] for i in order]
     except:
-       return group.sorted_indicators(level)
+       result = []
+       for i in group.sorted_indicators(level):
+           if i.published == True:
+              result.append(i)
+       return result
 
 register.filter('group_filter', group_filter)
 
