@@ -8,7 +8,7 @@ class StayInTouchUser(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return "%s -- %s"%(self.name, self.email)
+        return "%s -- %s"%(self.first_name, self.email)
 
 
 class AboutPost(models.Model):
