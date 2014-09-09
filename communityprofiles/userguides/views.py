@@ -22,9 +22,9 @@ def stay(request):
        response_data = {'result':'success'} 
        if len(result) == 0: # one email can only reg once
           StayInTouchUser(email=email, first_name=first_name, last_name=last_name).save()
-          response_data.update({'message':'Thank you for stay in touch'})
+          response_data.update({'message':'Thank you for staying in touch.'})
        else:
-          response_data.update({'message':'Your email is already in the system. Thank you for stay in touch.'})
+          response_data.update({'message':'Your email is already in the system. Thank you for staying in touch.'})
        return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def about(request):
