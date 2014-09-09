@@ -331,7 +331,7 @@ def generate_indicator_data(modeladmin, request, queryset):
 class IndicatorAdmin(SortableAdmin):
     prepopulated_fields = {"slug": ("name",)}
     list_filter = (LastGeneratedDateField, NextUpdateDateField,'published','data_type', 'indicatorpart__data_source', 'indicatorpart__time', 'data_domains__domain')
-    list_display = ('name','published','display_name','levels_str', 'data_type', 'sources_str', 'times_str', 'domains_str', 'short_definition', 'last_generated_at','last_modified_at')
+    list_display = ('name','published','display_name','levels_str', 'data_type', 'sources_str', 'times_str', 'domains_str', 'universe', 'last_generated_at','last_modified_at')
     search_fields = ['display_name', 'name', 'id', 'short_definition']
     # There seems to a bug in Django admin right now, which prevents making these fields editable
     #list_editable = ('short_definition', 'long_definition',)
