@@ -129,7 +129,7 @@
                              #
                             </th>
                             <th ng-repeat-end>
-                                {[{indicator.tbl_name}]}
+                                <div ng-if="indicator.tbl_name!='None'">{[{indicator.tbl_name}]}</div>
                             </th>
 
                         </tr>
