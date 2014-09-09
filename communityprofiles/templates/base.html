@@ -112,7 +112,7 @@
    <script src="{{ STATIC_URL }}js/libs/angular-sanitize.min.js"></script>
    <script src="{{ STATIC_URL }}js/libs/ngStorage.min.js"></script>
    <script src="{{ STATIC_URL }}js/libs/bootstrap.min.js"></script>
-
+   <script src="{{ STATIC_URL }}js/libs/bootbox.js"></script>
    <script src="{{ STATIC_URL }}js/pp.js"></script>   
    <script src = "{{STATIC_URL}}js/app.js"></script>
    <script src = "{{STATIC_URL}}js/ui.js"></script>
@@ -178,7 +178,15 @@
                            mail: $('form.contact').serializeArray()[2]['value'],
                     },
                     success: function(data){
-                        alert(data.message);
+                        bootbox.dialog({
+                              title: "Thank You",
+                              message: data.message,
+                              buttons: {
+                                  success: {
+                                  label: "OK", className: "btn-success", callback: function () {}
+                                  }
+                              }
+                        });
                     },
                     error: function(data){
                         console.log(data);
