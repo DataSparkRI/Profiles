@@ -845,3 +845,7 @@ padding: 0px;
     display: none;
 }
 
+.row[ng-show="wTop"] {
+    z-index: -1;
+}
+
