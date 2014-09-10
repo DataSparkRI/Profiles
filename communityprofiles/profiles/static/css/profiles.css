@@ -844,4 +844,9 @@ padding: 0px;
     float: right;
     display: none;
 }
-
+.popover-title{
+    color: black;
+}
+.popover-content{
+   color: black;
+}

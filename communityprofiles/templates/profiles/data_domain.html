@@ -76,7 +76,7 @@ right:5px;
                 </div>
 
                 <h5 class="map-sub-header">Change Geography Level </h5>
-                <select class="form-control input-sm" ng-model="level" ng-options="level.name for level in levels" ng-change="updateLev(level, true)"></select>
+                <select class="form-control input-sm" ng-model="level" ng-options="level.name for level in levels" ng-change="updateLev(level, true)" title="How to Find Your Community" data-content="You can click on a town or city on the map or use the drop downs to find your community." data-placement="top" id="tour_geo"></select>
 
                 <span id="level-unavliable-msg" class="label wrap-label label-warning hidden">Corresponding geography level and data not available</span>
 
@@ -127,7 +127,7 @@ right:5px;
                 <div class="panel panel-default" id="{{domain.slug}}">
                     <div class="panel-heading sub-domain">
                         <h5>{{domain.name}}</h5>
-                        <form class="dl-form hidden-print" name="download" action="{{API_URL}}/csv/" method="get">
+                        <form class="dl-form hidden-print" name="download" action="{{API_URL}}/csv/" method="get" data-placement="left" id="tour_download" data-original-title="Download the Data" data-content="Download will allow you to download the data in a csv file.">
                             <input type="hidden" name="i" value="{%for g in domain.sorted_groups%}{%for indicator in g|group_filter:geo_level %}{{indicator.id}},{% endfor %}{% endfor %}">
                             <input type="hidden" name="g" value="{{geo_record.id}}">
                             <input type="hidden" name="dom" value="{{domain.name}}">
@@ -141,11 +141,12 @@ right:5px;
                     {%for g in domain.sorted_groups%}
                     <li>
 {% if g|group_filter:geo_level %}
-                    <a href="#" class="domain-title">
+                    {% if forloop.parentloop.first %}{%if forloop.first%}<a href="#" class="domain-title" id="tour_data" data-original-title="The Data Table" data-content="This table will reflect data for the geography selected.">{%else%}<a href="#" class="domain-title">{%endif%}{%else%}<a href="#" class="domain-title">{% endif %}
                         <span id="{{g.name}}" class="title {%if forloop.first%} first-group{%endif%}" ng-click='groupSelect([{%for indicator in g|group_filter:geo_level %}
                            {{indicator.get_slug_time_props|order_key:forloop.counter|safe}}{%if forloop.last%}{%else%},{%endif%}{%endfor%}],"{{g.name}}", $event)'>{{g.name}} <span class="glyphicon glyphicon-chevron-right"></span></span></a>
 {% else %}
-                    <a href="#" class="domain-title" rel="popover" data-trigger="hover" style="color:gray" data-title="No Data" data-content="Data not available at all geography levels">
+                    {%if forloop.first %}<a href="#" class="domain-title" rel="popover" data-trigger="hover" style="color:gray" data-title="The Data Table (No Data)" data-content="This table will reflect data for the geography selected. (Data not available at all geography levels)">{%else%}
+                    <a href="#" class="domain-title" rel="popover" data-trigger="hover" style="color:gray" data-title="No Data" data-content="Data not available at all geography levels">{%endif%}
                         <span id="{{g.name}}" class="title">{{g.name}}</span></a>
 
 {% endif %}
@@ -181,11 +182,12 @@ index["{{indicator.slug}}"] = '{{indicator.data_type}}';
                                     <div class="moe-wrap" ng-bind-html=indicator.vals[t].moe|safehtml></div>
                                 </td>
                                 <td class="indicator-info hidden-print">
-                                    <div> <a href="#" ng-click="indicatorInfo($event, indicator)"><span class="glyphicon glyphicon-info-sign"</span></a></div>
+                                    <div> <a href="#" ng-click="indicatorInfo($event, indicator)"><span class="glyphicon glyphicon-info-sign" data-original-title="More Information" data-content="Source information and definition of the indicator can be found here." id="tour_info"></span></a></div>
                                 </td>                                    
                                 <td class="indicator-options hidden-print">
                                     <div class="wrap">
-                                    <a href="{[{indicator.targ_url}]}" data-indicator="{[{indicator.name}]}" class="map-link" ng-click="mapIt($event)">MAP{#<span class="glyphicon glyphicon-globe"></span>#}</a>
+                               {%if forloop.first %}<a href="{[{indicator.targ_url}]}" data-indicator="{[{indicator.name}]}" class="map-link" ng-click="mapIt($event)" data-original-title="'Map it'" id="tour_map" data-content="Display the data on a map and compare with other communities.">MAP{#<span class="glyphicon glyphicon-globe"></span>#}</a>{%else%}
+                                    <a href="{[{indicator.targ_url}]}" data-indicator="{[{indicator.name}]}" class="map-link" ng-click="mapIt($event)">MAP{#<span class="glyphicon glyphicon-globe"></span>#}</a>{%endif%}
                                     </div>
                                     <div ng-bind-html=indicator.alink|safehtml></div>
 
@@ -228,7 +230,50 @@ index["{{indicator.slug}}"] = '{{indicator.data_type}}';
 
 <div id ="f-foot" ><a href="#" class="hidden-print"><span class="glyphicon glyphicon-chevron-up"></span></a></div>
 </div>
-   <script>
+   <script  type="text/javascript">
+   function close_all_tour(){
+     $('#tour_geo').popover('hide');
+     $('#tour_exp').popover('hide');
+     $('#tour_search').popover('hide');
+     $('#tour_data').popover('hide');
+     $('#tour_download').popover('hide');
+     $('#tour_info').popover('hide');
+     $('#tour_map').popover('hide');
+   }
+   var clicks = 0;
+   function tour(){
+       clicks += 1;
+       if(clicks==1){
+         $('#tour_geo').popover('show');
+       }
+       else if(clicks==2){
+         $('#tour_geo').popover('hide');
+         $('#tour_download').popover('show');
+       }
+       else if(clicks==3){
+         $('#tour_download').popover('hide');
+         $('#tour_search').popover('show');
+       }
+       else if(clicks==4){
+         $('#tour_search').popover('hide');
+         $('#tour_exp').popover('show');
+       }
+       else if(clicks==5){
+         $('#tour_exp').popover('hide');
+         $(".title[ng-click]").not(".expanded")[0].click();
+         $('#tour_data').popover('show');
+       }
+       else if(clicks==6){
+         $('#tour_info').popover('show');
+         $('#tour_data').popover('hide');
+       }
+       else if(clicks==7){
+         $('#tour_info').popover('hide');
+         $('#tour_map').popover('show'); 
+       }
+       else if(clicks==8){$(".title.expanded[ng-click]")[0].click();clicks=0;close_all_tour();}
+   }
+
    function resize(h){
        var sb = document.getElementById('sb');
        var tb = document.getElementById('tb');
@@ -266,6 +311,7 @@ index["{{indicator.slug}}"] = '{{indicator.data_type}}';
 
             $("#close-all").click(function(event) {
                 $(".title.expanded[ng-click]").click();
+                close_all_tour();
                 $(this).hide();
                 $("#expand-all").show();
             });
