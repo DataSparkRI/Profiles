@@ -579,21 +579,25 @@ ProfilesMap.prototype.formatCommafy = function(value, decimal){
         x1 = x1.replace(rgx, '$1' + ',' + '$2');
     }
     if(decimal){
-        return x1 + x2;
+        if(x2 == '.0') {
+            return x1;
+        } else {
+            return x1 + x2;
+        }
     }
     else{
         return x1;
     }
 }
 
-ProfilesMap.prototype.formatCount = function(value, decimal){
+ProfilesMap.prototype.formatCount = function(value){
     var self = this;
     var v = self.getValueCodeFormat(value);
     if(v){
         return v
     }else{
         value = Math.round(value * 10 ) / 10;
-        return self.formatCommafy(value, decimal);
+        return self.formatCommafy(value, true);
     }
 }
 

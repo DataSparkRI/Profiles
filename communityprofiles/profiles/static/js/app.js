@@ -545,6 +545,14 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
        $scope.activity = false;
     }
 
+    $scope.getAllRecsForLev = function(level) {
+        return $http.get($scope.api_url + '/geos/level/'+ level.slug)
+            .success(function (data, status, headers, config){
+                $scope.record_sets[level.name] = data.objects;
+                $scope.records = $scope.records.concat(data.objects);
+            });
+    }
+
     $scope.getIndicatorGeoms = function(){
         /*Dataview 1: Start by Collecting all the geographies for the levels available in this indicator*/
 
@@ -568,21 +576,8 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
         
         // collect basic info on records that are in or around this geography
         for(var i in $scope.levels){
-            if($scope.levels[i] != $scope.level){
-                proms.push($scope.geoQuery($scope.init_record, $scope.level, $scope.levels[i], function(data, targLevel){
-                    $scope.record_sets[targLevel.name] = data.objects;
-                    $scope.records = $scope.records.concat(data.objects);
-                }));
-            }
+            proms.push($scope.getAllRecsForLev($scope.levels[i]));
         }
-        
-        // Collect other geo records at the level of our main geography
-        var rLevP = $http.get($scope.api_url + '/geos/level/'+ $scope.level.slug, { params:{ filter:$scope.filter_key }})
-        .success(function (data, status, headers, config){
-            $scope.record_sets[$scope.level.name] = data.objects;
-        });
-
-        proms.push(rLevP);
 
         $q.all(proms).then(function(results) {
             $scope.enable_tools = true; // this activates our tools.
@@ -621,7 +616,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
         geoms = $scope.record_sets[level.name].map(function(obj){
               return obj.id;
         });
-       
+
         for(var i in $scope.times){
             var t = $scope.times[i]; // time
         
