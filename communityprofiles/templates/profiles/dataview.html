@@ -84,7 +84,7 @@
                 </div>{# end map controls#}
                 <div class="col-md-4" ng-show="enable_tools && indicatorOptions != false" id="indicator-options">
                     <label> Options </label>
-                    <select class="form-control input-sm" ng-options="i.name for i in indicatorOptions"  ng-model="indicator" ng-change="changeIndicator(i)">
+                    <select class="form-control input-sm" ng-options="i.name.replace('&\amp;', '&') for i in indicatorOptions"  ng-model="indicator" ng-change="changeIndicator(i)">
                     </select>
                  </div>
             </div>
