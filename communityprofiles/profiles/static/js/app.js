@@ -784,7 +784,6 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
             }  
         }
         var data = {'objects':$scope.data_cache[$scope.indicator.slug][$scope.time][$scope.level.name]};
-       
         var base_layer = $scope.pm.DataPolyFeatureGroup($scope.reference_layer_data, {
             weight:2,
             opacity:1,
@@ -817,7 +816,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
             choro[0].addTo($scope.pm.map);
             choro[1].addTo($scope.pm.map);
             base_layer.addTo($scope.pm.map);
-            $scope.pm.map.fitBounds(choro[0].getBounds());
+            $scope.pm.map.fitBounds(base_layer.getBounds());
 
         }else{
             base_layer.addTo($scope.pm.map);
