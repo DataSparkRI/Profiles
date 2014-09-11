@@ -5,7 +5,7 @@
 {% for domain in data_domains %}
    {%if domain.domain.publish%}
  
-   {% if forloop.first %}<li class="domain {% if domain.domain == selected_domain %}active{% endif %}" data-original-title="Explore the Data" data-content="Use the category tabs along the top to browse through the information available." id="tour_exp">{%else%}
+   {% if forloop.first %}<li class="domain {% if domain.domain == selected_domain %}active{% endif %}" data-original-title="Explore the Data" data-content="Use the category tabs along the top to browse through the information available. <button type='button' class='btn btn-warning pull-right tour_btn' onclick='tour()'>Next</button>" id="tour_exp">{%else%}
    <li class="domain {% if domain.domain == selected_domain %}active{% endif %}">{%endif%}
        <a href="{{domain.href}}" class="sub-nav">
            {{ domain.domain.name }}

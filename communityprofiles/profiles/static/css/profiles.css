@@ -854,4 +854,7 @@ padding: 0px;
 .row[ng-show="wTop"] {
     z-index: -1;
 }
-
+.tour_btn{
+    margin-bottom: 5px;
+    margin-top:5px;
+}
