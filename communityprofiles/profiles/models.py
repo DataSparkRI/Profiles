@@ -442,7 +442,7 @@ class Indicator(models.Model):
         t = {'slug':self.slug, 'times':self.get_times(name_only=True),
              'name':html_escape(self.display_name),
              'id':self.id,
-             'denoms':[{'slug':d.slug, 'name':d.label} for d in self.denominator_set.all().only('slug','label')],
+             'denoms':[{'slug':d.slug, 'name':d.label} for d in self.denominator_set.filter(published=True).only('slug','label')],
 
              }
         return json.dumps(t)
