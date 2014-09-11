@@ -311,8 +311,6 @@ select.form-control{
 }
 
 .data-table{
-    overflow-y:auto;
-    overflow-x:hidden;
     position:relative;
 }
 .data-table table {
@@ -339,6 +337,10 @@ select.form-control{
 
 .data-table table>tbody+tbody {
     border-top:none;
+}
+
+.data-table-wrap {
+    overflow: auto;
 }
 
 .td-highlight{

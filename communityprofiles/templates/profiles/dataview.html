@@ -49,6 +49,7 @@
                 if (tHeight < 10){
                 tHeight = window.parent.innerHeight-245;}
                 $(".dataview.container .data-table").css({height:tHeight});
+                $(".dataview.container .data-table-wrap").css({height:tHeight-25});
                 $(".dataview.container #map").css({height:tHeight});
 
             };
@@ -106,7 +107,7 @@
 
 
                 {#table#}
-             
+                <div class="data-table-wrap">
                 <table class="table table-striped table-bordered" id="table-data-{[{key}]}"  ng-repeat='(key, tval) in table_data' ng-show="key==level.name">
                     <thead>
                         <tr id="{[{val.label}]}">
@@ -167,7 +168,8 @@
                         </tr>
 
                     </tbody>
-                    </table>
+                </table>
+                </div><!-- end data-table-wrap -->
                        <small id="moe-print-notice" class="visible-print"><b>Note:</b> MOEs are not included on the print tables, but are available through the data download option.</small>
 
             </div>
