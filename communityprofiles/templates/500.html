@@ -1,10 +1,210 @@
-{% extends "base.html" %}
+<!DOCTYPE html>{% load profiles_tags %}{%load liltags%}
+<!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8" ng-app="profiles"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9" ng-app="profiles"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="" ng-app="profiles"> <!--<![endif]-->
+	<head > 
+		<meta charset="utf-8"> 
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
 
-{% block content %}
-<div class="page-error" style="padding-top:50px; padding-bottom:200px;">
+        <title>{% block title %}{{BANNER_TEXT}}{% endblock %}</title> 
+		<meta name="description" content=""> 
+		<meta name="author" content=""> 
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<link rel="shortcut icon" href="/favicon.ico"> 
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png"> 
+                {% comment %}<style>@font-face { font-family: helvetica; src: url('/static/fonts/HelveticaNeueLTStd-MdCn.otf'); } </style>{% endcomment %}
+ 		<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+ 		<link rel="stylesheet" type="text/css" href="/static/{% style_css %}">
+        {%block head%}
+        {%endblock head%}
+
+	</head> 
+	 
+	<body> 
+		<!--[if lt IE 9]>
+		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p> <![endif]-->
+    <img id="beta-icon" src="/static/images/beta-icon.png" class="hidden-print" style="z-index:1;"/>
+    <nav class="navbar navbar-default" id ="navbar" role="navigation">
+        <div class="container hidden-print">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">{%comment%}{{BANNER_TEXT}}{%endcomment%}<img src="/static/{% logo_icon %}" class="log"></a>
+                    
+            </div>
+            <form class="navbar-form navbar-right search-form" role="search" action="/search/" method="get">
+                <ul class="nav navbar-nav navbar-left about-faq"><li><a href="javascript:void(0)" onclick="tour();" style="color: #fff; font-size: small;padding-top:7px;" id="tour"class="ng-hide">Take A Tour</a></li></ul>
+                <ul class="nav navbar-nav navbar-left"><li style="color:#fff;font-family: cursive;font-size: xx-large; font-weight: bold; top:-18px" id="tour_dot" class="ng-hide">.</li></ul>
+                <ul class="nav navbar-nav navbar-left about-faq"><li><a href="/about" style="color: #fff; font-size: small;padding-top:7px;">About</a></li></ul>
+                <ul class="nav navbar-nav navbar-left"><li style="color:#fff;font-family: cursive;font-size: xx-large; font-weight: bold; top:-18px">.</li></ul>
+                <ul class="nav navbar-nav navbar-left about-faq"><li><a href="/about/FAQ" style="color:#fff; font-size: small;padding-top:7px;">FAQ</a></li></ul>
+                <div class="form-group">
+<span id="tour_search" data-original-title="Search" data-content="Having trouble finding the data you're looking for? Try using the search bar. <button type='button' class='btn btn-warning pull-right tour_btn' onclick='tour()'>Next</button>" data-placement="bottom"></span>
+                    <input name="q" type="text" class="form-control" placeholder="Find an Indicator">
+                    <input name="rid" type="hidden" value="{{geo_record.id}}">
+                </div>
+                <button type="submit" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-search"></span></button>
+            </form>
+        </div>
+        <div class="container hidden-print">
+           {% data_domains geo_record data_domain %}
+        </div>
+    </nav>
+  <div class="container"> 
+
+
+        {% block content %}
+        <div class="page-error" style="padding-top:50px; padding-bottom:200px;">
 <h3>Woopsie! Something happened. We've sent an message to our developers.</h3>
 <h5>Consider trying Search or <a href="/">Return Home</h5>
 </div>
+        
+        
+        {% endblock %}
+        <!-- Modal -->
+        <div class="modal fade" id="dataview-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="dataViewActive = false;">&times;</button>
+                <h4 class="modal-title"></h4>
+              </div>
+              <div class="modal-body">
+                  <iframe src="" width="100%" height="100%"></iframe>
+              </div>
+              
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="info-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"></h4>
+              </div>
+              <div class="modal-body">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+	    <footer class="row">
+            {% lilbox 'footer' %}
+		</footer> 
+
+    </div><!-- end container-->
+
+	<script> 
+		var _gaq = [['_setAccount', '{% google_analytics %}'], ['_trackPageview']];
+		(function(d, t) {
+			var g = d.createElement(t),
+			s = d.getElementsByTagName(t)[0];
+			g.async = true;
+			g.src = ('https:' == location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			s.parentNode.insertBefore(g, s);
+		})(document, 'script');
+
+		//PP.Settings.baseURL = "http://{{request.META.HTTP_HOST}}";
+
+	</script>
+   <script src="/static/js/jquery.min.js"></script>   
+   <script src="/static/js/libs/angular.min.js"></script>
+   <script src="/static/js/libs/angular-sanitize.min.js"></script>
+   <script src="/static/js/libs/ngStorage.min.js"></script>
+   <script src="/static/js/libs/bootstrap.min.js"></script>
+   <script src="/static/js/libs/bootbox.js"></script>
+   <script src="/static/js/pp.js"></script>   
+   <script src = "/static/js/app.js"></script>
+   <script src = "/static/js/ui.js"></script>
 
 
-{% endblock content %}
+
+   {% block extrafoot %}
+   {% endblock extrafoot%}
+
+   {% block extrafooter %}
+<div id="footer">
+      <div class="container">
+        <div class="row clearfix">
+                        <div class="col-md-8 column">
+                                <h5 class="footer-head">Stay in touch for updates</h5>
+                                <form id="form" class="contact">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <input type="text" name="first_name" class="form-control" placeholder="First Name" required>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <input type="text" name="last_name" class="form-control" placeholder="Last Name" required>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <input type="email" name="mail" class="form-control" id="inputEmail" placeholder="Enter email" data-error="Bruh, that email address is invalid" required>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <button type="submit" class="btn btn-profile"> <img class="log-sign-up" src="/static/images/sign_up_button.png" style="margin-top:-2px;border-radius: 14px;" height=36/></a>
+                                    </div>
+                                 </div>
+                                 </form>
+                        </div>
+                        <div class="col-md-4 column">
+                    <p class="footer-head pull-right" style="padding-top:10px;">
+                                                <a href="mailto:profiles@provplan.org"><img class="log-email" src="/static/images/email_icon.png"/></a>
+                                                <a href="https://twitter.com/ProvPlan" target="_blank"><img class="log-github" src="/static/images/twitter-icon.png"/></a>
+                                                <a href="https://github.com/ProvidencePlan/Profiles" target="_blank"><img class="log-github" src="/static/images/git_profile-icons.png"/></a>
+                                               <!-- <script type="text/javascript" src="/static/js/github-watchers-button/github-watchers.js"></script> -->
+                                        </p>
+                        </div>
+            </div>
+      </div>
+</div>
+
+   {% endblock extrafooter %}
+   
+   {{SENTRY_JS|safe}}
+
+   <!-- 
+    <script>FEEDBACK_FORM_URL="http://feedback.provplan.org"</script>
+    <script src="http://feedback.provplan.org/static/js/embedFeedback.js"></script>-->
+ <script type="text/javascript">
+   $(document).ready(function(){   
+            $("#form").submit(function(e){
+                $.ajax({
+                    url: "/about/stay_in_touch",
+                    type: "POST",
+                    data: {csrfmiddlewaretoken: "{{ csrf_token }}",   // < here 
+                           state:"inactive",
+                           first_name: $('form.contact').serializeArray()[0]['value'],
+                           last_name: $('form.contact').serializeArray()[1]['value'],
+                           mail: $('form.contact').serializeArray()[2]['value'],
+                    },
+                    success: function(data){
+                        bootbox.dialog({
+                              title: "Thank You",
+                              message: data.message,
+                              buttons: {
+                                  success: {
+                                  label: "OK", className: "btn-success", callback: function () {}
+                                  }
+                              }
+                        });
+                    },
+                    error: function(data){
+                        console.log(data);
+                    } 
+                });
+            });
+    }); 
+ </script>   
+ 
+	</body> 
+</html>
