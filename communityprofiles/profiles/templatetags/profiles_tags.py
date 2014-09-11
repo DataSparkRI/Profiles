@@ -88,8 +88,10 @@ def _indicator_href(indicator, geo_record, data_domain=None):
 
 def _domain_href(domain, geo_record):
     # Get the href for the domain, in the context of the selected geo_record
-    return reverse('data_domain', kwargs={'geo_level_slug': geo_record.level.slug, 'geo_record_slug': geo_record.slug, 'data_domain_slug': domain.slug})
-
+    try:
+        return reverse('data_domain', kwargs={'geo_level_slug': geo_record.level.slug, 'geo_record_slug': geo_record.slug, 'data_domain_slug': domain.slug})
+    except AttributeError:
+        return reverse('data_domain', kwargs={'geo_level_slug': None, 'geo_record_slug': None, 'data_domain_slug': None})
 
 @register.simple_tag(takes_context=True)
 def record_href(context, record):
