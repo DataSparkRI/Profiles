@@ -1015,6 +1015,7 @@ class Denominator(models.Model):
     indicator = models.ForeignKey(Indicator)
     sort = models.PositiveIntegerField(default = 1)
     slug = models.SlugField(max_length=100, unique=True, db_index=True, null=True, blank=True)
+    published = models.BooleanField(default=True) 
 
     @property
     def display_name(self):
