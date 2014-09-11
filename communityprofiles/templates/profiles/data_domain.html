@@ -141,9 +141,9 @@ right:5px;
                     {%for g in domain.sorted_groups%}
                     <li>
 {% if g|group_filter:geo_level %}
-                    {% if forloop.parentloop.first %}{%if forloop.first%}<a href="#" class="domain-title" id="tour_data" data-original-title="The Data Table" data-content="This table will reflect data for the geography selected.">{%else%}<a href="#" class="domain-title">{%endif%}{%else%}<a href="#" class="domain-title">{% endif %}
+                    <a href="#" class="domain-title">
                         <span id="{{g.name}}" class="title {%if forloop.first%} first-group{%endif%}" ng-click='groupSelect([{%for indicator in g|group_filter:geo_level %}
-                           {{indicator.get_slug_time_props|order_key:forloop.counter|safe}}{%if forloop.last%}{%else%},{%endif%}{%endfor%}],"{{g.name}}", $event)'>{{g.name}} <span class="glyphicon glyphicon-chevron-right"></span></span></a>
+                           {{indicator.get_slug_time_props|order_key:forloop.counter|safe}}{%if forloop.last%}{%else%},{%endif%}{%endfor%}],"{{g.name}}", $event)'>{{g.name}} <span class="glyphicon glyphicon-chevron-right"></span></span>{% if forloop.parentloop.first %}{%if forloop.first%}<span class="tour_data" data-original-title="The Data Table" data-content="This table will reflect data for the geography selected."></span>{%endif%}{%endif%}</a>
 {% else %}
                     {%if forloop.first %}<a href="#" class="domain-title" rel="popover" data-trigger="hover" style="color:gray" data-title="The Data Table (No Data)" data-content="This table will reflect data for the geography selected. (Data not available at all geography levels)">{%else%}
                     <a href="#" class="domain-title" rel="popover" data-trigger="hover" style="color:gray" data-title="No Data" data-content="Data not available at all geography levels">{%endif%}
@@ -235,7 +235,7 @@ index["{{indicator.slug}}"] = '{{indicator.data_type}}';
      $('#tour_geo').popover('hide');
      $('#tour_exp').popover('hide');
      $('#tour_search').popover('hide');
-     $('#tour_data').popover('hide');
+     $('.tour_data').popover('hide');
      $('#tour_download').popover('hide');
      $('#tour_info').popover('hide');
      $('#tour_map').popover('hide');
@@ -261,11 +261,11 @@ index["{{indicator.slug}}"] = '{{indicator.data_type}}';
        else if(clicks==5){
          $('#tour_exp').popover('hide');
          $(".title[ng-click]").not(".expanded")[0].click();
-         $('#tour_data').popover('show');
+         $('.tour_data').popover('show');
        }
        else if(clicks==6){
          $('#tour_info').popover('show');
-         $('#tour_data').popover('hide');
+         $('.tour_data').popover('hide');
        }
        else if(clicks==7){
          $('#tour_info').popover('hide');
