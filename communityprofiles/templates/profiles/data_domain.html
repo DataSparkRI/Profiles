@@ -75,8 +75,8 @@ right:5px;
                     
                 </div>
 
-                <h5 class="map-sub-header">Change Geography Level </h5>
-                <select class="form-control input-sm" ng-model="level" ng-options="level.name for level in levels" ng-change="updateLev(level, true)" title="How to Find Your Community" data-content="You can click on a town or city on the map or use the drop downs to find your community. <button type='button' class='btn btn-warning pull-right tour_btn' onclick='tour()'>Next</button>" data-placement="top" id="tour_geo"></select>
+                <h5 class="map-sub-header">Change Geography Level </h5><span title="How to Find Your Community" data-content="You can click on a town or city on the map or use the drop downs to find your community. <button type='button' class='btn btn-warning pull-right tour_btn' onclick='tour()'>Next</button>" data-placement="top" id="tour_geo"></span>
+                <select class="form-control input-sm" ng-model="level" ng-options="level.name for level in levels" ng-change="updateLev(level, true)"></select>
 
                 <span id="level-unavliable-msg" class="label wrap-label label-warning hidden">Corresponding geography level and data not available</span>
 
@@ -127,11 +127,11 @@ right:5px;
                 <div class="panel panel-default" id="{{domain.slug}}">
                     <div class="panel-heading sub-domain">
                         <h5>{{domain.name}}</h5>
-                        <form class="dl-form hidden-print" name="download" action="{{API_URL}}/csv/" method="get" data-placement="left" id="tour_download" data-original-title="Download the Data" data-content="Download will allow you to download the data in a csv file. <button type='button' class='btn btn-warning pull-right tour_btn' onclick='tour()'>Next</button>">
+                        <form class="dl-form hidden-print" name="download" action="{{API_URL}}/csv/" method="get">
                             <input type="hidden" name="i" value="{%for g in domain.sorted_groups%}{%for indicator in g|group_filter:geo_level %}{{indicator.id}},{% endfor %}{% endfor %}">
                             <input type="hidden" name="g" value="{{geo_record.id}}">
                             <input type="hidden" name="dom" value="{{domain.name}}">
-
+<span data-placement="top" id="tour_download" data-original-title="Download the Data" data-content="Download will allow you to download the data in a csv file. <button type='button' class='btn btn-warning pull-right tour_btn' onclick='tour()'>Next</button>"></span>
                             <button type="submit" class="btn btn-default btn-sm">Download <span class="glyphicon glyphicon-file"></span></button>
                         </form>
                     </div>
@@ -182,11 +182,11 @@ index["{{indicator.slug}}"] = '{{indicator.data_type}}';
                                     <div class="moe-wrap" ng-bind-html=indicator.vals[t].moe|safehtml></div>
                                 </td>
                                 <td class="indicator-info hidden-print">
-                                    <div> <a href="#" ng-click="indicatorInfo($event, indicator)"><span class="glyphicon glyphicon-info-sign" data-original-title="More Information" data-content="Source information and definition of the indicator can be found here. <button type='button' class='btn btn-warning pull-right tour_btn' onclick='tour()'>Next</button>" id="tour_info"></span></a></div>
+                                    <div> <a href="#" ng-click="indicatorInfo($event, indicator)"><span class="glyphicon glyphicon-info-sign"></span></a><span data-original-title="More Information" data-content="Source information and definition of the indicator can be found here. <button type='button' class='btn btn-warning pull-right tour_btn' onclick='tour()'>Next</button>" id="tour_info"></span></div>
                                 </td>                                    
                                 <td class="indicator-options hidden-print">
                                     <div class="wrap">
-                               {%if forloop.first %}<a href="{[{indicator.targ_url}]}" data-indicator="{[{indicator.name}]}" class="map-link" ng-click="mapIt($event)" data-original-title="'Map it'" id="tour_map" data-content="Display the data on a map and compare with other communities. <button type='button' class='btn btn-warning pull-right tour_btn' onclick='tour()'>Done</button>">MAP{#<span class="glyphicon glyphicon-globe"></span>#}</a>{%else%}
+                               {%if forloop.first %}<a href="{[{indicator.targ_url}]}" data-indicator="{[{indicator.name}]}" class="map-link" ng-click="mapIt($event)">MAP{#<span class="glyphicon glyphicon-globe"></span>#}</a> <span data-placement="top" data-original-title="'Map it'" id="tour_map" data-content="Display the data on a map and compare with other communities. <button type='button' class='btn btn-warning pull-right tour_btn' onclick='tour()'>Done</button>"></span>{%else%}
                                     <a href="{[{indicator.targ_url}]}" data-indicator="{[{indicator.name}]}" class="map-link" ng-click="mapIt($event)">MAP{#<span class="glyphicon glyphicon-globe"></span>#}</a>{%endif%}
                                     </div>
                                     <div ng-bind-html=indicator.alink|safehtml></div>
