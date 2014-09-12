@@ -47,9 +47,14 @@
                 <button type="submit" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-search"></span></button>
             </form>
         </div>
+        {% if data_domain %}
         <div class="container hidden-print">
            {% data_domains geo_record data_domain %}
         </div>
+        {% else %}
+        <div class="col-md-12" style="height: 40px">
+        </div>
+        {% endif %}
     </nav>
   <div class="container"> 
 
