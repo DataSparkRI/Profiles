@@ -765,7 +765,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                   // highlight the table cell
                   var td = $("#" + props.label.replace(/\s/g, "\\ ").replace(/\./g, "\\.").replace(/\'/g, "\\\'"));
                   td.addClass("td-highlight");
-                  var dt = $(".data-table");
+                  var dt = $(".data-table-wrap");
                   dt.scrollTop(0);
                   dt.scrollTop(td.offset().top-(td.height()*4));
 
