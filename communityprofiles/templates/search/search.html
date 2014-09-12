@@ -19,6 +19,7 @@ var INIT_LEVEL = {name:'{{geo_record.level.name}}', slug:'{{geo_record.level.slu
     </div>
     <div class="col-md-12">
     {% for result, indicator_data in indicator_results %}
+        {% if result.object.published%}
         <hr>
         <div>
             <h3><a href="/profiles/dataview/{{geo_record.level.slug}}/{{geo_record.slug}}/{{result.object.slug}}" ng-click="mapIt($event, '{{result.object.get_slug_time_props}}')">{{ result.object.display_name }}</a></h3>
@@ -28,6 +29,9 @@ var INIT_LEVEL = {name:'{{geo_record.level.name}}', slug:'{{geo_record.level.slu
             {%for p in result.object.domain_group_path%}<a target="blank" href="/profiles/{{geo_record.level.slug}}/{{geo_record.slug}}/{{p.domain.slug}}/#/{{p.subdomain}}/{{p.group}}">{{p.domain.name}} - {{p.group}}</a>{%if forloop.last%}{%else%}, {%endif%}
             {%endfor%}</p>
         </div>
+        {% else %}
+        <hr><div><h3>{{ result.object.display_name }}</h3><p><small>comming soon...</small></p></div>     
+        {% endif %}
     {% empty %}
     <p style="padding-top:50px;">No Indicators were found matching your search criteria</p>
     {% endfor %}
