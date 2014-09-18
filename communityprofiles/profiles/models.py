@@ -453,7 +453,7 @@ class Indicator(models.Model):
         for ip in self.indicatorpart_set.all():
             sources.append("{time}:{ds}".format(time=ip.time.name, ds=ip.data_source.name))
         for dp in self.denominatorpart_set.all():
-            sources.append("{time}:{ds}".format(time=dp.time.name, ds=dp.data_source.name))
+            sources.append("{time}:{ds}".format(time=dp.part.time.name, ds=dp.data_source.name))
         return sources
 
     def get_tables(self, denom=False):
