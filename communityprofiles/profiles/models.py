@@ -971,6 +971,9 @@ class DataGenerator(Sortable):
         if self.data_source.name != "File":
             prs = parse.FormulaParser(self.data_source)
             tokens = prs.tokens(str(self.formula))
+            if tokens == None:
+               return tables
+            
             for tl in tokens:
                 if type(tl) == data.Table:
                     # single item its just a census.Table

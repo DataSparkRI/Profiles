@@ -54,7 +54,10 @@ class FormulaParser(object):
 
     def tokens(self, formula, tabilify=True):
         """ @param tabilify = Return this in the old table format?"""
-        return self.grammar(tabilify).parseString(formula)
+        try:
+           return self.grammar(tabilify).parseString(formula)
+        except:
+           return None
 
     def _df_parse(self, parse_result,**kwargs):
 
@@ -138,10 +141,11 @@ class AltFormulaParser:
             point = Literal( "." )
             uscore = Literal("_")
 
-            e     = CaselessLiteral( "E" )
+            #e     = CaselessLiteral( "E" )
             fnumber = Combine( Word( "+-"+alphanums, alphanums ) +
                             Optional(point + Optional(Word(alphanums))) +
-                            Optional(e + Word( "+-" + alphanums,alphanums)) +
+                            Optional(Word( "+-" + alphanums,alphanums)) +
+                            #Optional(e + Word( "+-" + alphanums,alphanums)) +
                             Optional(uscore + Optional(Word(alphanums)))
                             )
             ident = Word(alphas, alphas+nums+"_$")
@@ -157,7 +161,8 @@ class AltFormulaParser:
             expop = Literal( "^" )
             pi    = CaselessLiteral( "PI" )
             expr = Forward()
-            atom = (Optional("-") + ( pi | e | fnumber | ident + lpar + expr + rpar ).setParseAction( self.push_first ) | ( lpar + expr.suppress() + rpar )).setParseAction(self.push_uminus)
+            atom = (Optional("-") + ( pi | fnumber | ident + lpar + expr + rpar ).setParseAction( self.push_first ) | ( lpar + expr.suppress() + rpar )).setParseAction(self.push_uminus) # unlock E
+            #atom = (Optional("-") + ( pi | e | fnumber | ident + lpar + expr + rpar ).setParseAction( self.push_first ) | ( lpar + expr.suppress() + rpar )).setParseAction(self.push_uminus)
 
             # by defining exponentiation as "atom [ ^ factor ]..." instead of "atom [ ^ atom ]...", we get right-to-left exponents, instead of left-to-righ
             # that is, 2^3^2 = 2^(3^2), not (2^3)^2.
