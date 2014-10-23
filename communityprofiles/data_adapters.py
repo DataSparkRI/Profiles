@@ -612,7 +612,21 @@ class QUICKAPI_2013(QUICKAPI):
                     '150':'block+group',
                     '160': 'place',
                 })
- 
+
+class BLSAPI_2010(BLSAPI):
+    def __init__(self):
+    
+       super(BLSAPI_2010, self).__init__('2010',
+                api_levs={
+                    '040':'state',
+                    '050':'county',
+                    '060': 'county+subdivision',
+                    '101':'block',
+                    '140':'tract',
+                    '150':'block+group',
+                    '160': 'place',
+                })
+
 class BLSAPI_2011(BLSAPI):
     def __init__(self):
     
