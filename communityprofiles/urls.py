@@ -8,6 +8,7 @@ from views import front_page
 from tastypie.api import Api
 from maps.api import *
 from profiles.api import *
+from django.conf.urls.static import static
 
 maps_api = Api(api_name='v1')
 maps_api.register(PolygonMapFeatureResource())
@@ -33,3 +34,4 @@ urlpatterns = patterns('',
     url(r'^$', front_page, name='front_page'),
     (r'^maps_api/', include(maps_api.urls)), # ex: /maps_api/v1/l_feat/307/?format=json
 )
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
