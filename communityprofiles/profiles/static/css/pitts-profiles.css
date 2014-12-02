@@ -872,3 +872,13 @@ padding: 0px;
     margin-bottom:5px;
     margin-top:5px;
 }
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus{
+   background-color:white;
+}
+.navbar-default .navbar-nav>li>a{
+   color: white;
+}
+.sub-nav{
+   border-radius: 4px 4px 0 0;
+}
+

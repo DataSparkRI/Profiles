@@ -115,10 +115,10 @@
                             <th class="geo-label" ng-show="indicator.key =='percent'" rowspan="2"><div ng-click="sortTable('label')">Geography</div></th>
                             
                             <th ng-repeat="t in indicator.times" id="{[{t}]}" ng-show="indicator.key !='percent'">
-                                <div>{[{t}]}</div>
+                                <div ng-click="sortTable(t)">{[{t}]}</div>
                             </th>
                             <th ng-repeat="t in indicator.times" id="{[{t}]}" ng-show="indicator.key =='percent'" colspan="3" class="time-heading">
-                                <div>{[{t}]}</div>
+                                <div ng-click="sortTable(t)">{[{t}]}</div>
                             </th>
 
                         </tr>
@@ -137,7 +137,7 @@
                     </thead>
                     {#<tbody style="display:block;" class="shim"></tbody>#}
                     <tbody>
-                        <tr ng-repeat="val in tval | orderBy: geoLabelSort" id="{[{val.label}]}">
+                        <tr ng-repeat="val in tval | orderBy:val.label:reverse" id="{[{val.label}]}">
                             <td class="geo-label"><div>{[{val.label}]}</div></td>{# geo label #}                            
                             <td ng-repeat-start="t in indicator.times" id="{[{t}]}">{# main value #}
                                 <div class="val-wrap" ng-show="indicator.key =='percent'">

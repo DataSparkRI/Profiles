@@ -893,13 +893,21 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
             
         }
         $scope.table_data[$scope.level.name].sort(function(a, b){
-            if(a[sortKey] == null || b[sortKey] == null ){
+            if (sortKey == 'label'){
+               a = a[sortKey]
+               b = b[sortKey]
+            }
+            else{
+               a = a[sortKey]['value']
+               b = b[sortKey]['value']
+            }
+            if(a == null || b == null ){
                 return -1;
             }
             
-            if(a[sortKey].toString().search(/\d+/) !== -1){
-                aC = parseFloat(a[sortKey].toString().replace(/[a-zA-Z\!\s]+/g, ''));
-                bC = parseFloat(b[sortKey].toString().replace(/[a-zA-Z\!\s]+/g, ''));
+            if(a.toString().search(/\d+/) !== -1){
+                aC = parseFloat(a.toString().replace(/[a-zA-Z\!\s]+/g, ''));
+                bC = parseFloat(b.toString().replace(/[a-zA-Z\!\s]+/g, ''));
                 if ($scope.tableReverse == false){
                     if(aC < bC) return 1;
                     if(aC > bC) return -1;
@@ -908,8 +916,8 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                     if(aC < bC) return -1;
                 }
             }else{
-                aC = a[sortKey];
-                bC = b[sortKey];
+                aC = a;
+                bC = b;
                 if ($scope.tableReverse == false){
                     if(aC < bC) return -1;
                     if(aC > bC) return 1;
@@ -919,7 +927,6 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                 }
             }
         });
-
     }
 
     $scope.objKeys = function(obj){

@@ -1,10 +1,26 @@
 {% spaceless %}
 <div class="col-md-12">
 
-<ul id="domains-wrap" class="nav nav-tabs pull-right" style="padding-left: 160px;">
+<div class="col-md-12">
+
+  <nav class="navbar navbar-default" role="navigation" style="background-color:transparent;">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+    <ul class="nav navbar-nav navbar-right">
 {% for domain in data_domains %}
    {%if domain.domain.publish%}
- 
+
    {% if forloop.first %}<span data-placement="left" data-original-title="Explore the Data" data-content="Use the category tabs along the top to browse through the information available. <button type='button' class='btn btn-warning pull-right tour_btn' onclick='tour()'>Next</button>" id="tour_exp"></span>{%endif%}
    <li class="domain {% if domain.domain == selected_domain %}active{% endif %}">
        <a href="{{domain.href}}" class="sub-nav">
@@ -13,6 +29,16 @@
    </li>
    {%endif%}
 {% endfor %}
-</ul>
+
+    </ul>
+
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+
+</div>
+
+
+
 </div>
 {% endspaceless %}
