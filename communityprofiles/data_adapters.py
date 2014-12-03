@@ -410,7 +410,13 @@ class BLSAPI(object):
         if type(op) == str and op in "+-*/^":
             op2 = self.evaluate( stack )
             op1 = self.evaluate(stack)
-            return self.parser.opn[op]( op1, op2 )
+            try:
+               return self.parser.opn[op]( op1, op2 )
+            except:
+               if op=='/':
+                 return op1 / op2
+               if op=='*':
+                 return op1 * op2
         else:
             return op
 
@@ -472,7 +478,7 @@ class BLSAPI(object):
             for part in self.parser.expr_stack:
 
                 if part not in self.op_map:
-                        parts_dict[pcount] = Value(self.get_api_data(part, geo_record))
+                    parts_dict[pcount] = Value(self.get_api_data(part, geo_record))
                 else:
                     # this is on op
                     parts_dict[pcount] = part
@@ -530,7 +536,11 @@ class BLSAPI(object):
             return "error: %s" % e
 
     def get_api_data(self, table, geo_record):
-        
+        try:
+           return float(table)
+        except:
+           pass        
+
         url = 'http://api.bls.gov/publicAPI/v2/timeseries/data/'
         if geo_record.census_id == geo_record.geo_id:
            geo_id = geo_record.geo_id+'000'
