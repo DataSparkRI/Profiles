@@ -883,7 +883,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
         $scope.switchDataLevel($scope.level)
     }
     
-    $scope.sortTable = function (sortKey){
+    $scope.sortTable = function (sortKey, option){
         var aC, bc = null;
         $scope.tableReverse = !$scope.tableReverse; 
         if($scope.tableReverse){
@@ -902,10 +902,19 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                }
             }
             else{
-               a = a[sortKey]['number']
-               b = b[sortKey]['number']
-               if(a == null){a='-99999';}
-               if(b == null){b='-99999';}
+               if (option != null){
+                  a = a[sortKey][option]
+                  b = b[sortKey][option]
+                  if(a == null){a='-99999';}
+                  if(b == null){b='-99999';}
+
+               }
+               else{
+                  a = a[sortKey]['number']
+                  b = b[sortKey]['number']
+                  if(a == null){a='-99999';}
+                  if(b == null){b='-99999';}
+               }
             }
             if(a.toString().search(/\d+/) !== -1){
                 aC = parseFloat(a.toString().replace(/[a-zA-Z\!\s]+/g, ''));

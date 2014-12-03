@@ -124,12 +124,12 @@
                         </tr>
                         <tr ng-repeat-end ng-show="indicator.key =='percent'">
                             <th ng-repeat-start="t in indicator.times">
-                             %
+                             <div ng-click="sortTable(t,'value')">%</div>
                             </th>
                             <th>
-                             #
+                             <div ng-click="sortTable(t,'numerator')">#</div>
                             </th>
-                            <th ng-repeat-end>
+                            <th ng-repeat-end ng-click="sortTable(t,'number')" class="tableview-number">
                                 <div ng-if="indicator.tbl_name!='None'">{[{indicator.tbl_name}]}</div>
                             </th>
 
