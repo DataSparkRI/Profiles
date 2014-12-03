@@ -893,18 +893,20 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
             
         }
         $scope.table_data[$scope.level.name].sort(function(a, b){
+            console.log(sortKey);
             if (sortKey == 'label'){
                a = a[sortKey]
                b = b[sortKey]
+               if(a == null || b == null ){
+                  return -1;
+               }
             }
             else{
-               a = a[sortKey]['value']
-               b = b[sortKey]['value']
+               a = a[sortKey]['number']
+               b = b[sortKey]['number']
+               if(a == null){a='-99999';}
+               if(b == null){b='-99999';}
             }
-            if(a == null || b == null ){
-                return -1;
-            }
-            
             if(a.toString().search(/\d+/) !== -1){
                 aC = parseFloat(a.toString().replace(/[a-zA-Z\!\s]+/g, ''));
                 bC = parseFloat(b.toString().replace(/[a-zA-Z\!\s]+/g, ''));
@@ -927,6 +929,7 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                 }
             }
         });
+        console.log($scope.table_data);
     }
 
     $scope.objKeys = function(obj){
