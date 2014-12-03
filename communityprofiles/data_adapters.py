@@ -554,7 +554,7 @@ class BLSAPI(object):
            return None
         try:
            return float(value)
-        except TypeError:
+        except:
            return None
 
 class QUICKAPI_2010(QUICKAPI):
