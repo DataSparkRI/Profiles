@@ -328,6 +328,7 @@ class QUICKAPI(object):
         return '+'.join(geos)
 
     def get(self, url, params={}):
+
         url_str = url
         for k, v in params.iteritems():
             url_str += "&" + k + "=" + v
@@ -353,6 +354,17 @@ class QUICKAPI(object):
         return None
 
     def get_api_data(self, formula, geo_record):
+
+        def get_total_value(json_data):
+            value = None
+            for i in json_data:
+               try:
+                   value = float(value) + float(i['Value'].replace(",",""))
+               except TypeError:
+                   value = float(i['Value'].replace(",",""))
+            return value
+
+
         import json
         """ Needs to end up looking like this http://api.census.gov/data/2010/sf1?get=P0010001&for=county+subdivision:003&in=state:02+county:290"""
         url = "http://quickstats.nass.usda.gov/api/api_GET/?key=A92FB496-9FD3-3853-B73F-65B0752EE775"
@@ -383,10 +395,10 @@ class QUICKAPI(object):
         r = self.get(url,dic)
         
         try:
-           value = json.loads(r)["data"][0]["Value"]
+           value = get_total_value(json.loads(r)["data"])
         except ValueError: #"bad request - invalid query"
            return None
-        return float(value.replace(",",""))
+        return value
 
     
 class BLSAPI(object):
