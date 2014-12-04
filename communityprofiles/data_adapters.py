@@ -413,10 +413,13 @@ class BLSAPI(object):
             try:
                return self.parser.opn[op]( op1, op2 )
             except:
-               if op=='/':
-                 return op1 / op2
-               if op=='*':
-                 return op1 * op2
+               try:
+                  if op=='/':
+                     return op1 / op2
+                  if op=='*':
+                     return op1 * op2
+               except:
+                  return None
         else:
             return op
 
@@ -519,12 +522,11 @@ class BLSAPI(object):
         import requests
         import json
         import prettytable
-    
+ 
         headers = {'Content-type': 'application/json'}
         data = json.dumps(params)
         p = requests.post(url, data=data, headers=headers)
         json_data = json.loads(p.text)
-
         logger.debug("Fetching url %s via BLSAPI" % url)
 
         try:
@@ -533,7 +535,7 @@ class BLSAPI(object):
             return get_total_value(json_data)
             
         except Exception as e:
-            return "error: %s" % e
+            return False
 
     def get_api_data(self, table, geo_record):
         try:
@@ -551,21 +553,24 @@ class BLSAPI(object):
         # State Code, Area Code
         
         prefix_index = ["EN","EW"]
-        
-        if prefix in prefix_index:
-           seriesid = table[0:3] + geo_id + table[8:]
-           value = self.get(url, {"seriesid": [seriesid],"startyear":self.year, "endyear":self.year, 
-                               "registrationKey":"03ac8d50ab4341e0805cb100cce6a05e"})
-        else:
-           value = self.get(url, {"seriesid": [table],"startyear":self.year, "endyear":self.year, 
-                               "registrationKey":"03ac8d50ab4341e0805cb100cce6a05e"})
-        print "Value: ", value
-        if value == '-':
-           return None
-        try:
-           return float(value)
-        except:
-           return None
+        for key in getattr(settings, 'BLS_KEYS', None):
+           if prefix in prefix_index:
+              seriesid = table[0:3] + geo_id + table[8:]
+              value = self.get(url, {"seriesid": [seriesid],"startyear":self.year, "endyear":self.year, 
+                               "registrationKey":key})
+           else:
+              value = self.get(url, {"seriesid": [table],"startyear":self.year, "endyear":self.year, 
+                               "registrationKey":key})
+           print key
+           if value != False:
+              print "Value: ", value
+              if value == '-':
+                 return None
+              try:
+                 return float(value)
+              except:
+                 return None
+        return None
 
 class QUICKAPI_2010(QUICKAPI):
     def __init__(self):

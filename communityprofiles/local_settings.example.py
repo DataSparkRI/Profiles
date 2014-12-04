@@ -4,6 +4,7 @@ DEBUG = True
 BETA = True
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
+BLS_KEYS = ('')
 
 CACHES = {
     'default': {
