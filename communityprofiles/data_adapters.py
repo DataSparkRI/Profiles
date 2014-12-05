@@ -531,6 +531,15 @@ class BLSAPI(object):
                   value = float(i['value'])
            return value
         
+        def get_annual_value(json_data):
+           for i in json_data['Results']['series'][0]['data']:
+               if i['periodName']=='Annual':
+                  try:
+                     return float(i['value'])
+                  except TypeError:
+                     return False
+           return False
+ 
         import requests
         import json
         import prettytable
@@ -544,6 +553,9 @@ class BLSAPI(object):
         try:
             p = requests.post(url, data=data, headers=headers)
             json_data = json.loads(p.text)
+            annual = get_annual_value(json_data)
+            if annual != False:
+               return annual
             return get_total_value(json_data)
             
         except Exception as e:
@@ -568,11 +580,9 @@ class BLSAPI(object):
         for key in getattr(settings, 'BLS_KEYS', None):
            if prefix in prefix_index:
               seriesid = table[0:3] + geo_id + table[8:]
-              value = self.get(url, {"seriesid": [seriesid],"startyear":self.year, "endyear":self.year, 
-                               "registrationKey":key})
+              value = self.get(url, {"seriesid": [seriesid],"startyear":self.year, "endyear":self.year,"calculations":"true","annualaverage":"true", "registrationKey":key})
            else:
-              value = self.get(url, {"seriesid": [table],"startyear":self.year, "endyear":self.year, 
-                               "registrationKey":key})
+              value = self.get(url, {"seriesid": [table],"startyear":self.year, "endyear":self.year,"calculations":"true","annualaverage":"true","registrationKey":key})
            print key
            if value != False:
               print "Value: ", value
