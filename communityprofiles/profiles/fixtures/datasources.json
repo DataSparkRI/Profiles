@@ -94,6 +94,22 @@
             "implementation": "data_adapters.CensusAPI_ACS5_2013",
             "name": "CensusAPI_ACS5_2013"
         }
+    },
+    {
+        "pk": 14,
+        "model": "profiles.datasource",
+        "fields": {
+            "implementation": "data_adapters.CensusAPI_ACS5_2012_Profile",
+            "name": "CensusAPI_ACS5_2012_Profile"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "profiles.datasource",
+        "fields": {
+            "implementation": "data_adapters.CensusAPI_ACS5_2013_Profile",
+            "name": "CensusAPI_ACS5_2013_Profile"
+        }
     }
 
 ]
