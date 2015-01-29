@@ -49,8 +49,6 @@ DATABASES = {
 PHANTOM_JS_RENDERER = "/path/to/phantomjs/render.js"
 PHANTOM_JS_RENDER_DIR = "/tmp/phantom/"
 
-DEFAULT_GEO_RECORD_ID = 1
-
 ADDITIONAL_APPS = (
     #'rhodeisland',
     #'gunicorn',

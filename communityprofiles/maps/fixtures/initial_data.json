@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "maps.setting", "fields": {"active": true, "DEFAULT_GEO_RECORD_ID": "1"}}]
