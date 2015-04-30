@@ -458,6 +458,8 @@ class DataFileAdmin(admin.ModelAdmin):
 
 admin.site.register(DataFile, DataFileAdmin)
 
+admin.site.register(Setting)
+
 #--------radmin console------------
 console.register_to_all('Clear Memcache', 'profiles.utils.clear_memcache', True)
 console.register_to_all('Update Search Index', 'profiles.utils.rebuild_search_index', True)

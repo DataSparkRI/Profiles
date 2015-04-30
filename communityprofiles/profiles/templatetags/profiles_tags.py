@@ -672,3 +672,9 @@ def search_domainId(domain_id):
 def search_groupId(group_id):
     from profiles.models import GroupIndex
     return GroupIndex.objects.filter(groups_id=group_id)
+
+@register.simple_tag
+def get_setting(name):
+    from profiles.models import Setting
+    return Setting.objects.get(name=name).value
+

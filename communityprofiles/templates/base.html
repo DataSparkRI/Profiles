@@ -164,9 +164,9 @@
                         </div>
                         <div class="col-md-4 column">
                     <p class="footer-head pull-right" style="padding-top:10px;">
-                                                <a href="mailto:profiles@provplan.org"><img class="log-email" src="{{ STATIC_URL }}images/email_icon.png"/></a>
-                                                <a href="https://twitter.com/ProvPlan" target="_blank"><img class="log-github" src="{{ STATIC_URL }}images/twitter-icon.png"/></a>
-                                                <a href="https://github.com/ProvidencePlan/Profiles" target="_blank"><img class="log-github" src="{{ STATIC_URL }}images/git_profile-icons.png"/></a>
+                                                <a href="mailto:{% get_setting 'email' %}"><img class="log-email" src="{{ STATIC_URL }}images/email_icon.png"/></a>
+                                                <a href="{% get_setting 'twitter' %}" target="_blank"><img class="log-github" src="{{ STATIC_URL }}images/twitter-icon.png"/></a>
+                                                <a href="{% get_setting 'github' %}" target="_blank"><img class="log-github" src="{{ STATIC_URL }}images/git_profile-icons.png"/></a>
                                                <!-- <script type="text/javascript" src="{{STATIC_URL}}js/github-watchers-button/github-watchers.js"></script> -->
                                         </p>
                         </div>

@@ -1,0 +1,26 @@
+[
+{
+    "pk": 1, 
+    "model": "profiles.setting", 
+    "fields": {
+        "name": "twitter", 
+        "value": "https://twitter.com/ProvPlan"
+    }
+},
+{
+    "pk": 2, 
+    "model": "profiles.setting", 
+    "fields": {
+        "name": "email", 
+        "value": "profiles@provplan.org"
+    }
+},
+{
+    "pk": 3, 
+    "model": "profiles.setting", 
+    "fields": {
+        "name": "github", 
+        "value": "https://github.com/ProvidencePlan/Profiles"
+    }
+}
+]

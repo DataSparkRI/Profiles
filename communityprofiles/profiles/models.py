@@ -1424,6 +1424,14 @@ class IndicatorTask(models.Model):
         except TaskStatus.DoesNotExist:
             return "Task for %s pending or does not exist" % self.indicator.display_name
 
+class Setting(models.Model):
+    name = models.CharField(max_length=255,unique=True)
+    value = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return u"%s: %s" % (self.name, self.value)
+
+
 @receiver(pre_delete, sender=TaskStatus)
 def task_cleanup(sender, instance, **kwargs):
     """ Delete indicator Task Meta data when we delete a TaskStatus"""
