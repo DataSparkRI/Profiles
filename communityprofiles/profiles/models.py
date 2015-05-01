@@ -503,8 +503,6 @@ class Indicator(models.Model):
             notes.append({'label':'Limitations', 'text':self.limitations })
         if self.routine_use:
             notes.append({'label':'Routine', 'text':self.routine_use })
-        if self.notes:
-            notes.append({'label':'Notes', 'text':u''+self.notes})
         if self.source:
             notes.append({'label':'Source', 'text':self.source})
         if self.data_as_of:
