@@ -1,0 +1,10 @@
+{
+        "DB_HOST" : "127.0.0.1",
+        "DB_PORT" : "5432",
+        "DB_NAME" : "communityprofiles",
+        "DB_USER" : "vagrant",
+        "DB_PASS" : "vagrant",
+        "REDIS_CONN" : "localhost:6379",
+        "REDIS_HASH_PREFIX" :"communityprofiles:",
+        "CACHE_EXPIRE" : 18000
+}
