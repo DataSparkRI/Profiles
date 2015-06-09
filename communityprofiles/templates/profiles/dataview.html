@@ -141,7 +141,8 @@
                             <td class="geo-label"><div>{[{val.label}]}</div></td>{# geo label #}                            
                             <td ng-repeat-start="t in indicator.times" id="{[{t}]}">{# main value #}
                                 <div class="val-wrap" ng-show="indicator.key =='percent'">
-                                    {[{value_formatter(val[t].value, true)}]}<span ng-show="val[t].value">%</span>
+                                    {# {[{value_formatter(val[t].value, true)}]}<span ng-show="val[t].value">%</span> #}
+                                    {[{val[t].value}]}<span ng-show="val[t].value">%</span>
                                     <div class="moe-wrap" ng-bind-html="val[t].moe|safehtml" ng-show="val[t].moe"></div>
                                 </div>
 
