@@ -710,7 +710,6 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
             $(".moe").tooltip();
         }, 200)
         $scope.updateTable();
-
     } 
 
     $scope.updateMapData = function(){
@@ -827,7 +826,6 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
             $scope.pm.map.fitBounds(base_layer.getBounds());
         }
 
-
     }
 
     $scope.switchTime = function(time){
@@ -893,7 +891,6 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
             
         }
         $scope.table_data[$scope.level.name].sort(function(a, b){
-            console.log(sortKey);
             if (sortKey == 'label'){
                a = a[sortKey]
                b = b[sortKey]
@@ -938,7 +935,6 @@ function MapCntrl($scope, $http, $sanitize, $compile, $timeout, $q, $log, $locat
                 }
             }
         });
-        console.log($scope.table_data);
     }
 
     $scope.objKeys = function(obj){
