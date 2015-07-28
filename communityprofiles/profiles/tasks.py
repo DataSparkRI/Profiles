@@ -167,13 +167,11 @@ def generate_geo_record_task(queryset):
     for geolevel in queryset:
 
         all = PolygonMapFeature.objects.filter(source = geolevel.shapefile)
-
     
         for e in all:
-            GeoRecord(level=geolevel,
-               name = e.geo_key,
-               slug = e.geo_key,
-               geo_id = e.geo_key,
-               geo_searchable = True,
-               geo_id_segments = '{"'+geolevel.summary_level+'":"'+e.geo_key+'"}').save()
-
+            geo_record, create = GeoRecord.objects.get_or_create(level=geolevel, slug=e.geo_key)
+            geo_record.name = name = e.label
+            geo_record.geo_id = e.geo_key
+            geo_record.geo_searchable = True
+            geo_record.geo_id_segments = '{"'+geolevel.summary_level+'":"'+e.geo_key+'"}'
+            geo_record.save()
