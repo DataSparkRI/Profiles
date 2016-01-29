@@ -848,6 +848,38 @@ class CensusAPI_ACS5_2013_Profile(CensusAPI):
                     '160': 'place',
                 })
 
+class CensusAPI_ACS5_2014(CensusAPI):
+    # API levs supported by api
+    def __init__(self):
+
+        super(CensusAPI_ACS5_2014, self).__init__('2014', 'acs5',
+                api_levs={
+                    '010':'us',
+                    '040':'state',
+                    '050':'county',
+                    '060': 'county+subdivision',
+                    '101':'block',
+                    '140':'tract',
+                    '150':'block+group',
+                    '160': 'place',
+                })
+
+class CensusAPI_ACS5_2014_Profile(CensusAPI):
+    # API levs supported by api
+    def __init__(self):
+
+        super(CensusAPI_ACS5_2014_Profile, self).__init__('2014', 'acs5/profile',
+                api_levs={
+                    '010':'us',
+                    '040':'state',
+                    '050':'county',
+                    '060': 'county+subdivision',
+                    '101':'block',
+                    '140':'tract',
+                    '150':'block+group',
+                    '160': 'place',
+                })
+
 class FileAdapter(BaseCensusDataAdapter):
     def __init__(self, data_file=None):
         if data_file is None:
